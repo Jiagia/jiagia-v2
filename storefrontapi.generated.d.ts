@@ -364,6 +364,41 @@ export type TowerQuery = {
   >;
 };
 
+export type CloudsQueryVariables = StorefrontAPI.Exact<{[key: string]: never}>;
+
+export type CloudsQuery = {
+  cloud: {
+    nodes: Array<
+      Pick<StorefrontAPI.Metaobject, 'id' | 'handle' | 'type'> & {
+        image?: StorefrontAPI.Maybe<{
+          reference?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.MediaImage, 'alt'> & {
+              image?: StorefrontAPI.Maybe<
+                Pick<
+                  StorefrontAPI.Image,
+                  'altText' | 'height' | 'id' | 'url' | 'width'
+                >
+              >;
+            }
+          >;
+        }>;
+        size?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+        speed?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+        delay?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+        position?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+      }
+    >;
+  };
+};
+
 export type FeaturedCollectionFragment = Pick<
   StorefrontAPI.Collection,
   'id' | 'title' | 'handle'
@@ -1276,6 +1311,10 @@ interface GeneratedQueryTypes {
   '#graphql\n  fragment Floor on Metaobject {\n    id,\n    image: field(key: "image") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            id\n            url\n            width\n          }\n        }\n      }\n    }\n    name: field(key: "name") {\n      value\n    }\n    link: field(key: "link") {\n      value,\n    }\n    active: field(key: "link_active") {\n      value\n    }\n    show_name: field(key: "show_name") {\n      value\n    }\n  }\n\n  query Tower($handle: String!, $type: String!) {\n    home: metaobject(handle: {handle: $handle, type: $type}) {\n      id\n      handle\n      type\n      floors: field(key: "floors") {\n        references(first: 10) {\n          nodes {\n            ...Floor\n          }\n        }\n      }\n      color: field(key: "sky_colors") {\n        value\n        type\n      }\n      time: field(key: "time") {\n        value\n        type\n      }\n    }\n  }\n': {
     return: TowerQuery;
     variables: TowerQueryVariables;
+  };
+  '#graphql\nquery Clouds {\n  cloud: metaobjects(type: "cloud", first: 20) {\n    nodes {\n      id\n      handle\n      type\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              id\n              url\n              width\n            }\n          }\n        }\n      }\n      size: field(key: "size") {\n        value\n        type\n      }\n      speed: field(key: "speed") {\n        value\n        type\n      }\n      delay: field(key: "delay") {\n        value\n        type\n      }\n      position: field(key: "position") {\n        value\n        type\n      }\n    }\n  }\n}\n': {
+    return: CloudsQuery;
+    variables: CloudsQueryVariables;
   };
   '#graphql\n  fragment FeaturedCollection on Collection {\n    id\n    title\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n    handle\n  }\n  query FeaturedCollection($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {\n      nodes {\n        ...FeaturedCollection\n      }\n    }\n  }\n': {
     return: FeaturedCollectionQuery;

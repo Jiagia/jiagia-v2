@@ -6,7 +6,7 @@ import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
   TowerQuery,
-
+  CloudsQuery,
 } from 'storefrontapi.generated';
 
 
@@ -77,36 +77,53 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
       return null;
     });
 
+    const clouds = context.storefront
+    .query(CLOUD_QUERY)
+    .catch((error) => {
+      // Log query errors, but don't throw them so the page can still render
+      console.error(error);
+      return null;
+    });
+
   return {
     recommendedProducts,
     tower,
+    clouds
   };
 }
 
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
-
+  
   return (
     <div className="home dark">
       <div className="dark:bg-black dark:text-white">
        <Planets></Planets>
-
+      
+      <div className="relative">
        <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={data.tower}>
           {(response) => (
             <div className="relative md:min-h-[120wh]">
             {response ? (
-              <Tower tower={response}></Tower>) : null
+              <>
+                <Tower tower={response} />
+              </>) : null
             }
             </div>
           )}
         </Await>
         </Suspense>
+
+        <Clouds clouds={data.clouds} />
+        </div>
        {/* <Tower tower={data.tower}></Tower> */}
       </div>
     </div>
   );
 }
+
+
 
 function Planets() {
   return (
@@ -144,7 +161,7 @@ function Tower({
 }) {
   if (!tower.home) return null;
 
-  // buggy/need to refresh every hour
+  // buggy/ - need to refresh every hour
   const colors = JSON.parse(tower.home.color.value);
   const time = JSON.parse(tower.home.time.value);
 
@@ -161,10 +178,10 @@ function Tower({
       <div className={" h-[320px] w-full"} style={{backgroundImage: "linear-gradient(to bottom, black, "+sky_color}}></div>
       <div style={{backgroundColor: sky_color}}>
       {tower.home?.floors?.references.nodes.map((floor) => (
-      <div className="bg-transparent" key={floor.id}>
+      <div className="bg-transparent" key={floor.id} >
         {floor.active.value === "true" 
           ?
-            <div className="relative"><Image data={floor.image.reference.image} sizes="100%" />
+            <div className="relative" style={{zIndex: "2"}}><Image data={floor.image.reference.image} sizes="100%" />
               {floor.show_name?.value ==="true" && 
               <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible" to={floor.link.value || ""}>
                 <h2 className="">{floor.name?.value}</h2>
@@ -172,7 +189,7 @@ function Tower({
             </div>
 
           :
-          <div className="relative"><Image data={floor.image.reference.image} sizes="100%" />
+          <div className="relative " style={{zIndex: "2"}}><Image data={floor.image.reference.image} sizes="100%" />
             {floor.show_name.value ==="true" && <h2 className="absolute inset-x-0 bottom-0 text-center invisible sm:visible">{floor.name.value}</h2>}
             </div>
 
@@ -181,9 +198,47 @@ function Tower({
         ))}
       </div>
     </> 
-      
-          
-      
+  
+  )
+}
+
+function Clouds({
+  clouds
+} : {
+  clouds: Promise<CloudsQuery | null>;
+}) {
+  return (
+    <Suspense >
+    <Await resolve={clouds}>
+      {(response) => (
+        <>
+        {response ? (
+          response.cloud.nodes.map((cloud) => {
+            const pos = JSON.parse(cloud.position.value);
+            const dur = 30;
+            return (
+            <div key={cloud.id} className="absolute top-[320px]">
+
+              {cloud.image ? 
+              <Image data={cloud.image.reference.image} width={cloud.image.reference?.image.width/2+"px"} 
+              style={{position: "relative", 
+                animationName: "cloud", 
+                animationDuration: dur+"s", 
+                animationIterationCount: "infinite", 
+                animationTimingFunction: "linear",
+                animationDelay: cloud.delay.value/10*dur+"s",
+                top: pos[1]+"vw"}}
+              /> 
+              : null}
+            </div>
+          )})
+        )
+        : null
+        }
+        </>
+      )}
+    </Await>
+    </Suspense>
   )
 }
 
@@ -329,6 +384,48 @@ const TOWER_QUERY = `#graphql
       }
     }
   }
+` as const;
+
+const CLOUD_QUERY = `#graphql
+query Clouds {
+  cloud: metaobjects(type: "cloud", first: 20) {
+    nodes {
+      id
+      handle
+      type
+      image: field(key: "image") {
+        reference {
+          ... on MediaImage {
+            alt
+            image {
+              altText
+              height
+              id
+              url
+              width
+            }
+          }
+        }
+      }
+      size: field(key: "size") {
+        value
+        type
+      }
+      speed: field(key: "speed") {
+        value
+        type
+      }
+      delay: field(key: "delay") {
+        value
+        type
+      }
+      position: field(key: "position") {
+        value
+        type
+      }
+    }
+  }
+}
 ` as const;
 
 const FEATURED_COLLECTION_QUERY = `#graphql
