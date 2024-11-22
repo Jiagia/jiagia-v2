@@ -54,7 +54,7 @@ export default function About() {
 }
 
 const PAGE_QUERY = `#graphql
-  query Page($handle: String!) {
+  query About($handle: String!) {
     page(handle: $handle) {
       handle
       body

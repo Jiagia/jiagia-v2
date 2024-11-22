@@ -5,10 +5,15 @@ import {Image, Money} from '@shopify/hydrogen';
 import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
+  TowerQuery,
+
 } from 'storefrontapi.generated';
 
+
+import  lumaperl from  "~/assets/LumaPerl.png"
+
 export const meta: MetaFunction = () => {
-  return [{title: 'Hydrogen | Home'}];
+  return [{title: 'Jiagia Studios'}];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
@@ -26,10 +31,20 @@ export async function loader(args: LoaderFunctionArgs) {
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
 async function loadCriticalData({context}: LoaderFunctionArgs) {
+
   const [{collections}] = await Promise.all([
     context.storefront.query(FEATURED_COLLECTION_QUERY),
     // Add other queries here, so that they are loaded in parallel
   ]);
+
+  // const handle = "home-page";
+  // const type = "tower";
+  // const [{tower = await Promise.all([
+  //   context.storefront
+  //   .query(TOWER_QUERY, {
+  //     variables: {handle, type},
+  //   }),
+  // ]);
 
   return {
     featuredCollection: collections.nodes[0],
@@ -49,21 +64,155 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
       console.error(error);
       return null;
     });
+  
+  const handle = "home-page";
+  const type = "tower";
+  const tower = context.storefront
+    .query(TOWER_QUERY, {
+      variables: {handle, type},
+    })
+    .catch((error) => {
+      // Log query errors, but don't throw them so the page can still render
+      console.error(error);
+      return null;
+    });
 
   return {
     recommendedProducts,
+    tower,
   };
 }
 
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
+
   return (
-    <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} />
+    <div className="home dark">
+      <div className="dark:bg-black dark:text-white">
+       <Planets></Planets>
+
+       <Suspense fallback={<div>Loading...</div>}>
+        <Await resolve={data.tower}>
+          {(response) => (
+            <div className="relative md:min-h-[120wh]">
+            {response ? (
+              <Tower tower={response}></Tower>) : null
+            }
+            </div>
+          )}
+        </Await>
+        </Suspense>
+       {/* <Tower tower={data.tower}></Tower> */}
+      </div>
     </div>
   );
 }
+
+function Planets() {
+  return (
+    <div className="pt-40">
+      <div className="min-h-32"></div>
+      <div className="max-w-[400px] mx-auto text-center">
+        <p>WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE <i><strong>“DAYDREAM UNIVERSE”</strong></i> </p>
+        
+        <p className="mt-[2rem]">FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY OUR FINDINGS </p>
+
+        <div className="flex justify-center items-center">
+          <img className="mt-40" src={lumaperl} />
+        </div>
+
+        <h5 className=" my-4 text-[64px] text-[#896997]">LUMAPERL</h5>
+
+        <Link to="/dreamscape/lumaperl">
+          <h4 className="border border-white border-2 text-[32px]"> &lt; VIEW LATEST EDITION &gt; </h4>
+        </Link>
+
+        <div className="min-h-32"></div>
+        
+      </div>
+      
+      
+    </div>
+  )
+}
+
+
+function Tower({
+  tower,
+}: {
+  tower: TowerQuery;
+}) {
+  if (!tower.home) return null;
+
+  // buggy/need to refresh every hour
+  const colors = JSON.parse(tower.home.color.value);
+  const time = JSON.parse(tower.home.time.value);
+
+  let currentTime = new Date();
+  let hr = currentTime.getHours();
+  let i = 0
+  for (i = 0; i++; i < time.length) {
+    if (hr > time[i]) break;
+  }
+  let sky_color = colors[i].toString();
+
+  return (
+    <>
+      <div className={" h-[320px] w-full"} style={{backgroundImage: "linear-gradient(to bottom, black, "+sky_color}}></div>
+      <div style={{backgroundColor: sky_color}}>
+      {tower.home?.floors?.references.nodes.map((floor) => (
+      <div className="bg-transparent" key={floor.id}>
+        {floor.active.value === "true" 
+          ?
+            <div className="relative"><Image data={floor.image.reference.image} sizes="100%" />
+              {floor.show_name?.value ==="true" && 
+              <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible" to={floor.link.value || ""}>
+                <h2 className="">{floor.name?.value}</h2>
+              </Link>}
+            </div>
+
+          :
+          <div className="relative"><Image data={floor.image.reference.image} sizes="100%" />
+            {floor.show_name.value ==="true" && <h2 className="absolute inset-x-0 bottom-0 text-center invisible sm:visible">{floor.name.value}</h2>}
+            </div>
+
+        }
+        </div>
+        ))}
+      </div>
+    </> 
+      
+          
+      
+  )
+}
+
+
+
+// function Tower( {
+//   tower,
+// } : {tower: Promise<TowerQuery | null>;} ) {
+//   return (
+//     <Suspense>
+//       <Await resolve={tower}>
+//         {(response) => (
+//           <>
+//           
+//           <div>
+//             {response 
+//               ? (<div></div>)
+//               : null
+//             }
+//           </div>
+//           </>
+//         )}
+//         <div></div>
+//       </Await>
+//     </Suspense>
+//   )
+// }
+
+
 
 function FeaturedCollection({
   collection,
@@ -126,6 +275,61 @@ function RecommendedProducts({
     </div>
   );
 }
+
+const TOWER_QUERY = `#graphql
+  fragment Floor on Metaobject {
+    id,
+    image: field(key: "image") {
+      reference {
+        ... on MediaImage {
+          alt
+          image {
+            altText
+            height
+            id
+            url
+            width
+          }
+        }
+      }
+    }
+    name: field(key: "name") {
+      value
+    }
+    link: field(key: "link") {
+      value,
+    }
+    active: field(key: "link_active") {
+      value
+    }
+    show_name: field(key: "show_name") {
+      value
+    }
+  }
+
+  query Tower($handle: String!, $type: String!) {
+    home: metaobject(handle: {handle: $handle, type: $type}) {
+      id
+      handle
+      type
+      floors: field(key: "floors") {
+        references(first: 10) {
+          nodes {
+            ...Floor
+          }
+        }
+      }
+      color: field(key: "sky_colors") {
+        value
+        type
+      }
+      time: field(key: "time") {
+        value
+        type
+      }
+    }
+  }
+` as const;
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {
