@@ -187,7 +187,7 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
       <div className="p-8 max-w-[400px] mx-auto text-center ">
         <p className="dark:bg-black relative z-0">WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE <i><strong>“DAYDREAM UNIVERSE”</strong></i> </p>
         
-        <p className="mt-[2rem]">FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY OUR FINDINGS </p>
+        <p className="dark:bg-black relative z-0 mt-[2rem]">FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY OUR FINDINGS </p>
 
         <div className="flex justify-center items-center">
           <img className="mt-40" src={lumaperl} />
@@ -234,26 +234,32 @@ function Tower({
 
   return (
     <>
-      <div className={" h-[320px] w-full"} style={{backgroundImage: "linear-gradient(to bottom, black, "+sky_color}}></div>
+      <div className={" h-[360px] w-full"} style={{backgroundImage: "linear-gradient(to bottom, black, "+sky_color}}>
+
+        <nav className="flex flex-col justify-end items-center h-5/6 space-y-5 text-[18px] text-[#5C0F0B] sm:invisible ">
+          <Link to="/about">&gt; ABOUT US &lt;</Link>
+          <Link className="pointer-events-none" to="/shop">&gt; SHOP &lt;</Link>
+          <Link className="pointer-events-none" to="/lab">&gt; LABORATORY &lt;</Link>
+        </nav>
+      </div>
+        
       <div style={{backgroundColor: sky_color}}>
-      {tower.home?.floors?.references.nodes.map((floor) => (
-      <div className="bg-transparent" key={floor.id} >
-        {floor.active.value === "true" 
-          ?
-            <div className="relative" style={{zIndex: "2"}}><Image data={floor.image.reference.image} sizes="100%" />
-              {floor.show_name?.value ==="true" && 
-              <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible lg:mb-2 lg:text-[16px]" to={floor.link.value || ""}>
-                <h2 className="">{floor.name?.value}</h2>
-              </Link>}
-            </div>
+        {tower.home?.floors?.references.nodes.map((floor) => (
+          <div className="bg-transparent relative" style={{zIndex: 2}} key={floor.id} >
 
-          :
-          <div className="relative " style={{zIndex: "2"}}><Image data={floor.image.reference.image} sizes="100%" />
-            {floor.show_name.value ==="true" && <h2 className="absolute inset-x-0 bottom-0 text-center invisible sm:visible lg:mb-2 lg:text-[16px]">{floor.name.value}</h2>}
-            </div>
-
-        }
-        </div>
+            <Image data={floor.image.reference.image} sizes="100%" />
+            {floor.show_name && floor.show_name.value === "true" ? 
+              (
+                <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible lg:mb-2 lg:text-[16px]" 
+                to={floor.link?.value || ""} 
+                style={{pointerEvents: floor.active && floor.active.value ==="true" ? "auto" : "none"}}
+                >
+                    <h2 className="">{floor.name?.value}</h2>
+                  </Link>
+              )
+              : null
+            }
+          </div>
         ))}
       </div>
     </> 
