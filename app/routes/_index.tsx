@@ -7,6 +7,7 @@ import type {
   RecommendedProductsQuery,
   TowerQuery,
   CloudsQuery,
+  PlanetsQuery,
 } from 'storefrontapi.generated';
 
 
@@ -85,10 +86,19 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
       return null;
     });
 
+    const planets = context.storefront
+    .query(PLANETS)
+    .catch((error) => {
+      // Log query errors, but don't throw them so the page can still render
+      console.error(error);
+      return null;
+    });
+
   return {
     recommendedProducts,
     tower,
-    clouds
+    clouds,
+    planets,
   };
 }
 
@@ -98,9 +108,9 @@ export default function Homepage() {
   return (
     <div className="home dark">
       <div className="dark:bg-black dark:text-white">
-       <Planets></Planets>
+       <Planets planets={data.planets}></Planets>
       
-      <div className="relative">
+      <div className="relative overflow-hidden">
        <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={data.tower}>
           {(response) => (
@@ -125,12 +135,57 @@ export default function Homepage() {
 
 
 
-function Planets() {
+function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
+
+  // generate stars
+  let stars: number[] = new Array(100);
+  for (let i=0; i<stars.length; i++) stars[i] = Math.random()*200;
+  
   return (
-    <div className="pt-40">
+    <div className="pt-40 h-full overflow-y-hidden">
+      
+      {stars.map((star, i) => (
+        <div key={i} 
+        style={{position: "absolute", 
+                top: star+"%", 
+                left: Math.random()*100+"%", 
+                fontSize: "10px"}}
+          >
+          &#10022;
+        </div>
+      ))}
+
+      <Suspense >
+        <Await resolve={planets}>
+          {(response) => (
+            <>
+            {response ? (
+              
+              response.planets.nodes.map((planet) => {
+                const pos_d : String[] = JSON.parse(planet.pos_d.value);
+                const size : String[] = JSON.parse(planet.size.value);
+
+                return (
+                <div key={planet.id} className="">
+
+                  {planet.image ? 
+                  <Image className={`absolute`} data={planet.image.reference.image} sizes={size[0]+"%"} width={size[0]+"%"} 
+                  style={{position: "absolute", left:pos_d[0]+"%", top: pos_d[1]+"%"}}
+                  /> 
+                  : null}
+                </div>
+              )})
+            )
+            : null
+            }
+            </>
+          )}
+        </Await>
+      </Suspense>
+      
       <div className="min-h-32"></div>
-      <div className="max-w-[400px] mx-auto text-center">
-        <p>WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE <i><strong>“DAYDREAM UNIVERSE”</strong></i> </p>
+      <div className="p-8 max-w-[400px] mx-auto text-center ">
+        <p className="dark:bg-black relative z-0">WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE <i><strong>“DAYDREAM UNIVERSE”</strong></i> </p>
         
         <p className="mt-[2rem]">FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY OUR FINDINGS </p>
 
@@ -138,13 +193,17 @@ function Planets() {
           <img className="mt-40" src={lumaperl} />
         </div>
 
-        <h5 className=" my-4 text-[64px] text-[#896997]">LUMAPERL</h5>
+        <h4 className="mt-4 text-[32px] text-slate-500">COMING SOON</h4>
+        <div className="invisible">
+          <h5 className=" my-4 text-[60px] md:text-[64px] text-[#896997] ">LUMAPERL</h5>
 
-        <Link to="/dreamscape/lumaperl">
-          <h4 className="border border-white border-2 text-[32px]"> &lt; VIEW LATEST EDITION &gt; </h4>
-        </Link>
+          <Link to="/dreamscape/lumaperl">
+            <h4 className="border border-white border-2 text-[16px]"> &gt; VIEW LATEST EXPEDITION &lt; </h4>
+          </Link>
 
-        <div className="min-h-32"></div>
+          <div className="min-h-32"></div>
+        
+        </div>
         
       </div>
       
@@ -183,14 +242,14 @@ function Tower({
           ?
             <div className="relative" style={{zIndex: "2"}}><Image data={floor.image.reference.image} sizes="100%" />
               {floor.show_name?.value ==="true" && 
-              <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible" to={floor.link.value || ""}>
+              <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible lg:mb-2 lg:text-[16px]" to={floor.link.value || ""}>
                 <h2 className="">{floor.name?.value}</h2>
               </Link>}
             </div>
 
           :
           <div className="relative " style={{zIndex: "2"}}><Image data={floor.image.reference.image} sizes="100%" />
-            {floor.show_name.value ==="true" && <h2 className="absolute inset-x-0 bottom-0 text-center invisible sm:visible">{floor.name.value}</h2>}
+            {floor.show_name.value ==="true" && <h2 className="absolute inset-x-0 bottom-0 text-center invisible sm:visible lg:mb-2 lg:text-[16px]">{floor.name.value}</h2>}
             </div>
 
         }
@@ -330,6 +389,48 @@ function RecommendedProducts({
     </div>
   );
 }
+
+const PLANETS = `#graphql
+query Planets {
+  planets: metaobjects(type: "planet", first: 20) {
+    nodes {
+      id
+      handle
+      type
+      image: field(key: "image") {
+        reference {
+          ... on MediaImage {
+            alt
+            image {
+              altText
+              height
+              id
+              url
+              width
+            }
+          }
+        }
+      }
+      size: field(key: "size") {
+        value
+        type
+      }
+      pos_m: field(key: "pos_m") {
+        value
+        type
+      }
+      pos_d: field(key: "pos_d") {
+        value
+        type
+      }
+      index: field(key: "index") {
+        value
+        type
+      }
+    }
+  }
+}
+` as const
 
 const TOWER_QUERY = `#graphql
   fragment Floor on Metaobject {

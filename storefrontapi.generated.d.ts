@@ -295,6 +295,41 @@ export type StoreRobotsQueryVariables = StorefrontAPI.Exact<{
 
 export type StoreRobotsQuery = {shop: Pick<StorefrontAPI.Shop, 'id'>};
 
+export type PlanetsQueryVariables = StorefrontAPI.Exact<{[key: string]: never}>;
+
+export type PlanetsQuery = {
+  planets: {
+    nodes: Array<
+      Pick<StorefrontAPI.Metaobject, 'id' | 'handle' | 'type'> & {
+        image?: StorefrontAPI.Maybe<{
+          reference?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.MediaImage, 'alt'> & {
+              image?: StorefrontAPI.Maybe<
+                Pick<
+                  StorefrontAPI.Image,
+                  'altText' | 'height' | 'id' | 'url' | 'width'
+                >
+              >;
+            }
+          >;
+        }>;
+        size?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+        pos_m?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+        pos_d?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+        index?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+      }
+    >;
+  };
+};
+
 export type FloorFragment = Pick<StorefrontAPI.Metaobject, 'id'> & {
   image?: StorefrontAPI.Maybe<{
     reference?: StorefrontAPI.Maybe<
@@ -1307,6 +1342,10 @@ interface GeneratedQueryTypes {
   '#graphql\n  query StoreRobots($country: CountryCode, $language: LanguageCode)\n   @inContext(country: $country, language: $language) {\n    shop {\n      id\n    }\n  }\n': {
     return: StoreRobotsQuery;
     variables: StoreRobotsQueryVariables;
+  };
+  '#graphql\nquery Planets {\n  planets: metaobjects(type: "planet", first: 20) {\n    nodes {\n      id\n      handle\n      type\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              id\n              url\n              width\n            }\n          }\n        }\n      }\n      size: field(key: "size") {\n        value\n        type\n      }\n      pos_m: field(key: "pos_m") {\n        value\n        type\n      }\n      pos_d: field(key: "pos_d") {\n        value\n        type\n      }\n      index: field(key: "index") {\n        value\n        type\n      }\n    }\n  }\n}\n': {
+    return: PlanetsQuery;
+    variables: PlanetsQueryVariables;
   };
   '#graphql\n  fragment Floor on Metaobject {\n    id,\n    image: field(key: "image") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            id\n            url\n            width\n          }\n        }\n      }\n    }\n    name: field(key: "name") {\n      value\n    }\n    link: field(key: "link") {\n      value,\n    }\n    active: field(key: "link_active") {\n      value\n    }\n    show_name: field(key: "show_name") {\n      value\n    }\n  }\n\n  query Tower($handle: String!, $type: String!) {\n    home: metaobject(handle: {handle: $handle, type: $type}) {\n      id\n      handle\n      type\n      floors: field(key: "floors") {\n        references(first: 10) {\n          nodes {\n            ...Floor\n          }\n        }\n      }\n      color: field(key: "sky_colors") {\n        value\n        type\n      }\n      time: field(key: "time") {\n        value\n        type\n      }\n    }\n  }\n': {
     return: TowerQuery;
