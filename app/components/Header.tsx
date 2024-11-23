@@ -25,16 +25,18 @@ export function Header({
 }: HeaderProps) {
   const {shop, menu} = header;
   return (
-    <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
+    <header className="header dark:bg-transparent dark:text-white" style={{zIndex: 10}}>
+      <NavLink prefetch="intent" to="/" 
+      // style={activeLinkStyle} 
+      end>
         <strong>{shop.name}</strong>
       </NavLink>
-      <HeaderMenu
+      {/* <HeaderMenu
         menu={menu}
         viewport="desktop"
         primaryDomainUrl={header.shop.primaryDomain.url}
         publicStoreDomain={publicStoreDomain}
-      />
+      /> */}
       <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
   );
@@ -61,7 +63,7 @@ export function HeaderMenu({
           end
           onClick={close}
           prefetch="intent"
-          style={activeLinkStyle}
+          // style={activeLinkStyle}
           to="/"
         >
           Home
@@ -84,7 +86,7 @@ export function HeaderMenu({
             key={item.id}
             onClick={close}
             prefetch="intent"
-            style={activeLinkStyle}
+            // style={activeLinkStyle}
             to={url}
           >
             {item.title}
@@ -109,9 +111,9 @@ function HeaderCtas({
           </Await>
         </Suspense>
       </NavLink> */}
-      <SearchToggle />
+      {/* <SearchToggle />
       <CartToggle cart={cart} />
-      <HeaderMenuMobileToggle />
+      <HeaderMenuMobileToggle /> */}
     </nav>
   );
 }

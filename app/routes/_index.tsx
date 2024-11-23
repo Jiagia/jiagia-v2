@@ -193,8 +193,8 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
           <img className="mt-40" src={lumaperl} />
         </div>
 
-        <h4 className="mt-4 text-[32px] text-slate-500">COMING SOON</h4>
-        <div className="invisible">
+        <h4 className="mt-4 text-[32px] text-slate-500 font-bold bg-black z-0 relative">COMING SOON</h4>
+        <div className="invisible font-bold">
           <h5 className=" my-4 text-[60px] md:text-[64px] text-[#896997] ">LUMAPERL</h5>
 
           <Link to="/dreamscape/lumaperl">
@@ -221,8 +221,8 @@ function Tower({
   if (!tower.home) return null;
 
   // buggy/ - need to refresh every hour
-  const colors = JSON.parse(tower.home.color.value);
-  const time = JSON.parse(tower.home.time.value);
+  const colors = JSON.parse(tower.home.color?.value || "[\"#000000\",\"#8deaff\"]");
+  const time = JSON.parse(tower.home.time?.value || "[8, 24]");
 
   let currentTime = new Date();
   let hr = currentTime.getHours();
@@ -234,7 +234,7 @@ function Tower({
 
   return (
     <>
-      <div className={" h-[360px] w-full"} style={{backgroundImage: "linear-gradient(to bottom, black, "+sky_color}}>
+      <div className={" h-[360px] w-full font-bold"} style={{backgroundImage: "linear-gradient(to bottom, black, "+sky_color}}>
 
         <nav className="flex flex-col justify-end items-center h-5/6 space-y-5 text-[18px] text-[#5C0F0B] sm:invisible ">
           <Link to="/about">&gt; ABOUT US &lt;</Link>
@@ -243,7 +243,7 @@ function Tower({
         </nav>
       </div>
         
-      <div style={{backgroundColor: sky_color}}>
+      <div className="font-bold" style={{backgroundColor: sky_color}}>
         {tower.home?.floors?.references.nodes.map((floor) => (
           <div className="bg-transparent relative" style={{zIndex: 2}} key={floor.id} >
 

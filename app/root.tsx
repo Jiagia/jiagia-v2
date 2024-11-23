@@ -50,6 +50,7 @@ export function links() {
       href: 'https://shop.app',
     },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat'}
   ];
 }
 
@@ -141,7 +142,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="dark bg-black">
         {data ? (
           <Analytics.Provider
             cart={data.cart}
