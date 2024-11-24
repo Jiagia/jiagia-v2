@@ -140,6 +140,9 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
   // generate stars
   let stars: number[] = new Array(100);
   for (let i=0; i<stars.length; i++) stars[i] = Math.random()*200;
+
+  let smallStars: number[] = new Array(50);
+  for (let i=0; i<smallStars.length; i++) smallStars[i] = Math.random()*200;
   
   return (
     <div className="pt-40 h-full overflow-y-hidden">
@@ -149,9 +152,22 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
         style={{position: "absolute", 
                 top: star+"%", 
                 left: Math.random()*100+"%", 
-                fontSize: "10px"}}
+                fontSize: "10px"
+              }}
           >
           &#10022;
+        </div>
+      ))}
+
+      {smallStars.map((star, i) => (
+        <div key={i} 
+        style={{position: "absolute", 
+                top: star+"%", 
+                left: Math.random()*100+"%", 
+                fontSize: "6px"
+              }}
+          >
+          &#10038;
         </div>
       ))}
 
@@ -166,10 +182,10 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
                 const size : String[] = JSON.parse(planet.size.value);
 
                 return (
-                <div key={planet.id} className="">
+                <div key={planet.id} className="" style={{zIndex:1}}>
 
                   {planet.image ? 
-                  <Image className={`absolute`} data={planet.image.reference.image} sizes={size[0]+"%"} width={size[0]+"%"} 
+                  <Image className="" data={planet.image.reference.image} sizes={size[0]+"%"} width={size[0]+"%"} 
                   style={{position: "absolute", left:pos_d[0]+"%", top: pos_d[1]+"%"}}
                   /> 
                   : null}
@@ -190,7 +206,7 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
         <p className="dark:bg-black relative z-0 mt-[2rem]">FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY OUR FINDINGS </p>
 
         <div className="flex justify-center items-center">
-          <img className="mt-40" src={lumaperl} />
+          <img className="mt-40 z-2" src={lumaperl} style={{zIndex:1}}/>
         </div>
 
         <h4 className="mt-4 text-[32px] text-slate-500 font-bold bg-black z-0 relative">COMING SOON</h4>
@@ -236,7 +252,7 @@ function Tower({
     <>
       <div className={" h-[360px] w-full font-bold"} style={{backgroundImage: "linear-gradient(to bottom, black, "+sky_color}}>
 
-        <nav className="flex flex-col justify-end items-center h-5/6 space-y-5 text-[18px] text-[#5C0F0B] sm:invisible ">
+        <nav className="flex flex-col justify-start items-center h-5/6 space-y-5 text-[18px]  sm:invisible ">
           <Link to="/about">&gt; ABOUT US &lt;</Link>
           <Link className="pointer-events-none" to="/shop">&gt; SHOP &lt;</Link>
           <Link className="pointer-events-none" to="/lab">&gt; LABORATORY &lt;</Link>
