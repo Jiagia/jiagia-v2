@@ -59,14 +59,30 @@ export default function About() {
   const data = useLoaderData<typeof loader>();
   const page = data.criticalData.page
 
+  // generate stars
+  let stars: number[] = new Array(100);
+  for (let i=0; i<stars.length; i++) stars[i] = Math.random()*200;
+
   return (
     <Suspense>
       <Await resolve={data.image1}>
         {(response) => (
-          <div className="bg-no-repeat dark:text-white mb-[160px]" 
+          <div className="bg-no-repeat dark:text-white mb-[160px] overflow-hidden" 
           style={{backgroundImage: `url(${response.image?.image.reference?.image.url || ""})`,
           backgroundSize: "cover" }}
           >
+            {stars.map((star, i) => (
+              <div key={i} 
+              style={{position: "absolute", 
+                      top: star+"%", 
+                      left: Math.random()*100+"%", 
+                      fontSize: "10px",
+                      zIndex: -1,
+                    }}
+                >
+                &#10022;
+              </div>
+            ))}
             <h1 className="pt-[240px] text-center text-[36px] dark:bg-black">ABOUT US</h1>
             <div className="mt-4 w-5/6 sm:w-1/3 mx-auto dark:bg-black" dangerouslySetInnerHTML={{__html: page.body}} />
             <div className="pt-[100px]  flex justify-center">
@@ -78,7 +94,7 @@ export default function About() {
                 &gt; BACK TO HOME &lt;
               </NavLink>
             </div>
-            <Image className="mx-auto mt-12" data={response.char?.image.reference.image} sizes="" width="50%" />
+            <Image className="mx-auto mt-12 sm:invisible" data={response.char?.image.reference.image} sizes="" width="50%" />
           </div>
         )}
       </Await>
