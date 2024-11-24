@@ -83,7 +83,7 @@ export default function About() {
                 &#10022;
               </div>
             ))}
-            <h1 className="pt-[240px] text-center text-[36px] dark:bg-black">ABOUT US</h1>
+            <h1 className="mt-[240px] text-center text-[36px] dark:bg-black">ABOUT US</h1>
             <div className="mt-4 w-5/6 sm:w-1/3 mx-auto dark:bg-black" dangerouslySetInnerHTML={{__html: page.body}} />
             <div className="pt-[100px]  flex justify-center">
               <NavLink
