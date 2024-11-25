@@ -32,6 +32,9 @@ export function PageLayout({
   isLoggedIn,
   publicStoreDomain,
 }: PageLayoutProps) {
+
+  // const newsletterLink = colorMode == "light" ? "klaviyo-form-XgeEVP" : "klaviyo-form-X5PmTV";
+  const newsletterLink =  "klaviyo-form-X5PmTV";
   return (
     <Aside.Provider>
       <CartAside cart={cart} />
@@ -50,6 +53,7 @@ export function PageLayout({
         footer={footer}
         header={header}
         publicStoreDomain={publicStoreDomain}
+        newsletterLink={newsletterLink}
       />
     </Aside.Provider>
   );

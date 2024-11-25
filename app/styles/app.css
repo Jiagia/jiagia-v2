@@ -488,3 +488,14 @@ button.reset:hover:not(:has(> *)) {
 .account-logout {
   display: inline-block;
 }
+
+/*
+* --------------------------------------------------
+* routes/_index
+* --------------------------------------------------
+*/
+
+@keyframes cloud {
+  from {left: 100vw}
+  to {left:-10vw}
+}
