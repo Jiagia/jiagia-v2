@@ -145,7 +145,7 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
   for (let i=0; i<smallStars.length; i++) smallStars[i] = Math.random()*200;
   
   return (
-    <div className="pt-40 h-full overflow-y-hidden">
+    <div className="pt-40 h-full overflow-hidden">
       
       {stars.map((star, i) => (
         <div key={i} 
@@ -209,7 +209,7 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
           <img className="mt-40 z-2" src={lumaperl} style={{zIndex:1}}/>
         </div>
 
-        <h4 className="mt-4 text-[32px] text-slate-500 font-bold bg-black z-0 relative">COMING SOON</h4>
+        <h4 className="mt-4 text-[32px] text-slate-800 font-bold bg-black z-0 relative">COMING SOON</h4>
         <div className="invisible font-bold">
           <h5 className=" my-4 text-[60px] md:text-[64px] text-[#896997] ">LUMAPERL</h5>
 
@@ -254,8 +254,8 @@ function Tower({
 
         <nav className="flex flex-col justify-start items-center h-5/6 space-y-5 text-[18px]  sm:invisible ">
           <Link to="/about">&gt; ABOUT US &lt;</Link>
-          <Link className="pointer-events-none" to="/shop">&gt; SHOP &lt;</Link>
-          <Link className="pointer-events-none" to="/lab">&gt; LABORATORY &lt;</Link>
+          {/* <Link className="pointer-events-none" to="/shop">&gt; SHOP &lt;</Link>
+          <Link className="pointer-events-none" to="/lab">&gt; LABORATORY &lt;</Link> */}
         </nav>
       </div>
         

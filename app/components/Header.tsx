@@ -29,7 +29,7 @@ export function Header({
       <NavLink prefetch="intent" to="/" 
       // style={activeLinkStyle} 
       end>
-        <strong>{shop.name}</strong>
+        <strong> &gt; {shop.name} STUDIOS &lt; </strong>
       </NavLink>
       {/* <HeaderMenu
         menu={menu}

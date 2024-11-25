@@ -141,6 +141,11 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
+        <script
+          async
+          type="text/javascript"
+          src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=QRiSq4"
+        ></script>
       </head>
       <body className="dark bg-black">
         {data ? (

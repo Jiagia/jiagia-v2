@@ -87,7 +87,8 @@ export default function About() {
             <div className="mt-4 w-5/6 sm:w-1/3 mx-auto dark:bg-black" dangerouslySetInnerHTML={{__html: page.body}} />
             <div className="pt-[100px]  flex justify-center">
               <NavLink
-                to="/dreamscapes"
+                // to="/dreamscapes"
+                to="/"
                 className="p-2 hover:font-bold border hover:border-2 border-black dark:border-white hover:no-underline dark:bg-black"
               >
                 {/* &gt; VIEW DREAMSCAPES &lt; */}
