@@ -178,7 +178,7 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
             {response ? (
               
               response.planets.nodes.map((planet) => {
-                const pos_d : String[] = JSON.parse(planet.pos_d.value);
+                const pos_d : String[] = JSON.parse(planet.pos_d.value || ["0", "0"]);
                 const size : String[] = JSON.parse(planet.size.value);
 
                 return (

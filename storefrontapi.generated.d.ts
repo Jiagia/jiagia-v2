@@ -543,6 +543,25 @@ export type AboutImageQuery = {
       >;
     }
   >;
+  char?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Metaobject, 'id' | 'handle' | 'type'> & {
+      image?: StorefrontAPI.Maybe<{
+        reference?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MediaImage, 'alt'> & {
+            image?: StorefrontAPI.Maybe<
+              Pick<
+                StorefrontAPI.Image,
+                'altText' | 'height' | 'id' | 'url' | 'width'
+              >
+            >;
+          }
+        >;
+      }>;
+      size?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+      >;
+    }
+  >;
 };
 
 export type ArticleQueryVariables = StorefrontAPI.Exact<{
@@ -1393,7 +1412,7 @@ interface GeneratedQueryTypes {
     return: AboutQuery;
     variables: AboutQueryVariables;
   };
-  '#graphql\n  query AboutImage {\n    image: metaobject(handle: {handle: "about1", type: "image"}) {\n      id\n      handle\n      type\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              id\n              url\n              width\n            }\n          }\n        }\n      }\n      size: field(key: "size") {\n        value,\n        type, \n      }\n    }\n  }\n': {
+  '#graphql\n  query AboutImage {\n    image: metaobject(handle: {handle: "about1", type: "image"}) {\n      id\n      handle\n      type\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              id\n              url\n              width\n            }\n          }\n        }\n      }\n      size: field(key: "size") {\n        value\n        type\n      }\n    }\n    char: metaobject(handle: {handle: "about2", type: "image"}) {\n      id\n      handle\n      type\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              id\n              url\n              width\n            }\n          }\n        }\n      }\n      size: field(key: "size") {\n        value\n        type\n      }\n    }\n  }\n': {
     return: AboutImageQuery;
     variables: AboutImageQueryVariables;
   };
