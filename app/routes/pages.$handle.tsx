@@ -55,7 +55,7 @@ export default function Page() {
   const {page} = useLoaderData<typeof loader>();
 
   return (
-    <div className="page">
+    <div className="page m-8 sm:mx-auto sm:w-1/2">
       <header>
         <h1>{page.title}</h1>
       </header>
