@@ -1,4 +1,4 @@
-import {useNonce, getShopAnalytics, Analytics} from '@shopify/hydrogen';
+import {useNonce, getShopAnalytics, Analytics, Script} from '@shopify/hydrogen';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {
   Links,
@@ -42,7 +42,14 @@ export function links() {
   return [
     {rel: 'stylesheet', href: resetStyles},
     {rel: 'stylesheet', href: appStyles},
-    {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat'},
+    {
+      rel:"preconnect", 
+      href: 'https://fonts.googleapis.com'
+    },
+    {
+      rel:"preconnect", 
+      href: 'https://fonts.gstatic.com'
+    },
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -51,6 +58,8 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
+    {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap'},
+    {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat'},
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
     
   ];
@@ -143,11 +152,6 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
-        <script
-          async
-          type="text/javascript"
-          src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=QRiSq4"
-        ></script>
       </head>
       <body className="dark bg-black overflow-x-hidden">
         {data ? (
@@ -161,8 +165,13 @@ export function Layout({children}: {children?: React.ReactNode}) {
         ) : (
           children
         )}
+        <Script async type="text/javascript" 
+        src="//static.klaviyo.com/onsite/js/QRiSq4/klaviyo.js" 
+        // src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=QRiSq4"
+        />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
+        
       </body>
     </html>
   );

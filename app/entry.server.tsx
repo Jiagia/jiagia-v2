@@ -16,6 +16,27 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
+    styleSrc: [
+      'https://klaviyo.com',
+      'https://*.klaviyo.com',
+      'https://fonts.googleapis.com'
+    ],
+    scriptSrc: [
+      'https://klaviyo.com',
+      'https://*.klaviyo.com',
+      'https://cdn.shopify.com'
+    ],
+    connectSrc: [
+      'https://klaviyo.com',
+      'https://*.klaviyo.com'
+    ],
+    fontSrc: [
+      'https://klaviyo.com',
+      'https://*.klaviyo.com',
+      'https://fonts.googleapis.com',
+      'https://fonts.gstatic.com/'
+    ],
+
   });
 
   const body = await renderToReadableStream(
