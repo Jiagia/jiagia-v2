@@ -42,6 +42,7 @@ export function links() {
   return [
     {rel: 'stylesheet', href: resetStyles},
     {rel: 'stylesheet', href: appStyles},
+    {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat'},
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -51,7 +52,7 @@ export function links() {
       href: 'https://shop.app',
     },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
-    {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat'}
+    
   ];
 }
 
@@ -148,7 +149,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
           src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=QRiSq4"
         ></script>
       </head>
-      <body className="dark bg-black">
+      <body className="dark bg-black overflow-x-hidden">
         {data ? (
           <Analytics.Provider
             cart={data.cart}

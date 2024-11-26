@@ -145,7 +145,7 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
   for (let i=0; i<smallStars.length; i++) smallStars[i] = Math.random()*200;
   
   return (
-    <div className="pt-40 h-full overflow-hidden">
+    <div className="pt-40 h-full overflow-x-hidden">
       
       {stars.map((star, i) => (
         <div key={i} 
@@ -178,7 +178,7 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
             {response ? (
               
               response.planets.nodes.map((planet) => {
-                const pos_d : String[] = JSON.parse(planet.pos_d.value || ["0", "0"]);
+                const pos_d : String[] = JSON.parse(planet.pos_d?.value || '["0", "0"]');
                 const size : String[] = JSON.parse(planet.size.value);
 
                 return (
