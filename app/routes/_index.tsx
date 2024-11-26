@@ -107,6 +107,7 @@ export default function Homepage() {
   
   return (
     <div className="home dark">
+      {/* <div className="klaviyo-form-UtiWXz"></div> */}
       <div className="dark:bg-black dark:text-white">
        <Planets planets={data.planets}></Planets>
       
