@@ -1,4 +1,4 @@
-import {useNonce, getShopAnalytics, Analytics} from '@shopify/hydrogen';
+import {useNonce, getShopAnalytics, Analytics, Script} from '@shopify/hydrogen';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {
   Links,
@@ -143,11 +143,6 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
-        <script
-          async
-          type="text/javascript"
-          src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=QRiSq4"
-        ></script>
       </head>
       <body className="dark bg-black overflow-x-hidden">
         {data ? (
@@ -161,8 +156,13 @@ export function Layout({children}: {children?: React.ReactNode}) {
         ) : (
           children
         )}
+        <Script async type="text/javascript" 
+        src="//static.klaviyo.com/onsite/js/QRiSq4/klaviyo.js" 
+        // src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=QRiSq4"
+        />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
+        
       </body>
     </html>
   );
