@@ -1,6 +1,6 @@
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
-import {Suspense} from 'react';
+import {Suspense, useState} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import type {
   FeaturedCollectionFragment,
@@ -138,33 +138,47 @@ export default function Homepage() {
 
 function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
 
-  // generate stars
-  let stars: number[] = new Array(100);
-  for (let i=0; i<stars.length; i++) stars[i] = Math.random()*200;
+  // const getRandomObject = (array) => {
+  //   const randomObject = array[Math.floor(Math.random() * array.length)];
+  //   return randomObject;
+  // };
+  
+  // const MyComponent = () => {
+  //   const [randomData, setRandomData] = useState(() => getRandomObject(DATA));
+  // // generate stars
+  let starsX: number[] = new Array(100);
+  for (let i=0; i<starsX.length; i++) starsX[i] = Math.random()*200;
 
-  let smallStars: number[] = new Array(50);
-  for (let i=0; i<smallStars.length; i++) smallStars[i] = Math.random()*200;
+  let starsY: number[] = new Array(100);
+  for (let i=0; i<starsY.length; i++) starsY[i] = Math.random()*200;
+
+  let smallStarsX: number[] = new Array(50);
+  for (let i=0; i<smallStarsX.length; i++) smallStarsX[i] = Math.random()*200;
+
+  let smallStarsY: number[] = new Array(50);
+  for (let i=0; i<smallStarsY.length; i++) smallStarsY[i] = Math.random()*200;
   
   return (
     <div className="pt-40 h-full overflow-x-hidden">
       
-      {stars.map((star, i) => (
+      {starsX.map((star, i) => (
         <div key={i} 
         style={{position: "absolute", 
                 top: star+"%", 
-                left: Math.random()*100+"%", 
+                left: starsY[i]+"%", 
                 fontSize: "10px"
               }}
           >
           &#10022;
         </div>
-      ))}
+      ))
+      }
 
-      {smallStars.map((star, i) => (
+      {smallStarsX.map((star, i) => (
         <div key={i} 
         style={{position: "absolute", 
                 top: star+"%", 
-                left: Math.random()*100+"%", 
+                left: smallStarsY[i]+"%", 
                 fontSize: "6px"
               }}
           >
@@ -186,8 +200,8 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
                 <div key={planet.id} className="" style={{zIndex:1}}>
 
                   {planet.image ? 
-                  <Image className="" data={planet.image.reference.image} sizes={size[0]+"%"} width={size[0]+"%"} 
-                  style={{position: "absolute", left:pos_d[0]+"%", top: pos_d[1]+"%"}}
+                  <Image className="" data={planet.image.reference.image} sizes={size[0]+"%"}
+                  style={{position: "absolute", left:pos_d[0]+"%", top: pos_d[1]+"%", width: size[0]+"%"}}
                   /> 
                   : null}
                 </div>
@@ -302,14 +316,15 @@ function Clouds({
             <div key={cloud.id} className="absolute top-[320px]">
 
               {cloud.image ? 
-              <Image data={cloud.image.reference.image} width={cloud.image.reference?.image.width/2+"px"} 
+              <Image data={cloud.image.reference.image} sizes="50vw"
               style={{position: "relative", 
                 animationName: "cloud", 
                 animationDuration: dur+"s", 
                 animationIterationCount: "infinite", 
                 animationTimingFunction: "linear",
                 animationDelay: cloud.delay.value/10*dur+"s",
-                top: pos[1]+"vw"}}
+                top: pos[1]+"vw",
+                width: cloud.image.reference?.image.width/2+"px"}}
               /> 
               : null}
             </div>
