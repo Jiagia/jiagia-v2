@@ -25,7 +25,7 @@ export function Footer({
         {(footer) => (
           <footer className="footer border-t border-black grid md:grid-cols-3 gap-y-4 justify-items-center items-center pt-2 dark:text-white  overflow-hidden mb-[32px]">
             <div className="px-8">
-              {/* <div className={newsletterLink} style={{maxWidth: '100vw'}}></div> */}
+              <div className={newsletterLink} style={{maxWidth: '100vw'}}></div>
             </div>
             <div className="justify-self-center py-4 md:pt-0">
               <SocialIcon FacebookLink={FBLink} InstaLink={IGLink} XLink={XLink} />

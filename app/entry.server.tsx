@@ -16,17 +16,24 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
+    defaultSrc:[
+      "'self'",
+      'https://geo.captcha-delivery.com',
+    ],
     styleSrc: [
+      "'self'",
       'https://klaviyo.com',
       'https://*.klaviyo.com',
       'https://fonts.googleapis.com'
     ],
     scriptSrc: [
+      "'self'",
       'https://klaviyo.com',
       'https://*.klaviyo.com',
       'https://cdn.shopify.com'
     ],
     connectSrc: [
+      "*", // need to change
       'https://klaviyo.com',
       'https://*.klaviyo.com'
     ],
@@ -36,7 +43,14 @@ export default async function handleRequest(
       'https://fonts.googleapis.com',
       'https://fonts.gstatic.com/'
     ],
-
+    workerSrc: [
+      'blob:',
+    ],
+    imgSrc: [
+      "'self'",
+      'https://cdnjs.cloudflare.com',
+      'https://cdn.shopify.com',
+    ],
   });
 
   const body = await renderToReadableStream(
