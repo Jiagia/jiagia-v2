@@ -21,19 +21,16 @@ export default async function handleRequest(
       'https://geo.captcha-delivery.com',
     ],
     styleSrc: [
-      "'self'",
       'https://klaviyo.com',
       'https://*.klaviyo.com',
       'https://fonts.googleapis.com'
     ],
     scriptSrc: [
-      "'self'",
       'https://klaviyo.com',
       'https://*.klaviyo.com',
       'https://cdn.shopify.com'
     ],
     connectSrc: [
-      "*", // need to change
       'https://klaviyo.com',
       'https://*.klaviyo.com'
     ],
@@ -47,7 +44,8 @@ export default async function handleRequest(
       'blob:',
     ],
     imgSrc: [
-      "'self'",
+      '*',
+      'data:',
       'https://cdnjs.cloudflare.com',
       'https://cdn.shopify.com',
     ],
