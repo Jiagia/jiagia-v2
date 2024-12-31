@@ -39,6 +39,8 @@ async function loadCriticalData({
     pageBy: 8,
   });
 
+  throw redirect('/');
+
   if (!handle) {
     throw redirect('/collections');
   }
