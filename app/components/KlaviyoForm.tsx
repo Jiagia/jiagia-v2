@@ -1,5 +1,3 @@
-
-
 export function KlaviyoForm({newsletterLink}) {
   return (
     <div className="flex flex-col items-center text-center gap-2 px-8">
