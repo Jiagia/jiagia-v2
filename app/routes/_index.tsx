@@ -108,10 +108,10 @@ export default function Homepage() {
   return (
     <div className="home dark">
       {/* <div className="klaviyo-form-UtiWXz"></div> */}
-      <div className="dark:bg-black dark:text-white">
+      <div className="dark:bg-black dark:text-white overflow-x-hidden">
        <Planets planets={data.planets}></Planets>
       
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden ">
        <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={data.tower}>
           {(response) => (
@@ -150,13 +150,13 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
   for (let i=0; i<starsX.length; i++) starsX[i] = Math.random()*200;
 
   let starsY: number[] = new Array(100);
-  for (let i=0; i<starsY.length; i++) starsY[i] = Math.random()*200;
+  for (let i=0; i<starsY.length; i++) starsY[i] = Math.random()*100;
 
   let smallStarsX: number[] = new Array(50);
   for (let i=0; i<smallStarsX.length; i++) smallStarsX[i] = Math.random()*200;
 
   let smallStarsY: number[] = new Array(50);
-  for (let i=0; i<smallStarsY.length; i++) smallStarsY[i] = Math.random()*200;
+  for (let i=0; i<smallStarsY.length; i++) smallStarsY[i] = Math.random()*100;
   
   return (
     <div className="pt-40 h-full overflow-x-hidden">
