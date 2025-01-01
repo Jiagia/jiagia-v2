@@ -291,7 +291,7 @@ function Tower({
             <Image data={floor.image.reference.image} sizes="100%" />
             {floor.show_name && floor.show_name.value === "true" ? 
               (
-                <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible lg:mb-2 lg:text-[16px]" 
+                <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible hover:no-underline lg:mb-2 lg:text-[16px]" 
                 to={floor.link?.value || ""} 
                 style={{pointerEvents: floor.active && floor.active.value ==="true" ? "auto" : "none"}}
                 >

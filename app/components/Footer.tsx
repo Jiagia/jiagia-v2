@@ -1,6 +1,7 @@
 import {Suspense} from 'react';
 import {Await, NavLink} from '@remix-run/react';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
+import { KlaviyoForm } from './KlaviyoForm';
 
 interface FooterProps {
   footer: Promise<FooterQuery | null>;
@@ -22,7 +23,8 @@ export function Footer({
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="footer border-t border-black grid md:grid-cols-2 gap-y-4 justify-items-center items-center pt-2 dark:text-white  overflow-hidden mb-[32px]">
+          <footer className="footer border-t border-black grid md:grid-cols-3 gap-y-4 justify-items-center items-center pt-2 dark:text-white overflow-hidden mb-[32px]">
+            <KlaviyoForm newsletterLink={newsletterLink} />
             <div className="justify-self-center py-4 md:pt-0">
               <SocialIcon
                 FacebookLink={FBLink}
