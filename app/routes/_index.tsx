@@ -1,6 +1,6 @@
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {Await, useLoaderData, Link, type MetaFunction} from '@remix-run/react';
-import {Suspense, useState} from 'react';
+import {Await, useLoaderData, Link, type MetaFunction,} from '@remix-run/react';
+import {Suspense, useState, useEffect, useCallback, useMemo} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import type {
   FeaturedCollectionFragment,
@@ -252,16 +252,26 @@ function Tower({
   if (!tower.home) return null;
 
   // buggy/ - need to refresh every hour
-  const colors = JSON.parse(tower.home.color?.value || "[\"#000000\",\"#8deaff\"]");
-  const time = JSON.parse(tower.home.time?.value || "[8, 24]");
+  const colors : any = JSON.parse(tower.home.color?.value || "[\"#000000\",\"#8deaff\"]");
+  const time : any = JSON.parse(tower.home.time?.value || "[8, 24]");
 
-  let currentTime = new Date();
-  let hr = currentTime.getHours();
+  const [date, setDate] = useState(new Date());
+  useEffect(() => {
+      const timerID = setInterval(() => tick(), 1000*60);
+      return () => clearInterval(timerID);
+  }, []);
+
+  const tick = useCallback(() => {
+      setDate(new Date());
+  }, []);
+
+  const hr = useMemo(() => date.getHours(), [date]);
   let i = 0
-  for (i = 0; i++; i < time.length) {
-    if (hr > time[i]) break;
+  for (i = 0; i < time.length; i++) {
+    if (hr < time[i]) break;
   }
-  let sky_color = colors[i].toString();
+  const sky_color = colors[i].toString();
+ console.log(sky_color)
 
   return (
     <>
