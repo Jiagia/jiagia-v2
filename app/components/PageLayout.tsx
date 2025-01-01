@@ -33,8 +33,7 @@ export function PageLayout({
   publicStoreDomain,
 }: PageLayoutProps) {
 
-  // const newsletterLink = colorMode == "light" ? "klaviyo-form-XgeEVP" : "klaviyo-form-X5PmTV";
-  const newsletterLink =  "klaviyo-form-X5PmTV";
+  const newsletterLink =  "https://manage.kmail-lists.com/subscriptions/subscribe?a=QRiSq4&g=SD5TkF";
   return (
     <Aside.Provider>
       <CartAside cart={cart} />

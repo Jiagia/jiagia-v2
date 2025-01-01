@@ -10,6 +10,7 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
+  Link,
 } from '@remix-run/react';
 // import favicon from '~/assets/favicon.svg';
 import favicon from '~/assets/JiagiaLogoWhiteFavicon.svg';
@@ -185,6 +186,8 @@ export function ErrorBoundary() {
   const error = useRouteError();
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
+  const backgroundImgUrl =
+    'https://cdn.shopify.com/s/files/1/0753/7868/8295/files/stars.png?v=1735004828';
 
   if (isRouteErrorResponse(error)) {
     errorMessage = error?.data?.message ?? error.data;
@@ -194,14 +197,29 @@ export function ErrorBoundary() {
   }
 
   return (
-    <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
-      )}
+    <div
+      className="route-error h-[900px] w-screen flex justify-center items-center overflow-hidden"
+      style={{backgroundImage: `url(${backgroundImgUrl})`, backgroundSize: "100% 100%"}}
+    >
+      <div className="mx-auto bg-black flex flex-col items-center gap-4 text-center">
+        <h1 className="text-4xl">Uh oh...</h1>
+        <div>
+          <p>It seesms like portal leads nowhere!</p>
+          <p>Let's help you get back to Jiagia</p>
+        </div>
+        <Link
+          to="/"
+          className="w-fit p-4 border border-white hover:no-underline hover:border-2"
+        >
+          &gt; BACK TO HOME &lt;
+        </Link>
+        <h2>{errorStatus}</h2>
+        {errorMessage && (
+          <fieldset>
+            <pre>{errorMessage}</pre>
+          </fieldset>
+        )}
+      </div>
     </div>
   );
 }

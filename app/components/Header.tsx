@@ -25,10 +25,17 @@ export function Header({
 }: HeaderProps) {
   const {shop, menu} = header;
   return (
-    <header className="header dark:bg-transparent dark:text-white" style={{zIndex: 10}}>
-      <NavLink prefetch="intent" to="/" 
-      // style={activeLinkStyle} 
-      end>
+    <header
+      className="header dark:bg-transparent dark:text-white"
+      style={{zIndex: 10}}
+    >
+      <NavLink
+        prefetch="intent"
+        to="/"
+        className="hover:no-underline"
+        // style={activeLinkStyle}
+        end
+      >
         <strong> &gt; {shop.name} STUDIOS &lt; </strong>
       </NavLink>
       {/* <HeaderMenu

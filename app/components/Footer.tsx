@@ -1,6 +1,7 @@
 import {Suspense} from 'react';
 import {Await, NavLink} from '@remix-run/react';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
+import { KlaviyoForm } from './KlaviyoForm';
 
 interface FooterProps {
   footer: Promise<FooterQuery | null>;
@@ -15,20 +16,21 @@ export function Footer({
   publicStoreDomain,
   newsletterLink,
 }: FooterProps) {
-
-  const FBLink: string = 'https://www.facebook.com/profile.php?id=100083105601746';
-  const IGLink: string = 'https://www.instagram.com/jiagia_studios/';
-  const XLink: string = 'https://twitter.com/jiagia_studios';
+  const FBLink = 'https://www.facebook.com/profile.php?id=100083105601746';
+  const IGLink = 'https://www.instagram.com/jiagia_studios/';
+  const XLink = 'https://twitter.com/jiagia_studios';
   return (
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="footer border-t border-black grid md:grid-cols-3 gap-y-4 justify-items-center items-center pt-2 dark:text-white  overflow-hidden mb-[32px]">
-            <div className="px-8">
-              {/* <div className={newsletterLink} style={{maxWidth: '100vw'}}></div> */}
-            </div>
+          <footer className="footer border-t border-black grid md:grid-cols-3 gap-y-4 justify-items-center items-center pt-2 dark:text-white overflow-hidden mb-[32px]">
+            <KlaviyoForm newsletterLink={newsletterLink} />
             <div className="justify-self-center py-4 md:pt-0">
-              <SocialIcon FacebookLink={FBLink} InstaLink={IGLink} XLink={XLink} />
+              <SocialIcon
+                FacebookLink={FBLink}
+                InstaLink={IGLink}
+                XLink={XLink}
+              />
             </div>
             {footer?.menu && header.shop.primaryDomain?.url && (
               <FooterMenu
