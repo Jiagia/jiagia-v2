@@ -10,10 +10,6 @@ export function KlaviyoForm({newsletterLink}) {
       >
         &gt; Subscribe &lt;
       </a>
-      <div className="hidden md:flex flex-col gap-2">
-        <p className="text-xs">We use email and targeted online advertising to send you product and services updates, promotional offers and other marketing communications based on the information we collect about you, such as your email address, general location, and purchase and website browsing history.</p>
-        <p className="text-xs">We process your personal data as stated in our Privacy Policy. You may withdraw your consent or manage your preferences at any time by clicking the unsubscribe link at the bottom of any of our marketing emails, or by emailing us at contact@jiagia.com.</p>
-      </div>
     </div>
   );
 }
