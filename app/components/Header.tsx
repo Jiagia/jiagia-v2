@@ -27,7 +27,7 @@ export function Header({
   return (
     <header
       className="header dark:bg-transparent dark:text-white"
-      style={{zIndex: 10}}
+      style={{zIndex: 5}}
     >
       <NavLink
         prefetch="intent"
@@ -38,12 +38,12 @@ export function Header({
       >
         <strong> &gt; {shop.name} STUDIOS &lt; </strong>
       </NavLink>
-      {/* <HeaderMenu
+      <HeaderMenu
         menu={menu}
         viewport="desktop"
         primaryDomainUrl={header.shop.primaryDomain.url}
         publicStoreDomain={publicStoreDomain}
-      /> */}
+      />
       <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
   );
@@ -70,7 +70,7 @@ export function HeaderMenu({
           end
           onClick={close}
           prefetch="intent"
-          // style={activeLinkStyle}
+          style={activeLinkStyle}
           to="/"
         >
           Home
@@ -117,10 +117,10 @@ function HeaderCtas({
             {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
           </Await>
         </Suspense>
-      </NavLink> */}
-      {/* <SearchToggle />
-      <CartToggle cart={cart} />
-      <HeaderMenuMobileToggle /> */}
+      </NavLink>
+      <SearchToggle />
+      <CartToggle cart={cart} /> */}
+      <HeaderMenuMobileToggle />
     </nav>
   );
 }

@@ -848,6 +848,139 @@ export type CatalogQuery = {
   };
 };
 
+export type ChapterFragment = Pick<StorefrontAPI.Metaobject, 'id'> & {
+  title?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+  >;
+  link?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+  >;
+  active?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+  >;
+};
+
+export type LocationQueryVariables = StorefrontAPI.Exact<{
+  location: StorefrontAPI.Scalars['String']['input'];
+  type: StorefrontAPI.Scalars['String']['input'];
+}>;
+
+export type LocationQuery = {
+  locationInfo?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Metaobject, 'id' | 'handle' | 'type'> & {
+      title?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+      >;
+      description?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+      >;
+      image?: StorefrontAPI.Maybe<{
+        reference?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MediaImage, 'alt'> & {
+            image?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'altText' | 'height' | 'width' | 'url'>
+            >;
+          }
+        >;
+      }>;
+      link?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+      >;
+      chapters?: StorefrontAPI.Maybe<{
+        references?: StorefrontAPI.Maybe<{
+          nodes: Array<
+            Pick<StorefrontAPI.Metaobject, 'id'> & {
+              title?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+              >;
+              link?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+              >;
+              active?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+              >;
+            }
+          >;
+        }>;
+      }>;
+    }
+  >;
+};
+
+export type LocationFragment = Pick<
+  StorefrontAPI.Metaobject,
+  'id' | 'handle'
+> & {
+  title?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
+  image?: StorefrontAPI.Maybe<{
+    reference?: StorefrontAPI.Maybe<
+      Pick<StorefrontAPI.MediaImage, 'alt'> & {
+        image?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Image, 'altText' | 'height' | 'width' | 'url'>
+        >;
+      }
+    >;
+  }>;
+  link?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
+  color?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
+};
+
+export type UniverseQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String']['input'];
+  type: StorefrontAPI.Scalars['String']['input'];
+}>;
+
+export type UniverseQuery = {
+  universe?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Metaobject, 'id' | 'handle'> & {
+      organization?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value'>
+      >;
+      caption?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value'>
+      >;
+      image?: StorefrontAPI.Maybe<{
+        reference?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MediaImage, 'alt'> & {
+            image?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'altText' | 'height' | 'width' | 'url'>
+            >;
+          }
+        >;
+      }>;
+      locations?: StorefrontAPI.Maybe<{
+        references?: StorefrontAPI.Maybe<{
+          nodes: Array<
+            Pick<StorefrontAPI.Metaobject, 'id' | 'handle'> & {
+              title?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+              image?: StorefrontAPI.Maybe<{
+                reference?: StorefrontAPI.Maybe<
+                  Pick<StorefrontAPI.MediaImage, 'alt'> & {
+                    image?: StorefrontAPI.Maybe<
+                      Pick<
+                        StorefrontAPI.Image,
+                        'altText' | 'height' | 'width' | 'url'
+                      >
+                    >;
+                  }
+                >;
+              }>;
+              link?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+              color?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+            }
+          >;
+        }>;
+      }>;
+    }
+  >;
+};
+
 export type PageQueryVariables = StorefrontAPI.Exact<{
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
@@ -1439,6 +1572,14 @@ interface GeneratedQueryTypes {
   '#graphql\n  query Catalog(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n      nodes {\n        ...ProductItem\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment MoneyProductItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment ProductItem on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyProductItem\n      }\n      maxVariantPrice {\n        ...MoneyProductItem\n      }\n    }\n    variants(first: 1) {\n      nodes {\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n\n': {
     return: CatalogQuery;
     variables: CatalogQueryVariables;
+  };
+  '#graphql\n  fragment Chapter on Metaobject {\n    id\n    title: field(key: "title") {\n      value\n      type\n    }\n    link: field(key: "link") {\n      value\n      type\n    }\n    active: field(key: "active") {\n      value\n      type\n    }\n  }\n\n  query Location($location: String!, $type: String!) {\n    locationInfo: metaobject(handle: {handle: $location, type: $type}) {\n      id\n      handle\n      type\n      title: field(key: "title") {\n        value\n        type\n      }\n      description: field(key: "description") {\n        value\n        type\n      }\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              width\n              url\n            }\n          }\n        }\n      }\n      link: field(key: "link") {\n        value\n        type\n      }\n      chapters: field(key: "chapters") {\n        references(first: 5) {\n          nodes {\n            ... on Metaobject {\n              ...Chapter\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+    return: LocationQuery;
+    variables: LocationQueryVariables;
+  };
+  '#graphql\nfragment Location on Metaobject {\n  id\n  handle\n  title: field(key: "title") {\n    value\n  }\n  image: field(key: "image") {\n    reference {\n      ... on MediaImage {\n        alt\n        image {\n          altText\n          height\n          width\n          url\n        }\n      }\n    }\n  }\n  link: field(key: "link") {\n    value\n  }\n  color: field(key: "color") {\n    value\n  }\n}\n\nquery Universe($handle: String!, $type: String!) {\n  universe: metaobject(handle: {handle: $handle, type: $type}) {\n    id\n    handle\n    organization: field(key: "dreamscape_organization") {\n      value\n    }\n    caption: field(key: "caption") {\n      value\n    }\n    image: field(key: "background_image") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            width\n            url\n          }\n        }\n      }\n    }\n    locations: field(key: "locations") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            ...Location\n          }\n        }\n      }\n    }\n  }\n}\n': {
+    return: UniverseQuery;
+    variables: UniverseQueryVariables;
   };
   '#graphql\n  query Page(\n    $language: LanguageCode,\n    $country: CountryCode,\n    $handle: String!\n  )\n  @inContext(language: $language, country: $country) {\n    page(handle: $handle) {\n      id\n      title\n      body\n      seo {\n        description\n        title\n      }\n    }\n  }\n': {
     return: PageQuery;
