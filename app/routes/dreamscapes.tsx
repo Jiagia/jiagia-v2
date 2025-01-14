@@ -9,7 +9,7 @@ import {
   useAsyncValue,
   type MetaFunction,
 } from '@remix-run/react';
-import {Suspense, useState, useMemo} from 'react';
+import {Suspense, useState, useEffect, useMemo} from 'react';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Dreamscapes'}];
@@ -103,7 +103,7 @@ function LocationCarousel() {
           width={150}
         />
         <div className="flex justify-center items-center">
-          <button onClick={prevButton}>
+          <button className='text-4xl hover:scale-150' onClick={prevButton}>
             <Link
               className="hover:no-underline"
               to={locations[(active - 1 + locations.length) % locations.length].handle}
@@ -118,9 +118,14 @@ function LocationCarousel() {
               data={locations[active].image.reference.image}
               width={300}
             />
-            <h3>{locations[active].title.value}</h3>
+            <h3
+              className="font-bold text-2xl"
+              style={{ color: locations[active].color.value }}
+            >
+              {locations[active].title.value}
+            </h3>
           </div>
-          <button onClick={nextButton}>
+          <button className='text-4xl hover:scale-150' onClick={nextButton}>
             <Link
               className="hover:no-underline"
               to={locations[(active + 1) % locations.length].handle}
@@ -170,6 +175,9 @@ fragment Location on Metaobject {
     }
   }
   link: field(key: "link") {
+    value
+  }
+  color: field(key: "color") {
     value
   }
 }

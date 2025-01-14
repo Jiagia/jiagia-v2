@@ -27,7 +27,7 @@ export function Header({
   return (
     <header
       className="header dark:bg-transparent dark:text-white"
-      style={{zIndex: 10}}
+      style={{zIndex: 5}}
     >
       <NavLink
         prefetch="intent"
