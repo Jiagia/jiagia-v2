@@ -80,7 +80,7 @@ function LocationCarousel() {
   const nextButton = () => setActive((active + 1) % locations.length);
 
   return (
-    <div className="bg-black">
+    <div>
       {/* TODO: fix text spacing */}
       <div className="md:w-1/3 mx-8 md:mx-auto my-16 text-center">
         {universe.caption?.value
@@ -146,7 +146,7 @@ function LocationCarousel() {
           width={150}
         />
       </div>
-      <div>
+      <div className="mb-8">
         <Image data={universe.image.reference.image} />
       </div>
       {/* <Outlet /> */}
