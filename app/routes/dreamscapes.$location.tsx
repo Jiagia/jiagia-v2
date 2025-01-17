@@ -63,18 +63,18 @@ function DreamscapeNav() {
   // console.log(locationInfo);
 
   return (
-    <div className="md:flex md:justify-evenly md:items-center">
+    <div className="mb-32 md:flex md:justify-evenly md:items-center">
       {/* todo: fix spacing */}
-      <div className="hidden md:block md:w-1/3 text-center">
-        <h2>{locationInfo.title.value}</h2>
-        <p>{`/${locationInfo.link.value}`}</p>
-        <p>{locationInfo.description.value}</p>
-        <div className="md:w-1/2 md:mx-auto">
+      {/* <div className="hidden md:block md:w-1/3 text-center"> */}
+      <div className="p-10 flex flex-col justify-center items-center gap-8 md:w-1/3 text-center">
+        <h2 className="bg-black text-2xl">{locationInfo.title.value}</h2>
+        <p className="bg-black">{locationInfo.description.value}</p>
+        <div className="bg-black md:w-1/2 md:mx-auto">
           <Image data={locationInfo.image.reference.image} />
         </div>
       </div>
-      <div className="text-center flex flex-col gap-4">
-        {locationInfo.chapters.references.nodes.map((chapter) => {
+      {/* <div className="text-center flex flex-col gap-4">
+        {locationInfo.chapters?.references.nodes.map((chapter) => {
           // TODO: make sure all chapter buttons are the same width and have correct spacing
           return (
             <div key={chapter.id} className="border hover:cursor-pointer hover:bg-white hover:text-black border-white py-2 px-8">
@@ -84,7 +84,7 @@ function DreamscapeNav() {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 }
