@@ -977,6 +977,15 @@ export type UniverseQuery = {
           >;
         }>;
       }>;
+      backgroundImg?: StorefrontAPI.Maybe<{
+        reference?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MediaImage, 'alt'> & {
+            image?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'altText' | 'height' | 'width' | 'url'>
+            >;
+          }
+        >;
+      }>;
     }
   >;
 };
@@ -1577,7 +1586,7 @@ interface GeneratedQueryTypes {
     return: LocationQuery;
     variables: LocationQueryVariables;
   };
-  '#graphql\nfragment Location on Metaobject {\n  id\n  handle\n  title: field(key: "title") {\n    value\n  }\n  image: field(key: "image") {\n    reference {\n      ... on MediaImage {\n        alt\n        image {\n          altText\n          height\n          width\n          url\n        }\n      }\n    }\n  }\n  link: field(key: "link") {\n    value\n  }\n  color: field(key: "color") {\n    value\n  }\n}\n\nquery Universe($handle: String!, $type: String!) {\n  universe: metaobject(handle: {handle: $handle, type: $type}) {\n    id\n    handle\n    organization: field(key: "dreamscape_organization") {\n      value\n    }\n    caption: field(key: "caption") {\n      value\n    }\n    image: field(key: "background_image") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            width\n            url\n          }\n        }\n      }\n    }\n    locations: field(key: "locations") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            ...Location\n          }\n        }\n      }\n    }\n  }\n}\n': {
+  '#graphql\nfragment Location on Metaobject {\n  id\n  handle\n  title: field(key: "title") {\n    value\n  }\n  image: field(key: "image") {\n    reference {\n      ... on MediaImage {\n        alt\n        image {\n          altText\n          height\n          width\n          url\n        }\n      }\n    }\n  }\n  link: field(key: "link") {\n    value\n  }\n  color: field(key: "color") {\n    value\n  }\n}\n\nquery Universe($handle: String!, $type: String!) {\n  universe: metaobject(handle: {handle: $handle, type: $type}) {\n    id\n    handle\n    organization: field(key: "dreamscape_organization") {\n      value\n    }\n    caption: field(key: "caption") {\n      value\n    }\n    image: field(key: "background_image") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            width\n            url\n          }\n        }\n      }\n    }\n    locations: field(key: "locations") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            ...Location\n          }\n        }\n      }\n    }\n    backgroundImg: field(key: "background") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            width\n            url\n          }\n        }\n      }\n    }\n  }\n}\n': {
     return: UniverseQuery;
     variables: UniverseQueryVariables;
   };

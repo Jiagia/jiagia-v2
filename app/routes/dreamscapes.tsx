@@ -60,11 +60,11 @@ export default function Dreamscapes() {
 
 function LocationCarousel() {
   const {universe} = useAsyncValue();
-  const locations = universe.locations.references.nodes;
+  const locations = universe?.locations?.references?.nodes;
   const pathname = useLocation().pathname.split('/');
   // console.log(pathname);
-  let handleIndex: number = -1;
-  if (pathname.length >= 2) {
+  let handleIndex = -1;
+  if (pathname.length >= 2 && locations) {
     for (let i = 0; i < locations.length; ++i) {
       // console.log(locations[i].handle);
       if (locations[i].handle === pathname[2]) {
@@ -72,27 +72,38 @@ function LocationCarousel() {
       }
     }
   }
-  console.log(universe.backgroundImg.reference.image);
 
-  const [active, setActive] = useState<number>((handleIndex === -1) ? 0 : handleIndex);
+  const [active, setActive] = useState<number>(
+    handleIndex === -1 ? 0 : handleIndex,
+  );
 
-  const prevButton = () => setActive((active - 1 + locations.length) % locations.length);
-  const nextButton = () => setActive((active + 1) % locations.length);
+  const prevButton = () => {
+    if (locations) {
+      setActive((active - 1 + locations.length) % locations.length);
+    }
+  };
+  const nextButton = () => {
+    if (locations) {
+      setActive((active + 1) % locations.length);
+    }
+  };
 
   return (
     <div
+      className="h-full"
       style={{
-        backgroundImage: `url(${universe.backgroundImg.reference.image.url})`,
+        backgroundImage: `url(${universe?.backgroundImg?.reference?.image?.url})`,
+        backgroundSize: 'contain',
         backgroundRepeat: 'repeat',
       }}
     >
       {/* TODO: fix text spacing */}
       <div className="bg-black md:w-1/3 flex flex-col justify-center items-center gap-2 mx-8 md:mx-auto my-16 text-center">
-        {universe.caption?.value
+        {(universe?.caption?.value ?? '')
           .split('\n')
           .map((phrase: string, index: number) => (
             <p key={index}>{phrase}</p>
-          ))}
+        ))}
       </div>
       {/* TODO: add carousel */}
       {/* TODO: change location image/chapters when switching locations */}
@@ -107,7 +118,7 @@ function LocationCarousel() {
           data={locations[(active - 1 + locations.length) % locations.length].image.reference.image}
           width={150}
         />
-        <div className="flex md:gap-4 justify-center md:justify-evenly items-center">
+        <div className="flex md:gap-4 justify-center md:justify-between items-center">
           <button className='bg-black text-4xl md:text-5xl hover:scale-150' onClick={prevButton}>
             <Link
               className="hover:no-underline"
@@ -117,9 +128,9 @@ function LocationCarousel() {
               &gt;
             </Link>
           </button>
-          <div className="text-center bg-black border-black border">
+          <div className="text-center border-black border">
             <Image
-              className="w-[300px]"
+              className="w-[300px] bg-transparent"
               data={locations[active].image.reference.image}
               width={300}
             />

@@ -69,7 +69,7 @@ function DreamscapeNav() {
       <div className="p-10 flex flex-col justify-center items-center gap-8 md:w-1/3 text-center">
         <h2 className="bg-black text-2xl">{locationInfo.title.value}</h2>
         <p className="bg-black">{locationInfo.description.value}</p>
-        <div className="bg-black md:w-1/2 md:mx-auto">
+        <div className="bg-transparent md:w-1/2 md:mx-auto">
           <Image data={locationInfo.image.reference.image} />
         </div>
       </div>
