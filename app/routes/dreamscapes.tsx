@@ -60,11 +60,11 @@ export default function Dreamscapes() {
 
 function LocationCarousel() {
   const {universe} = useAsyncValue();
-  const locations = universe.locations.references.nodes;
+  const locations = universe?.locations?.references?.nodes;
   const pathname = useLocation().pathname.split('/');
   // console.log(pathname);
-  let handleIndex: number = -1;
-  if (pathname.length >= 2) {
+  let handleIndex = -1;
+  if (pathname.length >= 2 && locations) {
     for (let i = 0; i < locations.length; ++i) {
       // console.log(locations[i].handle);
       if (locations[i].handle === pathname[2]) {
@@ -72,26 +72,42 @@ function LocationCarousel() {
       }
     }
   }
-  // console.log(handleIndex);
 
-  const [active, setActive] = useState<number>((handleIndex === -1) ? 0 : handleIndex);
+  const [active, setActive] = useState<number>(
+    handleIndex === -1 ? 0 : handleIndex,
+  );
 
-  const prevButton = () => setActive((active - 1 + locations.length) % locations.length);
-  const nextButton = () => setActive((active + 1) % locations.length);
+  const prevButton = () => {
+    if (locations) {
+      setActive((active - 1 + locations.length) % locations.length);
+    }
+  };
+  const nextButton = () => {
+    if (locations) {
+      setActive((active + 1) % locations.length);
+    }
+  };
 
   return (
-    <div>
+    <div
+      className="h-full"
+      style={{
+        backgroundImage: `url(${universe?.backgroundImg?.reference?.image?.url})`,
+        backgroundSize: 'contain',
+        backgroundRepeat: 'repeat',
+      }}
+    >
       {/* TODO: fix text spacing */}
-      <div className="md:w-1/3 mx-8 md:mx-auto my-16 text-center">
-        {universe.caption?.value
+      <div className="bg-black md:w-1/3 flex flex-col justify-center items-center gap-2 mx-8 md:mx-auto my-16 text-center">
+        {(universe?.caption?.value ?? '')
           .split('\n')
           .map((phrase: string, index: number) => (
             <p key={index}>{phrase}</p>
-          ))}
+        ))}
       </div>
       {/* TODO: add carousel */}
       {/* TODO: change location image/chapters when switching locations */}
-      <div className="flex items-center justify-evenly min-gap-4 mb-8 overflow-hidden">
+      <div className="flex items-center justify-evenly mb-16 overflow-hidden">
         <Image
           className="hidden lg:block"
           data={locations[(active - 2 + locations.length) % locations.length].image.reference.image}
@@ -102,36 +118,36 @@ function LocationCarousel() {
           data={locations[(active - 1 + locations.length) % locations.length].image.reference.image}
           width={150}
         />
-        <div className="flex justify-center items-center">
-          <button className='text-4xl hover:scale-150' onClick={prevButton}>
+        <div className="flex md:gap-4 justify-center md:justify-between items-center">
+          <button className='bg-black text-4xl md:text-5xl hover:scale-150' onClick={prevButton}>
             <Link
               className="hover:no-underline"
               to={locations[(active - 1 + locations.length) % locations.length].handle}
               preventScrollReset
             >
-              &lt;
+              &gt;
             </Link>
           </button>
-          <div className="text-center bg-black border-black border">
+          <div className="text-center border-black border">
             <Image
-              className="w-[300px]"
+              className="w-[300px] bg-transparent"
               data={locations[active].image.reference.image}
               width={300}
             />
             <h3
-              className="font-bold text-2xl"
+              className="mt-4 bg-black font-bold text-3xl"
               style={{ color: locations[active].color.value }}
             >
               {locations[active].title.value}
             </h3>
           </div>
-          <button className='text-4xl hover:scale-150' onClick={nextButton}>
+          <button className='bg-black text-4xl md:text-5xl hover:scale-150' onClick={nextButton}>
             <Link
               className="hover:no-underline"
               to={locations[(active + 1) % locations.length].handle}
               preventScrollReset
             >
-              &gt;
+              &lt;
             </Link>
           </button>
         </div>
@@ -146,10 +162,10 @@ function LocationCarousel() {
           width={150}
         />
       </div>
-      <div className="mb-8">
+      <div className="mb-32">
         <Image data={universe.image.reference.image} />
       </div>
-      {/* <Outlet /> */}
+      <Outlet />
     </div>
   );
 }
@@ -210,6 +226,19 @@ query Universe($handle: String!, $type: String!) {
         nodes {
           ... on Metaobject {
             ...Location
+          }
+        }
+      }
+    }
+    backgroundImg: field(key: "background") {
+      reference {
+        ... on MediaImage {
+          alt
+          image {
+            altText
+            height
+            width
+            url
           }
         }
       }

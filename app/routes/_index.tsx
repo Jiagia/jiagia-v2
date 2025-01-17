@@ -223,14 +223,16 @@ function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
         <div className="flex justify-center items-center">
           <img className="mt-40 z-2" src={lumaperl} style={{zIndex:1}}/>
         </div>
+        <div className="font-bold">
+          <div className="bg-black relative z-0">
+            <h5 className="bg-black my-4 text-[60px] md:text-[64px] text-[#896997] relative z-0">LUMAPERL</h5>
+          </div>
 
-        <h4 className="mt-4 text-[32px] text-slate-800 font-bold bg-black z-0 relative">COMING SOON</h4>
-        <div className="invisible font-bold">
-          <h5 className=" my-4 text-[60px] md:text-[64px] text-[#896997] ">LUMAPERL</h5>
-
-          <Link to="/dreamscape/lumaperl">
-            <h4 className="border border-white border-2 text-[16px]"> &gt; VIEW LATEST EXPEDITION &lt; </h4>
-          </Link>
+          <h4 className="bg-black hover:bg-white border-2 border-white hover:text-black text-[16px] p-4 relative z-0">
+            <Link to="/dreamscapes/lumaperl" className="hover:no-underline">
+              &gt; VIEW LATEST EXPEDITION &lt;
+            </Link>
+          </h4>
 
           <div className="min-h-32"></div>
         
