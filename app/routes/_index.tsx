@@ -279,8 +279,8 @@ function Tower({
     <>
       <div className={" h-[360px] w-full font-bold"} style={{backgroundImage: "linear-gradient(to bottom, black, "+sky_color}}>
 
-        <nav className="flex flex-col justify-start items-center h-5/6 space-y-5 text-[18px]  sm:invisible ">
-          <Link to="/about">&gt; ABOUT US &lt;</Link>
+        <nav className="flex flex-col justify-start items-center h-5/6 space-y-5 text-[18px] sm:invisible ">
+          <Link className="border-2 p-2 border-white rounded-xl" to="/about">&gt; ABOUT US &lt;</Link>
           {/* <Link className="pointer-events-none" to="/shop">&gt; SHOP &lt;</Link>
           <Link className="pointer-events-none" to="/lab">&gt; LABORATORY &lt;</Link> */}
         </nav>
@@ -293,11 +293,11 @@ function Tower({
             <Image data={floor.image.reference.image} sizes="100%" />
             {floor.show_name && floor.show_name.value === "true" ? 
               (
-                <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible hover:no-underline lg:mb-2 lg:text-[16px]" 
+                <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible hover:no-underline lg:mb-1 lg:text-[16px]" 
                 to={floor.link?.value || ""} 
                 style={{pointerEvents: floor.active && floor.active.value ==="true" ? "auto" : "none"}}
                 >
-                    <h2 className="">{floor.name?.value}</h2>
+                    <h2 className="mx-auto md:p-1 xl:p-2 w-fit border border-white rounded-xl">{floor.name?.value}</h2>
                   </Link>
               )
               : null
