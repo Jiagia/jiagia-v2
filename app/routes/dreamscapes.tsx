@@ -90,7 +90,7 @@ function LocationCarousel() {
 
   return (
     <div
-      className="h-full"
+      className="relative h-full my-[-125px] pt-[125px]"
       style={{
         backgroundImage: `url(${universe?.backgroundImg?.reference?.image?.url})`,
         backgroundSize: 'contain',
@@ -107,11 +107,11 @@ function LocationCarousel() {
       </div>
       {/* TODO: add carousel */}
       {/* TODO: change location image/chapters when switching locations */}
-      <div className="flex items-center justify-evenly mb-16 overflow-hidden">
+      <div className="h-[350px] flex items-center justify-evenly overflow-hidden">
         <Image
           className="hidden lg:block"
           data={locations[(active - 2 + locations.length) % locations.length].image.reference.image}
-          width={150}
+          width={75}
         />
         <Image
           className="hidden sm:block"
@@ -130,16 +130,10 @@ function LocationCarousel() {
           </button>
           <div className="text-center border-black border">
             <Image
-              className="w-[300px] bg-transparent"
+              className="bg-transparent"
               data={locations[active].image.reference.image}
               width={300}
             />
-            <h3
-              className="mt-4 bg-black font-bold text-3xl"
-              style={{ color: locations[active].color.value }}
-            >
-              {locations[active].title.value}
-            </h3>
           </div>
           <button className='bg-black text-4xl md:text-5xl hover:scale-150' onClick={nextButton}>
             <Link
@@ -159,13 +153,22 @@ function LocationCarousel() {
         <Image
           className="hidden lg:block"
           data={locations[(active + 2) % locations.length].image.reference.image}
-          width={150}
+          width={75}
         />
+      </div>
+      <div className="h-[275px] max-w-[300px] flex flex-col justify-start items-center gap-4 mx-auto mb-4 md:mb-8 text-center bg-transparent">
+        <h3
+          className="bg-black font-bold text-3xl"
+          style={{ color: locations[active].color.value }}
+        >
+          {locations[active].title.value}
+        </h3>
+        <p className="max-w-[300px] bg-black">{locations[active].description.value}</p>
       </div>
       <div className="mb-32">
         <Image data={universe.image.reference.image} />
       </div>
-      <Outlet />
+      {/* <Outlet /> */}
     </div>
   );
 }
@@ -175,6 +178,9 @@ fragment Location on Metaobject {
   id
   handle
   title: field(key: "title") {
+    value
+  }
+  description: field(key: "description") {
     value
   }
   image: field(key: "image") {
