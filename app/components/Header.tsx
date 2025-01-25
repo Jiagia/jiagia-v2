@@ -88,7 +88,7 @@ export function HeaderMenu({
             : item.url;
         return (
           <NavLink
-            className="header-menu-item"
+            className="header-menu-item hover:no-underline"
             end
             key={item.id}
             onClick={close}
