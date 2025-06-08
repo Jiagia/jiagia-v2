@@ -848,6 +848,47 @@ export type CatalogQuery = {
   };
 };
 
+export type PaintingsQueryVariables = StorefrontAPI.Exact<{
+  handle?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+}>;
+
+export type PaintingsQuery = {
+  paintings?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Collection, 'id' | 'title'> & {
+      products: {
+        nodes: Array<
+          Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
+            featuredImage?: StorefrontAPI.Maybe<
+              Pick<
+                StorefrontAPI.Image,
+                'id' | 'altText' | 'url' | 'width' | 'height'
+              >
+            >;
+            priceRange: {
+              minVariantPrice: Pick<
+                StorefrontAPI.MoneyV2,
+                'amount' | 'currencyCode'
+              >;
+              maxVariantPrice: Pick<
+                StorefrontAPI.MoneyV2,
+                'amount' | 'currencyCode'
+              >;
+            };
+            variants: {
+              nodes: Array<{
+                selectedOptions: Array<
+                  Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                >;
+              }>;
+            };
+          }
+        >;
+      };
+    }
+  >;
+};
+
 export type ChapterFragment = Pick<StorefrontAPI.Metaobject, 'id'> & {
   title?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
@@ -1587,6 +1628,10 @@ interface GeneratedQueryTypes {
   '#graphql\n  query Catalog(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n      nodes {\n        ...ProductItem\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment MoneyProductItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment ProductItem on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyProductItem\n      }\n      maxVariantPrice {\n        ...MoneyProductItem\n      }\n    }\n    variants(first: 1) {\n      nodes {\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n\n': {
     return: CatalogQuery;
     variables: CatalogQueryVariables;
+  };
+  '#graphql\n  query Paintings($handle: String, $first: Int) {\n    paintings: collection(handle: $handle) {\n      id\n      title\n      products(first: $first) {\n        nodes {\n          ...ProductItem\n        }\n      }\n    }\n  }\n  #graphql\n  fragment MoneyProductItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment ProductItem on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyProductItem\n      }\n      maxVariantPrice {\n        ...MoneyProductItem\n      }\n    }\n    variants(first: 1) {\n      nodes {\n        selectedOptions {\n          name\n          value\n        }\n      }\n    }\n  }\n\n': {
+    return: PaintingsQuery;
+    variables: PaintingsQueryVariables;
   };
   '#graphql\n  fragment Chapter on Metaobject {\n    id\n    title: field(key: "title") {\n      value\n      type\n    }\n    link: field(key: "link") {\n      value\n      type\n    }\n    active: field(key: "active") {\n      value\n      type\n    }\n  }\n\n  query Location($location: String!, $type: String!) {\n    locationInfo: metaobject(handle: {handle: $location, type: $type}) {\n      id\n      handle\n      type\n      title: field(key: "title") {\n        value\n        type\n      }\n      description: field(key: "description") {\n        value\n        type\n      }\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              width\n              url\n            }\n          }\n        }\n      }\n      link: field(key: "link") {\n        value\n        type\n      }\n      chapters: field(key: "chapters") {\n        references(first: 5) {\n          nodes {\n            ... on Metaobject {\n              ...Chapter\n            }\n          }\n        }\n      }\n    }\n  }\n': {
     return: LocationQuery;
