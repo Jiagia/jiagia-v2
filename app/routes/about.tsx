@@ -1,4 +1,4 @@
-import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {data, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Image} from '@shopify/hydrogen';
 import {Await, useLoaderData, NavLink, Link, type MetaFunction} from '@remix-run/react';
 import {Suspense} from 'react';
@@ -16,7 +16,7 @@ export async function loader(args: LoaderFunctionArgs) {
 
   const criticalData = await loadCriticalData(args);
 
-  return defer({...deferredData, criticalData});
+  return data({...deferredData, criticalData});
 }
 
 async function loadCriticalData({context}: LoaderFunctionArgs) {
