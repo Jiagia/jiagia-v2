@@ -155,7 +155,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <Meta />
         <Links />
       </head>
-      <body className="dark bg-black overflow-x-hidden">
+      <body className=" bg-white overflow-x-hidden">
         {data ? (
           <Analytics.Provider
             cart={data.cart}

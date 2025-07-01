@@ -14,7 +14,7 @@ export function Tower({
   clouds: Promise<CloudsQuery | null>;
 }) {
   return (
-    <div>
+    <div className="relative md:min-h-[120wh]">
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={tower}>
           {(response) => (
@@ -75,7 +75,7 @@ function TowerBuidling({
     <>
       <div className={" h-[360px] w-full font-bold"} style={{backgroundImage: "linear-gradient(to bottom, white, " + sky_color}}>
 
-        <nav className="flex flex-col justify-start items-center h-5/6 space-y-5 text-[18px] sm:invisible ">
+        <nav className="flex flex-col justify-start items-center p-16 h-5/6 space-y-5 text-[18px] sm:invisible ">
           <Link className="border-2 p-2 border-white rounded-xl" to="/about">&gt; ABOUT US &lt;</Link>
           {/* <Link className="pointer-events-none" to="/shop">&gt; SHOP &lt;</Link>
           <Link className="pointer-events-none" to="/lab">&gt; LABORATORY &lt;</Link> */}
@@ -93,7 +93,7 @@ function TowerBuidling({
                 to={floor.link?.value || ""} 
                 style={{pointerEvents: floor.active && floor.active.value ==="true" ? "auto" : "none"}}
                 >
-                    <h2 className="mx-auto md:p-1 xl:p-2 w-fit border border-white rounded-xl">{floor.name?.value}</h2>
+                    <p className="mx-auto md:p-1 xl:p-2 w-fit border border-white rounded-xl">{floor.name?.value}</p>
                   </Link>
               )
               : null

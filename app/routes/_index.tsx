@@ -115,7 +115,7 @@ export default function Homepage() {
        <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={data.tower}>
           {(response) => (
-            <div className="relative md:min-h-[120wh]">
+            <div className="relative min-h-[120wh]">
             {response ? (
               <>
                 <Tower tower={response} />
