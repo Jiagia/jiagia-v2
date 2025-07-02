@@ -9,6 +9,7 @@ import {
   useRouteLoaderData,
   ScrollRestoration,
   isRouteErrorResponse,
+  LiveReload,
   type ShouldRevalidateFunction,
   Link,
 } from '@remix-run/react';
@@ -173,7 +174,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
         />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
-        
+        <LiveReload />
       </body>
     </html>
   );

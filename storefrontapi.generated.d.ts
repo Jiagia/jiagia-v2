@@ -295,41 +295,6 @@ export type StoreRobotsQueryVariables = StorefrontAPI.Exact<{
 
 export type StoreRobotsQuery = {shop: Pick<StorefrontAPI.Shop, 'id'>};
 
-export type PlanetsQueryVariables = StorefrontAPI.Exact<{[key: string]: never}>;
-
-export type PlanetsQuery = {
-  planets: {
-    nodes: Array<
-      Pick<StorefrontAPI.Metaobject, 'id' | 'handle' | 'type'> & {
-        image?: StorefrontAPI.Maybe<{
-          reference?: StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.MediaImage, 'alt'> & {
-              image?: StorefrontAPI.Maybe<
-                Pick<
-                  StorefrontAPI.Image,
-                  'altText' | 'height' | 'id' | 'url' | 'width'
-                >
-              >;
-            }
-          >;
-        }>;
-        size?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-        >;
-        pos_m?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-        >;
-        pos_d?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-        >;
-        index?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-        >;
-      }
-    >;
-  };
-};
-
 export type FloorFragment = Pick<StorefrontAPI.Metaobject, 'id'> & {
   image?: StorefrontAPI.Maybe<{
     reference?: StorefrontAPI.Maybe<
@@ -429,77 +394,6 @@ export type CloudsQuery = {
         position?: StorefrontAPI.Maybe<
           Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
         >;
-      }
-    >;
-  };
-};
-
-export type FeaturedCollectionFragment = Pick<
-  StorefrontAPI.Collection,
-  'id' | 'title' | 'handle'
-> & {
-  image?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
-  >;
-};
-
-export type FeaturedCollectionQueryVariables = StorefrontAPI.Exact<{
-  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
-  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-}>;
-
-export type FeaturedCollectionQuery = {
-  collections: {
-    nodes: Array<
-      Pick<StorefrontAPI.Collection, 'id' | 'title' | 'handle'> & {
-        image?: StorefrontAPI.Maybe<
-          Pick<
-            StorefrontAPI.Image,
-            'id' | 'url' | 'altText' | 'width' | 'height'
-          >
-        >;
-      }
-    >;
-  };
-};
-
-export type RecommendedProductFragment = Pick<
-  StorefrontAPI.Product,
-  'id' | 'title' | 'handle'
-> & {
-  priceRange: {
-    minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
-  };
-  images: {
-    nodes: Array<
-      Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
-    >;
-  };
-};
-
-export type RecommendedProductsQueryVariables = StorefrontAPI.Exact<{
-  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
-  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-}>;
-
-export type RecommendedProductsQuery = {
-  products: {
-    nodes: Array<
-      Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle'> & {
-        priceRange: {
-          minVariantPrice: Pick<
-            StorefrontAPI.MoneyV2,
-            'amount' | 'currencyCode'
-          >;
-        };
-        images: {
-          nodes: Array<
-            Pick<
-              StorefrontAPI.Image,
-              'id' | 'url' | 'altText' | 'width' | 'height'
-            >
-          >;
-        };
       }
     >;
   };
@@ -1491,10 +1385,6 @@ interface GeneratedQueryTypes {
     return: StoreRobotsQuery;
     variables: StoreRobotsQueryVariables;
   };
-  '#graphql\nquery Planets {\n  planets: metaobjects(type: "planet", first: 20) {\n    nodes {\n      id\n      handle\n      type\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              id\n              url\n              width\n            }\n          }\n        }\n      }\n      size: field(key: "size") {\n        value\n        type\n      }\n      pos_m: field(key: "pos_m") {\n        value\n        type\n      }\n      pos_d: field(key: "pos_d") {\n        value\n        type\n      }\n      index: field(key: "index") {\n        value\n        type\n      }\n    }\n  }\n}\n': {
-    return: PlanetsQuery;
-    variables: PlanetsQueryVariables;
-  };
   '#graphql\n  fragment Floor on Metaobject {\n    id,\n    image: field(key: "image") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            id\n            url\n            width\n          }\n        }\n      }\n    }\n    name: field(key: "name") {\n      value\n    }\n    link: field(key: "link") {\n      value,\n    }\n    active: field(key: "link_active") {\n      value\n    }\n    show_name: field(key: "show_name") {\n      value\n    }\n  }\n\n  query Tower($handle: String!, $type: String!) {\n    home: metaobject(handle: {handle: $handle, type: $type}) {\n      id\n      handle\n      type\n      floors: field(key: "floors") {\n        references(first: 10) {\n          nodes {\n            ...Floor\n          }\n        }\n      }\n      color: field(key: "sky_colors") {\n        value\n        type\n      }\n      time: field(key: "time") {\n        value\n        type\n      }\n    }\n  }\n': {
     return: TowerQuery;
     variables: TowerQueryVariables;
@@ -1502,14 +1392,6 @@ interface GeneratedQueryTypes {
   '#graphql\nquery Clouds {\n  cloud: metaobjects(type: "cloud", first: 20) {\n    nodes {\n      id\n      handle\n      type\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              id\n              url\n              width\n            }\n          }\n        }\n      }\n      size: field(key: "size") {\n        value\n        type\n      }\n      speed: field(key: "speed") {\n        value\n        type\n      }\n      delay: field(key: "delay") {\n        value\n        type\n      }\n      position: field(key: "position") {\n        value\n        type\n      }\n    }\n  }\n}\n': {
     return: CloudsQuery;
     variables: CloudsQueryVariables;
-  };
-  '#graphql\n  fragment FeaturedCollection on Collection {\n    id\n    title\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n    handle\n  }\n  query FeaturedCollection($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {\n      nodes {\n        ...FeaturedCollection\n      }\n    }\n  }\n': {
-    return: FeaturedCollectionQuery;
-    variables: FeaturedCollectionQueryVariables;
-  };
-  '#graphql\n  fragment RecommendedProduct on Product {\n    id\n    title\n    handle\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    images(first: 1) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n  }\n  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    products(first: 4, sortKey: UPDATED_AT, reverse: true) {\n      nodes {\n        ...RecommendedProduct\n      }\n    }\n  }\n': {
-    return: RecommendedProductsQuery;
-    variables: RecommendedProductsQueryVariables;
   };
   '#graphql\n  query About($handle: String!) {\n    page(handle: $handle) {\n      handle\n      body\n      seo {\n        title\n        description\n      }\n    }\n  }\n': {
     return: AboutQuery;
