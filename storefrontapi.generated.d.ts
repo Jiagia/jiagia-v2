@@ -351,6 +351,15 @@ export type ExhibitionFragment = Pick<
   description?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.MetaobjectField, 'value'>
   >;
+  poster?: StorefrontAPI.Maybe<{
+    reference?: StorefrontAPI.Maybe<
+      Pick<StorefrontAPI.MediaImage, 'alt'> & {
+        image?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Image, 'altText' | 'height' | 'width' | 'url'>
+        >;
+      }
+    >;
+  }>;
 };
 
 export type FeaturedExhibitionsQueryVariables = StorefrontAPI.Exact<{
@@ -372,6 +381,18 @@ export type FeaturedExhibitionsQuery = {
               description?: StorefrontAPI.Maybe<
                 Pick<StorefrontAPI.MetaobjectField, 'value'>
               >;
+              poster?: StorefrontAPI.Maybe<{
+                reference?: StorefrontAPI.Maybe<
+                  Pick<StorefrontAPI.MediaImage, 'alt'> & {
+                    image?: StorefrontAPI.Maybe<
+                      Pick<
+                        StorefrontAPI.Image,
+                        'altText' | 'height' | 'width' | 'url'
+                      >
+                    >;
+                  }
+                >;
+              }>;
             }
           >;
         }>;
@@ -1474,7 +1495,7 @@ interface GeneratedQueryTypes {
     return: FeaturedArtQuery;
     variables: FeaturedArtQueryVariables;
   };
-  '#graphql\nfragment Exhibition on Metaobject {\n  id\n  handle\n  title: field(key: "title") {\n    value\n  }\n  description: field(key: "description") {\n    value\n  }\n}\nquery FeaturedExhibitions($handle: String!, $type: String!) {\n  featuredExhibitions: metaobject(handle: {handle: $handle, type: $type}) {\n    id\n    handle\n    title: field(key: "title") {\n      value\n    }\n    exhibitions: field(key: "exhibitions") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            ...Exhibition\n          }\n        }\n      }\n    }\n  }\n}': {
+  '#graphql\nfragment Exhibition on Metaobject {\n  id\n  handle\n  title: field(key: "title") {\n    value\n  }\n  description: field(key: "description") {\n    value\n  }\n  poster: field(key: "poster") {\n    reference {\n      ... on MediaImage {\n        alt\n        image {\n          altText\n          height\n          width\n          url\n        }\n      }\n    }\n  }\n}\nquery FeaturedExhibitions($handle: String!, $type: String!) {\n  featuredExhibitions: metaobject(handle: {handle: $handle, type: $type}) {\n    id\n    handle\n    title: field(key: "title") {\n      value\n    }\n    exhibitions: field(key: "exhibitions") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            ...Exhibition\n          }\n        }\n      }\n    }\n  }\n}': {
     return: FeaturedExhibitionsQuery;
     variables: FeaturedExhibitionsQueryVariables;
   };

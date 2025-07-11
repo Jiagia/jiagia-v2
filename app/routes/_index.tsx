@@ -3,6 +3,7 @@ import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
 import {useState} from 'react';
 import {HEADER_QUERY} from '~/lib/fragments';
+import type {FeaturedArtQuery, FeaturedExhibitionsQuery} from 'storefrontapi.generated';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Jiagia Studios'}];
@@ -84,36 +85,44 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 
 export default function Homepage() {
   const {featuredArt, featuredExhibitions, header} = useLoaderData<typeof loader>();
-  const entries = featuredArt?.entries?.references?.nodes;
-  const exhibitions = featuredExhibitions?.exhibitions?.references?.nodes;
-  const [active, setActive] = useState(0);
-  console.log(featuredArt);
-  console.log(featuredExhibitions);
-  console.log(header);
-  // console.log(entries);
-  // console.log(entries[active]);
-  console.log(exhibitions);
-  // console.log(JSON.parse(entries[active].caption.value));
 
   return (
     <div>
-      <div className="flex flex-col items-center text-center m-10 lg:m-20">
-        <h1 className=" text-4xl lg:text-8xl font-bold">JIAGIA STUDIOS</h1>
-        <div className="flex flex-wrap gap-4 text-red-800 font-bold">
-          <a href="/shop" className="hover:no-underline">
-            SHOP
-          </a>
-          <a href="/lab" className="hover:no-underline">
-            LAB
-          </a>
-          <a href="/exhibitions" className="hover:no-underline">
-            EXHIBITIONS
-          </a>
-        </div>
+      <HomePageNav />
+      <FeaturedArt featuredArt={featuredArt} />
+      <AboutUs />
+      <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
+    </div>
+  );
+}
+
+function HomePageNav() {
+  return (
+    <div className="flex flex-col items-center text-center m-10 lg:m-20">
+      <h1 className=" text-4xl lg:text-8xl font-bold">JIAGIA STUDIOS</h1>
+      <div className="flex flex-wrap gap-4 text-red-800 font-bold">
+        <a href="/shop" className="hover:no-underline">
+          SHOP
+        </a>
+        <a href="/lab" className="hover:no-underline">
+          LAB
+        </a>
+        <a href="/exhibitions" className="hover:no-underline">
+          EXHIBITIONS
+        </a>
       </div>
+    </div>
+  );
+}
+
+function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
+  const [active, setActive] = useState(0);
+  const entries = featuredArt?.entries?.references?.nodes;
+  return (
+    <div>
       <div className="flex flex-col items-center gap-2 max-w-[450px] mx-auto text-center">
-        <h2 className="text-3xl font-bold"text-3xl font-bold>FEATURED ART</h2>
-        <p className="font">Displayed in the Daydream Universe Artifact Gallery</p>
+        <h2 className="text-3xl font-bold">FEATURED ART</h2>
+        <p>Displayed in the Daydream Universe Artifact Gallery</p>
       </div>
       <div className="max-w-[80vw] mx-auto">
         <div className="my-8">
@@ -140,36 +149,52 @@ export default function Homepage() {
           ))}
         </div>
       </div>
-      <div className="flex flex-col items-center gap-4 max-w-[450px] py-20 mx-auto text-center">
+    </div>
+  );
+}
+
+function AboutUs() {
+  return (
+    <div className="flex flex-col items-center gap-4 max-w-[450px] py-20 mx-auto text-center">
+      <p>
+        WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE
+        <span className="italic"> &quot;DAYDREAM UNIVERSE&quot;</span>
+      </p>
+      <p>
+        FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY
+        FINDINGS
+      </p>
+      <Link to="/about">Learn More About Us</Link>
+    </div>
+  );
+}
+
+function FeaturedExhibitions({
+  featuredExhibitions,
+}: {
+  featuredExhibitions: FeaturedExhibitionsQuery;
+}) {
+  const exhibitions = featuredExhibitions?.exhibitions?.references?.nodes;
+
+  return (
+    <div className="bg-black text-white py-20">
+      <div className="flex flex-col items-center gap-2 max-w-[550px] mx-auto my-20 text-center">
+        <h2 className="text-3xl font-bold">EXHIBITIONS</h2>
         <p>
-          WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE
-          <span className="italic"> &quot;DAYDREAM UNIVERSE&quot;</span>
+          Our exhibitions are collection of works displayed within a
+          dreamscape. Each one are based on our explorations and findings.
         </p>
-        <p>
-          FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY
-          FINDINGS
-        </p>
-        <Link to="/about">Learn More About Us</Link>
       </div>
-      <div className="bg-black text-white py-20">
-        <div className="flex flex-col items-center gap-2 max-w-[550px] mx-auto my-20 text-center">
-          <h2 className="text-3xl font-bold">EXHIBITIONS</h2>
-          <p>
-            Our exhibitions are collection of works displayed within a
-            dreamscape. Each one are based on our explorations and findings.
-          </p>
-        </div>
-        <div className="flex flex-wrap justify-evenly my-20">
-          {exhibitions.map((exhibition) =>
-            <div key={exhibition.id} className="flex flex-col gap-4 max-w-[600px] text-wrap text-3xl">
-              <Image
-                data={exhibition.poster.reference.image}
-              />
-              <h3>{exhibition.title.value}</h3>
-              <p>{exhibition.description.value}</p>
-            </div>
-          )}
-        </div>
+      <div className="flex flex-wrap justify-evenly my-20">
+        {exhibitions.map((exhibition) =>
+          <div key={exhibition.id} className="flex flex-col gap-4 max-w-[600px] text-wrap text-3xl">
+            <Image
+              data={exhibition?.poster?.reference?.image}
+            />
+            <h3>{exhibition.title.value}</h3>
+            <p>{exhibition.description.value}</p>
+          </div>
+        )}
       </div>
     </div>
   );
