@@ -2,6 +2,7 @@ import {Image} from '@shopify/hydrogen';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
 import {useState} from 'react';
+import {HEADER_QUERY} from '~/lib/fragments';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Jiagia Studios'}];
@@ -55,9 +56,21 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
     });
   }
 
+  const [header] = await Promise.all([
+    context.storefront.query(HEADER_QUERY, {
+      cache: context.storefront.CacheLong(),
+      variables: {
+        headerMenuHandle: 'main-menu', // Adjust to your header menu handle
+      },
+    }),
+    // Add other queries here, so that they are loaded in parallel
+  ]);
+
+  console.log(JSON.stringify(header));
+
   console.log(JSON.stringify(featuredArt));
   console.log(JSON.stringify(featuredExhibitions));
-  return {...featuredArt, ...featuredExhibitions};
+  return {...featuredArt, ...featuredExhibitions, header};
 }
 
 /**
@@ -70,12 +83,13 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 }
 
 export default function Homepage() {
-  const {featuredArt, featuredExhibitions} = useLoaderData<typeof loader>();
+  const {featuredArt, featuredExhibitions, header} = useLoaderData<typeof loader>();
   const entries = featuredArt?.entries?.references?.nodes;
   const exhibitions = featuredExhibitions?.exhibitions?.references?.nodes;
   const [active, setActive] = useState(0);
   console.log(featuredArt);
   console.log(featuredExhibitions);
+  console.log(header);
   // console.log(entries);
   // console.log(entries[active]);
   console.log(exhibitions);
@@ -83,9 +97,23 @@ export default function Homepage() {
 
   return (
     <div>
+      <div className="flex flex-col items-center text-center m-10 lg:m-20">
+        <h1 className=" text-4xl lg:text-8xl font-bold">JIAGIA STUDIOS</h1>
+        <div className="flex flex-wrap gap-4 text-red-800 font-bold">
+          <a href="/shop" className="hover:no-underline">
+            SHOP
+          </a>
+          <a href="/lab" className="hover:no-underline">
+            LAB
+          </a>
+          <a href="/exhibitions" className="hover:no-underline">
+            EXHIBITIONS
+          </a>
+        </div>
+      </div>
       <div className="flex flex-col items-center gap-2 max-w-[450px] mx-auto text-center">
         <h2 className="text-3xl font-bold"text-3xl font-bold>FEATURED ART</h2>
-        <p>Displayed in the Daydream Universe Artifact Gallery</p>
+        <p className="font">Displayed in the Daydream Universe Artifact Gallery</p>
       </div>
       <div className="max-w-[80vw] mx-auto">
         <div className="my-8">
