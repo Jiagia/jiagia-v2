@@ -3,7 +3,10 @@ import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
 import {useState} from 'react';
 import {HEADER_QUERY} from '~/lib/fragments';
-import type {FeaturedArtQuery, FeaturedExhibitionsQuery, FeaturedGearQuery, FeaturedArtifactsQuery} from 'storefrontapi.generated';
+import type {
+  FeaturedArtQuery,
+  FeaturedExhibitionsQuery,
+} from 'storefrontapi.generated';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Jiagia Studios'}];
@@ -58,7 +61,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
   }
 
   handle = 'season-4';
-  let first = 3;
+  const first = 3;
 
   const gear = await context.storefront.query(GEAR, {
     cache: context.storefront.CacheLong(),
@@ -100,7 +103,13 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
 
   console.log(JSON.stringify(featuredArt));
   console.log(JSON.stringify(featuredExhibitions));
-  return {...featuredArt, ...featuredExhibitions, ...gear, ...artifacts, header};
+  return {
+    ...featuredArt,
+    ...featuredExhibitions,
+    ...gear,
+    ...artifacts,
+    header,
+  };
 }
 
 /**
@@ -113,7 +122,13 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 }
 
 export default function Homepage() {
-  const {featuredArt, featuredExhibitions, gear, artifacts, header} = useLoaderData<typeof loader>();
+  const {
+    featuredArt,
+    featuredExhibitions,
+    gear,
+    artifacts,
+    header,
+  } = useLoaderData<typeof loader>();
   console.log(gear);
   console.log(artifacts);
 
@@ -124,7 +139,7 @@ export default function Homepage() {
       <AboutUs />
       <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
       <FeaturedGear gear={gear} />
-      <div className="border border-black mx-20"></div>
+      <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div>
       <FeaturedArtifacts artifacts={artifacts} />
     </div>
   );
@@ -132,9 +147,11 @@ export default function Homepage() {
 
 function HomePageNav() {
   return (
-    <div className="flex flex-col items-center text-center m-10 lg:m-20">
-      <h1 className=" text-4xl lg:text-8xl font-bold">JIAGIA STUDIOS</h1>
-      <div className="flex flex-wrap gap-4 text-red-800 font-bold">
+    <div className="flex flex-col items-center text-center p-6 md:p-10 lg:p-20">
+      <h1 className="text-3xl md:text-6xl lg:text-8xl font-bold mb-4 md:mb-6">
+        JIAGIA STUDIOS
+      </h1>
+      <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-red-800 font-bold text-sm md:text-base">
         <Link to="/shop" className="hover:no-underline">
           SHOP
         </Link>
@@ -152,34 +169,47 @@ function HomePageNav() {
 function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
   const [active, setActive] = useState(0);
   const entries = featuredArt?.entries?.references?.nodes;
+  
+  if (!entries || entries.length === 0) {
+    return null;
+  }
+
   return (
-    <div>
-      <div className="flex flex-col items-center gap-2 max-w-[450px] mx-auto text-center">
-        <h2 className="text-3xl font-bold">FEATURED ART</h2>
-        <p>Displayed in the Daydream Universe Artifact Gallery</p>
+    <div className="px-4 md:px-8 lg:px-16">
+      <div className="flex flex-col items-center gap-2 max-w-md mx-auto text-center mb-6 md:mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold">FEATURED ART</h2>
+        <p className="text-sm md:text-base">
+          Displayed in the Daydream Universe Artifact Gallery
+        </p>
       </div>
-      <div className="max-w-[80vw] mx-auto">
-        <div className="my-8">
-          <Image
-            data={
-              featuredArt.entries.references.nodes[active].image.reference.image
-            }
-          />
-          <div className="flex flex-wrap justify-start gap-4">
-            {JSON.parse(entries[active].caption.value)?.map((caption, index) => (
-              <p className="mr-4"key={index}>{caption}</p>
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-6 md:mb-8">
+          <div className="w-full max-w-3xl mx-auto mb-4">
+            <Image
+              data={entries[active].image.reference.image}
+              className="w-full h-auto"
+            />
+          </div>
+          <div className="flex flex-wrap justify-center gap-2 md:gap-4 text-sm md:text-base">
+            {JSON.parse(entries[active].caption.value)?.map((caption: string, index: number) => (
+              <p className="px-2" key={index}>
+                {caption}
+              </p>
             ))}
           </div>
         </div>
-        <div className="flex flex-wrap justify-start gap-4">
-          {featuredArt.entries.references.nodes.map((entry, index) => (
-            <div
+        <div className="flex flex-wrap justify-center gap-2 md:gap-4">
+          {entries.map((entry: any, index: number) => (
+            <button
               key={entry.id}
               onClick={() => setActive(index)}
-              className={`hover:cursor-pointer ${active === index ? 'border-2 border-black' : ''}`}
+              className={`hover:cursor-pointer transition-all ${
+                active === index ? 'border-2 border-black' : ''
+              }`}
+              aria-label={`View featured art ${index + 1}`}
             >
-              <Image data={entry.image.reference.image} width={150} />
-            </div>
+              <Image data={entry.image.reference.image} width={100} className="md:w-32 lg:w-36" />
+            </button>
           ))}
         </div>
       </div>
@@ -189,16 +219,21 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
 
 function AboutUs() {
   return (
-    <div className="flex flex-col items-center gap-4 max-w-[450px] py-20 mx-auto text-center">
-      <p>
+    <div className="flex flex-col items-center gap-4 max-w-lg py-12 md:py-20 mx-auto text-center px-4 md:px-8">
+      <p className="text-sm md:text-base leading-relaxed">
         WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE
         <span className="italic"> &quot;DAYDREAM UNIVERSE&quot;</span>
       </p>
-      <p>
+      <p className="text-sm md:text-base leading-relaxed">
         FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY
         FINDINGS
       </p>
-      <Link to="/about">Learn More About Us</Link>
+      <Link 
+        to="/about" 
+        className="mt-4 text-sm md:text-base hover:underline"
+      >
+        Learn More About Us
+      </Link>
     </div>
   );
 }
@@ -210,57 +245,95 @@ function FeaturedExhibitions({
 }) {
   const exhibitions = featuredExhibitions?.exhibitions?.references?.nodes;
 
+  if (!exhibitions || exhibitions.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="bg-black text-white py-20">
-      <div className="flex flex-col items-center gap-2 max-w-[550px] mx-auto my-20 text-center">
-        <h2 className="text-3xl font-bold">EXHIBITIONS</h2>
-        <p>
-          Our exhibitions are collection of works displayed within a
-          dreamscape. Each one are based on our explorations and findings.
+    <div className="bg-black text-white py-12 md:py-20">
+      <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 md:mb-20 text-center px-4 md:px-8">
+        <h2 className="text-2xl md:text-3xl font-bold">EXHIBITIONS</h2>
+        <p className="text-sm md:text-base leading-relaxed">
+          Our exhibitions are collection of works displayed within a dreamscape. 
+          Each one are based on our explorations and findings.
         </p>
       </div>
-      <div className="flex flex-wrap justify-evenly my-20">
-        {exhibitions.map((exhibition) =>
-          <div key={exhibition.id} className="flex flex-col gap-4 max-w-[600px] text-wrap text-3xl">
-            <Image
-              data={exhibition?.poster?.reference?.image}
-            />
-            <h3>{exhibition.title.value}</h3>
-            <p>{exhibition.description.value}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 px-4 md:px-8 lg:px-16">
+        {exhibitions.map((exhibition: any) => (
+          <div
+            key={exhibition.id}
+            className="flex flex-col gap-4 text-center"
+          >
+            <div className="w-full">
+              <Image
+                data={exhibition?.poster?.reference?.image}
+                className="w-full h-auto"
+              />
+            </div>
+            <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold">
+              {exhibition.title.value}
+            </h3>
+            <p className="text-sm md:text-base leading-relaxed">
+              {exhibition.description.value}
+            </p>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
 }
 
-function FeaturedGear({gear}: {gear: FeaturedGearQuery}) {
+function FeaturedGear({gear}: {gear: any}) {
   return (
-    <div className="py-20">
-      <h2 className="text-3xl font-bold text-center">GEAR</h2>
-      <div className="flex flex-wrap justify-center gap-4">
-        {gear.products.nodes.map((product) =>
-          <div key={product.id} className="flex flex-col items-center gap-4 max-w-[500px]">
-            <Image data={product.featuredImage} />
-            <p>{product.title}</p>
+    <div className="py-12 md:py-20 px-4 md:px-8">
+      <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
+        GEAR
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+        {gear?.products?.nodes?.map((product: any) => (
+          <div
+            key={product.id}
+            className="flex flex-col items-center gap-4 text-center"
+          >
+            <div className="w-full max-w-sm">
+              <Image 
+                data={product.featuredImage} 
+                className="w-full h-auto"
+              />
+            </div>
+            <p className="text-sm md:text-base font-medium">
+              {product.title}
+            </p>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
 }
 
-function FeaturedArtifacts({artifacts}: {artifacts: FeaturedArtifactsQuery}) {
+function FeaturedArtifacts({artifacts}: {artifacts: any}) {
   return (
-    <div className="py-20">
-      <h2 className="text-3xl font-bold text-center">ARTIFACTS</h2>
-      <div className="flex flex-wrap justify-center gap-4">
-        {artifacts.products.nodes.map((product) =>
-          <div key={product.id} className="flex flex-col items-center gap-4 max-w-[500px]">
-            <Image data={product.featuredImage} />
-            <p>{product.title}</p>
+    <div className="py-12 md:py-20 px-4 md:px-8">
+      <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
+        ARTIFACTS
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+        {artifacts?.products?.nodes?.map((product: any) => (
+          <div
+            key={product.id}
+            className="flex flex-col items-center gap-4 text-center"
+          >
+            <div className="w-full max-w-sm">
+              <Image 
+                data={product.featuredImage} 
+                className="w-full h-auto"
+              />
+            </div>
+            <p className="text-sm md:text-base font-medium">
+              {product.title}
+            </p>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
