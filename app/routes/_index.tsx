@@ -3,7 +3,7 @@ import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
 import {useState} from 'react';
 import {HEADER_QUERY} from '~/lib/fragments';
-import type {FeaturedArtQuery, FeaturedExhibitionsQuery} from 'storefrontapi.generated';
+import type {FeaturedArtQuery, FeaturedExhibitionsQuery, FeaturedGearQuery, FeaturedArtifactsQuery} from 'storefrontapi.generated';
 
 export const meta: MetaFunction = () => {
   return [{title: 'Jiagia Studios'}];
@@ -57,6 +57,35 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
     });
   }
 
+  handle = 'season-4';
+  let first = 3;
+
+  const gear = await context.storefront.query(GEAR, {
+    cache: context.storefront.CacheLong(),
+    variables: {handle, first},
+  });
+
+  if (!gear) {
+    console.error(gear);
+    throw new Response('Gear not found', {
+      status: 404,
+    });
+  }
+
+  handle = 'season-3';
+
+  const artifacts = await context.storefront.query(ARTIFACTS, {
+    cache: context.storefront.CacheLong(),
+    variables: {handle, first},
+  });
+
+  if (!artifacts) {
+    console.error(artifacts);
+    throw new Response('Artifacts not found', {
+      status: 404,
+    });
+  }
+
   const [header] = await Promise.all([
     context.storefront.query(HEADER_QUERY, {
       cache: context.storefront.CacheLong(),
@@ -71,7 +100,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
 
   console.log(JSON.stringify(featuredArt));
   console.log(JSON.stringify(featuredExhibitions));
-  return {...featuredArt, ...featuredExhibitions, header};
+  return {...featuredArt, ...featuredExhibitions, ...gear, ...artifacts, header};
 }
 
 /**
@@ -84,7 +113,9 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 }
 
 export default function Homepage() {
-  const {featuredArt, featuredExhibitions, header} = useLoaderData<typeof loader>();
+  const {featuredArt, featuredExhibitions, gear, artifacts, header} = useLoaderData<typeof loader>();
+  console.log(gear);
+  console.log(artifacts);
 
   return (
     <div>
@@ -92,6 +123,9 @@ export default function Homepage() {
       <FeaturedArt featuredArt={featuredArt} />
       <AboutUs />
       <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
+      <FeaturedGear gear={gear} />
+      <div className="border border-black mx-20"></div>
+      <FeaturedArtifacts artifacts={artifacts} />
     </div>
   );
 }
@@ -101,15 +135,15 @@ function HomePageNav() {
     <div className="flex flex-col items-center text-center m-10 lg:m-20">
       <h1 className=" text-4xl lg:text-8xl font-bold">JIAGIA STUDIOS</h1>
       <div className="flex flex-wrap gap-4 text-red-800 font-bold">
-        <a href="/shop" className="hover:no-underline">
+        <Link to="/shop" className="hover:no-underline">
           SHOP
-        </a>
-        <a href="/lab" className="hover:no-underline">
+        </Link>
+        <Link to="/lab" className="hover:no-underline">
           LAB
-        </a>
-        <a href="/exhibitions" className="hover:no-underline">
+        </Link>
+        <Link to="/exhibitions" className="hover:no-underline">
           EXHIBITIONS
-        </a>
+        </Link>
       </div>
     </div>
   );
@@ -200,6 +234,38 @@ function FeaturedExhibitions({
   );
 }
 
+function FeaturedGear({gear}: {gear: FeaturedGearQuery}) {
+  return (
+    <div className="py-20">
+      <h2 className="text-3xl font-bold text-center">GEAR</h2>
+      <div className="flex flex-wrap justify-center gap-4">
+        {gear.products.nodes.map((product) =>
+          <div key={product.id} className="flex flex-col items-center gap-4 max-w-[500px]">
+            <Image data={product.featuredImage} />
+            <p>{product.title}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FeaturedArtifacts({artifacts}: {artifacts: FeaturedArtifactsQuery}) {
+  return (
+    <div className="py-20">
+      <h2 className="text-3xl font-bold text-center">ARTIFACTS</h2>
+      <div className="flex flex-wrap justify-center gap-4">
+        {artifacts.products.nodes.map((product) =>
+          <div key={product.id} className="flex flex-col items-center gap-4 max-w-[500px]">
+            <Image data={product.featuredImage} />
+            <p>{product.title}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 const FEATURED_ART = `#graphql
 fragment Entry on Metaobject {
   id
@@ -280,3 +346,49 @@ query FeaturedExhibitions($handle: String!, $type: String!) {
     }
   }
 }` as const;
+
+const GEAR = `#graphql
+query Gear($handle: String!, $first: Int!) {
+  gear: collection(handle: $handle) {
+    id
+    handle
+    products(first: $first) {
+      nodes {
+        id
+        handle
+        title
+        featuredImage {
+          id
+          altText
+          url
+          width
+          height
+        }
+      }
+    }
+  }
+}
+` as const;
+
+const ARTIFACTS = `#graphql
+query Artifacts($handle: String!, $first: Int!) {
+  artifacts: collection(handle: $handle) {
+    id
+    handle
+    products(first: $first) {
+      nodes {
+        id
+        handle
+        title
+        featuredImage {
+          id
+          altText
+          url
+          width
+          height
+        }
+      }
+    }
+  }
+}
+` as const;
