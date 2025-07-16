@@ -23,8 +23,10 @@ export function Footer({
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="footer border-t border-black grid md:grid-cols-3 gap-y-4 justify-items-center items-center pt-2 dark:text-white overflow-hidden mb-[32px]">
-            <KlaviyoForm newsletterLink={newsletterLink} />
+          <footer className="footer flex flex-col items-center gap-y-4 border-t border-black pt-2 overflow-hidden pt-[32px] mb-[32px]">
+            <div className="flex justify-center">
+              <KlaviyoForm newsletterLink={newsletterLink} />
+            </div>
             <div className="justify-self-center py-4 md:pt-0">
               <SocialIcon
                 FacebookLink={FBLink}
@@ -56,7 +58,10 @@ function FooterMenu({
   publicStoreDomain: string;
 }) {
   return (
-    <nav className="text-center md:text-right justify-items-center flex flex-col" role="navigation">
+    <nav
+      className="flex flex-col md:flex-row flex-wrap items-center justify-evenly text-center gap-y-2 gap-x-8 md:gap-x-20"
+      role="navigation"
+    >
       {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
         if (!item.url) return null;
         // if the url is internal, we strip the domain
@@ -95,7 +100,7 @@ function SocialIcon(
     XLink: string,
   }) {
   return (
-    <div className="social-icons">
+    <div className="social-icons flex flex-row items-center gap-4">
       <a
         target="_blank"
         href={FacebookLink}
@@ -221,6 +226,6 @@ function activeLinkStyle({
 }) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'white',
+    color: isPending ? 'grey' : 'black',
   };
 }

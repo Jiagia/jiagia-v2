@@ -168,7 +168,9 @@ function HomePageNav() {
 
 function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
   const [active, setActive] = useState(0);
+  console.log(active);
   const entries = featuredArt?.entries?.references?.nodes;
+  console.log(entries);
   
   if (!entries || entries.length === 0) {
     return null;

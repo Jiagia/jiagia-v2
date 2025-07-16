@@ -401,6 +401,54 @@ export type FeaturedExhibitionsQuery = {
   >;
 };
 
+export type GearQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String']['input'];
+  first: StorefrontAPI.Scalars['Int']['input'];
+}>;
+
+export type GearQuery = {
+  gear?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Collection, 'id' | 'handle'> & {
+      products: {
+        nodes: Array<
+          Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
+            featuredImage?: StorefrontAPI.Maybe<
+              Pick<
+                StorefrontAPI.Image,
+                'id' | 'altText' | 'url' | 'width' | 'height'
+              >
+            >;
+          }
+        >;
+      };
+    }
+  >;
+};
+
+export type ArtifactsQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String']['input'];
+  first: StorefrontAPI.Scalars['Int']['input'];
+}>;
+
+export type ArtifactsQuery = {
+  artifacts?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Collection, 'id' | 'handle'> & {
+      products: {
+        nodes: Array<
+          Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
+            featuredImage?: StorefrontAPI.Maybe<
+              Pick<
+                StorefrontAPI.Image,
+                'id' | 'altText' | 'url' | 'width' | 'height'
+              >
+            >;
+          }
+        >;
+      };
+    }
+  >;
+};
+
 export type FloorFragment = Pick<StorefrontAPI.Metaobject, 'id'> & {
   image?: StorefrontAPI.Maybe<{
     reference?: StorefrontAPI.Maybe<
@@ -1498,6 +1546,14 @@ interface GeneratedQueryTypes {
   '#graphql\nfragment Exhibition on Metaobject {\n  id\n  handle\n  title: field(key: "title") {\n    value\n  }\n  description: field(key: "description") {\n    value\n  }\n  poster: field(key: "poster") {\n    reference {\n      ... on MediaImage {\n        alt\n        image {\n          altText\n          height\n          width\n          url\n        }\n      }\n    }\n  }\n}\nquery FeaturedExhibitions($handle: String!, $type: String!) {\n  featuredExhibitions: metaobject(handle: {handle: $handle, type: $type}) {\n    id\n    handle\n    title: field(key: "title") {\n      value\n    }\n    exhibitions: field(key: "exhibitions") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            ...Exhibition\n          }\n        }\n      }\n    }\n  }\n}': {
     return: FeaturedExhibitionsQuery;
     variables: FeaturedExhibitionsQueryVariables;
+  };
+  '#graphql\nquery Gear($handle: String!, $first: Int!) {\n  gear: collection(handle: $handle) {\n    id\n    handle\n    products(first: $first) {\n      nodes {\n        id\n        handle\n        title\n        featuredImage {\n          id\n          altText\n          url\n          width\n          height\n        }\n      }\n    }\n  }\n}\n': {
+    return: GearQuery;
+    variables: GearQueryVariables;
+  };
+  '#graphql\nquery Artifacts($handle: String!, $first: Int!) {\n  artifacts: collection(handle: $handle) {\n    id\n    handle\n    products(first: $first) {\n      nodes {\n        id\n        handle\n        title\n        featuredImage {\n          id\n          altText\n          url\n          width\n          height\n        }\n      }\n    }\n  }\n}\n': {
+    return: ArtifactsQuery;
+    variables: ArtifactsQueryVariables;
   };
   '#graphql\n  fragment Floor on Metaobject {\n    id,\n    image: field(key: "image") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            id\n            url\n            width\n          }\n        }\n      }\n    }\n    name: field(key: "name") {\n      value\n    }\n    link: field(key: "link") {\n      value,\n    }\n    active: field(key: "link_active") {\n      value\n    }\n    show_name: field(key: "show_name") {\n      value\n    }\n  }\n\n  query Tower($handle: String!, $type: String!) {\n    home: metaobject(handle: {handle: $handle, type: $type}) {\n      id\n      handle\n      type\n      floors: field(key: "floors") {\n        references(first: 10) {\n          nodes {\n            ...Floor\n          }\n        }\n      }\n      color: field(key: "sky_colors") {\n        value\n        type\n      }\n      time: field(key: "time") {\n        value\n        type\n      }\n    }\n  }\n': {
     return: TowerQuery;
