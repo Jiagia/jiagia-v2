@@ -1,4 +1,4 @@
-import {Suspense} from 'react';
+import {Suspense, useState, useEffect} from 'react';
 import {Await, NavLink, useAsyncValue} from '@remix-run/react';
 import {
   type CartViewPayload,
@@ -23,11 +23,51 @@ export function Header({
   cart,
   publicStoreDomain,
 }: HeaderProps) {
+  console.log('render');
   const {shop, menu} = header;
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+
+    const controlHeader = () => {
+      const currentScrollY = window.scrollY;
+
+      // Show header when at top of page
+      if (currentScrollY <= 0) {
+        setIsVisible(true);
+      }
+      // Hide header when scrolling down, show when scrolling up
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', controlHeader);
+
+    return () => {
+      window.removeEventListener('scroll', controlHeader);
+    };
+  }, [lastScrollY]);
+
   return (
     <header
       className="header dark:bg-transparent dark:text-white"
-      style={{zIndex: 5}}
+      style={{
+        zIndex: 5,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
+        transition: 'transform 0.3s ease-in-out',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(10px)',
+      }}
     >
       <NavLink
         prefetch="intent"

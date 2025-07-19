@@ -252,7 +252,7 @@ function FeaturedExhibitions({
   }
 
   return (
-    <div className="bg-black text-white py-12 md:py-20">
+    <div className="bg-black text-white py-12 md:py-20 lg:py-40 px-6 sm:px-14 md:px-20 lg:px-30 xl:px-40">
       <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 md:mb-20 text-center px-4 md:px-8">
         <h2 className="text-2xl md:text-3xl font-bold">EXHIBITIONS</h2>
         <p className="text-sm md:text-base leading-relaxed">

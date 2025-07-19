@@ -174,7 +174,6 @@ export function Layout({children}: {children?: React.ReactNode}) {
         />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
-        <LiveReload />
       </body>
     </html>
   );
