@@ -23,7 +23,6 @@ export function Header({
   cart,
   publicStoreDomain,
 }: HeaderProps) {
-  console.log('render');
   const {shop, menu} = header;
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -56,7 +55,7 @@ export function Header({
 
   return (
     <header
-      className="header dark:bg-transparent dark:text-white"
+      className="header"
       style={{
         zIndex: 5,
         position: 'fixed',

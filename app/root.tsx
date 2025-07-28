@@ -201,7 +201,7 @@ export function ErrorBoundary() {
       className="route-error h-[900px] w-screen flex justify-center items-center overflow-hidden"
       style={{backgroundImage: `url(${backgroundImgUrl})`, backgroundSize: "100% 100%"}}
     >
-      <div className="mx-auto bg-black flex flex-col items-center gap-4 text-center">
+      <div className="mx-auto flex flex-col items-center gap-4 text-center">
         <h1 className="text-4xl">Uh oh...</h1>
         <div>
           <p>It seesms like portal leads nowhere!</p>

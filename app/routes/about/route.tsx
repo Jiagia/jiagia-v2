@@ -1,9 +1,5 @@
 import {data, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link, type MetaFunction} from 'react-router';
-import {Image} from '@shopify/hydrogen';
-import type {
-  FeaturedCollectionFragment,
-} from 'storefrontapi.generated';
 import { Tower, TOWER_QUERY, CLOUD_QUERY} from './Tower';
 
 import artistStatement from "~/assets/ArtistStatement.png"
@@ -87,14 +83,13 @@ export default function AboutUs() {
     <div className="">
       <div>
         <h1 className="mt-[240px] text-center text-[36px]">ABOUT US</h1>
-        <div className="mt-4 w-5/6 sm:w-1/3 mx-auto dark:bg-black" dangerouslySetInnerHTML={{__html: page.body}} />
+        <div className="mt-4 w-5/6 sm:w-1/3 mx-auto" dangerouslySetInnerHTML={{__html: page.body}} />
       </div>
-      <div className="dark dark:bg-black dark:text-white overflow-x-hidden">
+      <div className="bg-black text-white overflow-x-hidden">
         <Tower tower={data.tower} clouds={data.clouds} />
-        <section className="relative">
-          <img src={artistStatement} className="pt-48 md:pt-16 lg:pt-0"/>
-          <div className="absolute top-0 w-full">
-            <div className=" text-center sm:w-1/2 lg:w-1/3 mx-auto">
+        <section>
+          <div className="w-full">
+            <div className="text-center sm:w-1/2 lg:w-1/3 mx-auto">
               <h2 className="text-[36px]">Artist Statement</h2>
               <br />
               <p>Parth creates art based on his experience and deep research conducted. He channels his experience and thoughts through the daydream universe story.</p>
@@ -102,6 +97,7 @@ export default function AboutUs() {
               <p>He hopes people reflect based on values and ideas expressed within these paintings.</p>
             </div>
           </div>
+          <img src={artistStatement} alt="Artist Statement" />
         </section>
       </div>
     </div>
