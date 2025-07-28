@@ -1,6 +1,6 @@
 import {Image} from '@shopify/hydrogen';
-import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
+import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {Link, useLoaderData, type MetaFunction} from 'react-router';
 import {useState} from 'react';
 import {HEADER_QUERY} from '~/lib/fragments';
 import type {
@@ -19,7 +19,7 @@ export async function loader(args: LoaderFunctionArgs) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  return defer({...deferredData, ...criticalData});
+  return {...deferredData, ...criticalData};
 }
 
 /**
@@ -148,7 +148,7 @@ export default function Homepage() {
 function HomePageNav() {
   return (
     <div className="flex flex-col items-center text-center p-6 md:p-10 lg:p-20">
-      <h1 className="text-3xl md:text-6xl lg:text-8xl font-bold mb-4 md:mb-6">
+      <h1 className="text-red text-3xl md:text-6xl lg:text-8xl font-bold mb-4 md:mb-6">
         JIAGIA STUDIOS
       </h1>
       <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-red-800 font-bold text-sm md:text-base">

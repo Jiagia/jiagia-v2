@@ -1,5 +1,5 @@
 import {data, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {Await, useLoaderData, Link, type MetaFunction,} from '@remix-run/react';
+import {Await, useLoaderData, Link, type MetaFunction} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 import type {
   FeaturedCollectionFragment,
@@ -86,7 +86,7 @@ export default function AboutUs() {
   return (
     <div className="">
       <div>
-        <h1 className="mt-[240px] text-center text-[36px] dark:bg-black">ABOUT US</h1>
+        <h1 className="mt-[240px] text-center text-[36px]">ABOUT US</h1>
         <div className="mt-4 w-5/6 sm:w-1/3 mx-auto dark:bg-black" dangerouslySetInnerHTML={{__html: page.body}} />
       </div>
       <div className="dark dark:bg-black dark:text-white overflow-x-hidden">

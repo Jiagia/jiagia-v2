@@ -1,4 +1,4 @@
-import {Await, Link,} from '@remix-run/react';
+import {Await, Link,} from 'react-router';
 import {Suspense, useState, useEffect, useCallback, useMemo} from 'react';
 import {Image} from '@shopify/hydrogen';
 import type {

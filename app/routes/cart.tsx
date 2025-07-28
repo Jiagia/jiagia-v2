@@ -1,4 +1,4 @@
-import {Await, type MetaFunction, useRouteLoaderData} from '@remix-run/react';
+import {Await, type MetaFunction, useRouteLoaderData} from 'react-router';
 import {Suspense} from 'react';
 import type {CartQueryDataReturn} from '@shopify/hydrogen';
 import {CartForm} from '@shopify/hydrogen';
@@ -104,7 +104,7 @@ export async function action({request, context}: ActionFunctionArgs) {
 
 export async function loader({context}: LoaderFunctionArgs) {
       const {cart} = context;
-    // return json(await cart.get());
+    // return data(await cart.get());
     return await cart.get();
 }
 
