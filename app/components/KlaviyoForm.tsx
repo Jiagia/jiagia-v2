@@ -9,7 +9,7 @@ export function KlaviyoForm({newsletterLink}: KlaviyoFormProps) {
         Join our email list for exclusive products and offers!
       </p>
       <a
-        className="w-full md:w-1/2 bg-black hover:bg-white text-white hover:text-black hover:no-underline border border-white p-2"
+        className="w-full md:w-1/2 hover:bg-black hover:text-white hover:no-underline border border-black p-2"
         rel="noopener noreferrer"
         href={newsletterLink}
         target="_blank"
