@@ -1,4 +1,4 @@
-import {Suspense} from 'react';
+import {Suspense, useEffect} from 'react';
 import {data, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, type MetaFunction} from 'react-router';
 import type {ProductFragment} from 'storefrontapi.generated';
@@ -12,6 +12,7 @@ import {getVariantUrl} from '~/lib/variants';
 import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
+import {trackViewedProduct} from '~/components/KlaviyoOnsiteTrack';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [{title: `Hydrogen | ${data?.product.title ?? ''}`}];
@@ -132,6 +133,10 @@ export default function Product() {
     product.selectedVariant,
     variants,
   );
+
+  useEffect(() => {
+    trackViewedProduct(product);
+  },[]);
 
   const {title, descriptionHtml} = product;
 

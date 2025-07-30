@@ -6,6 +6,7 @@ import type {
 } from 'storefrontapi.generated';
 import {AddToCartButton} from '~/components/AddToCartButton';
 import {useAside} from '~/components/Aside';
+import {trackAddedToCart} from '~/components/KlaviyoOnsite';
 
 export function ProductForm({
   product,
@@ -17,6 +18,12 @@ export function ProductForm({
   variants: Array<ProductVariantFragment>;
 }) {
   const {open} = useAside();
+
+  // klaviyo - track adding to cart
+  const handleAtc = function () {
+    trackAddedToCart(product)
+  } 
+
   return (
     <div className="product-form">
       <VariantSelector
@@ -30,6 +37,7 @@ export function ProductForm({
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
         onClick={() => {
+          handleAtc();
           open('cart');
         }}
         lines={
