@@ -3,14 +3,14 @@ export function trackViewedProduct(product) {
     let item = {
         Name: product.title,
         ProductID: product.id.substring(product.id.lastIndexOf('/') + 1),
-        ImageURL: product.selectedVariant.image.url,
+        ImageURL: product.image.url,
         Handle: product.handle,
         Brand: product.vendor,
-        Price: product.selectedVariant.price.amount,
+        Price: product.price.amount,
         Metadata: {
           Brand: product.vendor,
-          Price: product.selectedVariant.unitPrice,
-          CompareAtPrice: product.selectedVariant.compareAtPrice
+          Price: product.unitPrice,
+          CompareAtPrice: product.compareAtPrice
         }
 };
 klaviyo.push(['track', 'Hydrogen Viewed Product', item]);
@@ -24,10 +24,10 @@ let klaviyo = window.klaviyo || []
 let item = {
         Name: product.title,
         ProductID: product.id.substring(product.id.lastIndexOf('/') + 1),
-        ImageURL: product.selectedVariant.image.url,
+        ImageURL: product.image.url,
         Handle: product.handle,
         Brand: product.vendor,
-        Price: product.selectedVariant.price.amount
+        Price: product.price.amount
       }
       klaviyo.push(['track', 'Hydrogen Added To Cart', item])
 }
