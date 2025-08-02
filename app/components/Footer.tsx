@@ -25,7 +25,8 @@ export function Footer({
         {(footer) => (
           <footer className="footer flex flex-col items-center gap-y-4 border-t border-black pt-2 overflow-hidden pt-[32px] mb-[32px]">
             <div className="flex justify-center">
-              <KlaviyoForm newsletterLink={newsletterLink} />
+              {/* <KlaviyoForm newsletterLink={newsletterLink} /> */}
+              <div className="klaviyo-form-SYV6SN"></div>
             </div>
             <div className="justify-self-center py-4 md:pt-0">
               <SocialIcon
