@@ -208,9 +208,9 @@ button.reset:hover:not(:has(> *)) {
   padding: 1rem;
 }
 
-.footer-menu a {
-  /* color: var(--color-dark); */
-}
+/* .footer-menu a {
+  color: var(--color-dark);
+} */
 
 /*
 * --------------------------------------------------
