@@ -134,11 +134,12 @@ export default function Homepage() {
   console.log(artifacts);
 
   return (
-    <div className="h-screen w-screen overflow-hidden">
+    <div className="h-screen w-screen overflow-hidden md:h-auto md:w-auto md:overflow-scroll">
       <img 
+        id="coming-soon"
         src={comingSoon} 
-        alt="Coming Soon" 
-        className="h-full w-full object-cover"
+        alt="Coming Soon Image" 
+        className="w-full h-full object-cover md:h-auto md:object-fill"
       />
       {/* <HomePageNav />
       <FeaturedArt featuredArt={featuredArt} />
