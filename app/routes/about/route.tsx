@@ -92,9 +92,9 @@ export default function AboutUs() {
             <div className="text-center sm:w-1/2 lg:w-1/3 mx-auto">
               <h2 className="text-[36px]">Artist Statement</h2>
               <br />
-              <p>Parth creates art based on his experience and deep research conducted. He channels his experience and thoughts through the daydream universe story.</p>
+              <p>Jiagia is built around a shared creative ecosystem we call the Daydream Universe. At the center of it all are Parth Ghawghawe’s original paintings. These artworks are the core of Jiagia. They hold the ideas and themes that shape everything we create. </p>
               <br />
-              <p>He hopes people reflect based on values and ideas expressed within these paintings.</p>
+              <p>The paintings are filled with symbols, myths, and references, showing how people today explore culture—not in a structured way, but by mixing, reusing, and re-imagining. The characters in the art represent feelings, creative thoughts, or visual metaphors. They help guide people through a rich, layered world. While the meanings are deep, the style stays fun and playful, inspired by the way we tell stories online.</p>
             </div>
           </div>
           <img src={artistStatement} alt="Artist Statement" />
