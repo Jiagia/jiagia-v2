@@ -66,7 +66,7 @@ export function Header({
         transition: 'transform 0.3s ease-in-out',
         // backgroundColor: 'rgba(255, 255, 255, 0.95)',
         backgroundColor: 'transparent',
-        color: 'white',
+        color: '#94a3b8',
         // backdropFilter: 'blur(10px)',
       }}
     >
