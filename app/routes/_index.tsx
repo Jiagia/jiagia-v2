@@ -134,7 +134,7 @@ export default function Homepage() {
   console.log(artifacts);
 
   return (
-    <div className="h-screen w-screen overflow-hidden md:h-auto md:w-auto md:overflow-scroll">
+    <div className="h-screen w-screen overflow-hidden md:h-auto md:w-auto ">
       <img 
         id="coming-soon"
         src={comingSoon} 
