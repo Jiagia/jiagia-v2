@@ -55,7 +55,7 @@ export function Header({
 
   return (
     <header
-      className="header"
+      className="header flex justify-between md:justify-start mx-4"
       style={{
         zIndex: 5,
         position: 'fixed',
@@ -64,8 +64,10 @@ export function Header({
         right: 0,
         transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
         transition: 'transform 0.3s ease-in-out',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(10px)',
+        // backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: 'transparent',
+        color: 'white',
+        // backdropFilter: 'blur(10px)',
       }}
     >
       <NavLink
@@ -83,7 +85,7 @@ export function Header({
         primaryDomainUrl={header.shop.primaryDomain.url}
         publicStoreDomain={publicStoreDomain}
       />
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+      {/* <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
     </header>
   );
 }
@@ -103,7 +105,7 @@ export function HeaderMenu({
   const {close} = useAside();
 
   return (
-    <nav className={className} role="navigation">
+    <nav className={className + ' mx-4'} role="navigation">
       {viewport === 'mobile' && (
         <NavLink
           end

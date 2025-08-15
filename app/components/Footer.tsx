@@ -17,7 +17,7 @@ export function Footer({
   newsletterLink,
 }: FooterProps) {
   const FBLink = 'https://www.facebook.com/profile.php?id=100083105601746';
-  const IGLink = 'https://www.instagram.com/jiagia_studios/';
+  const IGLink = 'https://www.instagram.com/jiagia.x/';
   const XLink = 'https://twitter.com/jiagia_studios';
   return (
     <Suspense>
