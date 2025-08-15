@@ -39,7 +39,7 @@ export function PageLayout({
 
   return (
     <Aside.Provider>
-      <CartAside cart={cart} />
+      {/* <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
       {header && !isHome && (
@@ -49,14 +49,14 @@ export function PageLayout({
           isLoggedIn={isLoggedIn}
           publicStoreDomain={publicStoreDomain}
         />
-      )}
+      )} */}
       <main>{children}</main>
-      <Footer
+      {/* <Footer
         footer={footer}
         header={header}
         publicStoreDomain={publicStoreDomain}
         newsletterLink={newsletterLink}
-      />
+      /> */}
     </Aside.Provider>
   );
 }

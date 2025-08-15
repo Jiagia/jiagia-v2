@@ -7,6 +7,7 @@ import type {
   FeaturedArtQuery,
   FeaturedExhibitionsQuery,
 } from 'storefrontapi.generated';
+import comingSoon from '~/assets/coming-soon.png'
 
 export const meta: MetaFunction = () => {
   return [{title: 'Jiagia Studios'}];
@@ -133,14 +134,19 @@ export default function Homepage() {
   console.log(artifacts);
 
   return (
-    <div>
-      <HomePageNav />
+    <div className="h-screen w-screen overflow-hidden">
+      <img 
+        src={comingSoon} 
+        alt="Coming Soon" 
+        className="h-full w-full object-cover"
+      />
+      {/* <HomePageNav />
       <FeaturedArt featuredArt={featuredArt} />
       <AboutUs />
       <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
       <FeaturedGear gear={gear} />
       <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div>
-      <FeaturedArtifacts artifacts={artifacts} />
+      <FeaturedArtifacts artifacts={artifacts} /> */}
     </div>
   );
 }
