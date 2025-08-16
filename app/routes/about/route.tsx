@@ -24,9 +24,19 @@ export async function loader(args: LoaderFunctionArgs) {
  */
 async function loadCriticalData({context}: LoaderFunctionArgs) {
   const {storefront} = context;
-  const handle = 'about';
+  let handle = 'artist-statement';
 
-  const [{page}] = await Promise.all([
+  let [{page}] = await Promise.all([
+    storefront.query(PAGE_QUERY, {
+      cache: storefront.CacheLong(),
+      variables: {handle},
+    }),
+  ]);
+
+  const artistStmt = page;
+
+   handle = 'about';
+   [{page}] = await Promise.all([
     storefront.query(PAGE_QUERY, {
       cache: storefront.CacheLong(),
       variables: {handle},
@@ -36,9 +46,10 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
   if (!page) {
     console.error(page);
     throw new Response(null, {status: 404});
-  }
+  } 
 
   return {
+    artistStmt,
     page,
   };
 }
@@ -61,13 +72,13 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
       return null;
     });
 
-    const clouds = context.storefront
-    .query(CLOUD_QUERY)
-    .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
-      console.error(error);
-      return null;
-    });
+  const clouds = context.storefront
+  .query(CLOUD_QUERY)
+  .catch((error) => {
+    // Log query errors, but don't throw them so the page can still render
+    console.error(error);
+    return null;
+  });
 
   return {
     tower,
@@ -78,6 +89,7 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 export default function AboutUs() {
   const data = useLoaderData<typeof loader>();
   const page = data.page
+  const artistStmt = data.artistStmt
   
   return (
     <div className="">
@@ -91,10 +103,7 @@ export default function AboutUs() {
           <div className="w-full">
             <div className="text-center sm:w-1/2 lg:w-1/3 mx-auto">
               <h2 className="text-[36px]">Artist Statement</h2>
-              <br />
-              <p>Jiagia is built around a shared creative ecosystem we call the Daydream Universe. At the center of it all are Parth Ghawghawe’s original paintings. These artworks are the core of Jiagia. They hold the ideas and themes that shape everything we create. </p>
-              <br />
-              <p>The paintings are filled with symbols, myths, and references, showing how people today explore culture—not in a structured way, but by mixing, reusing, and re-imagining. The characters in the art represent feelings, creative thoughts, or visual metaphors. They help guide people through a rich, layered world. While the meanings are deep, the style stays fun and playful, inspired by the way we tell stories online.</p>
+              <div className="" dangerouslySetInnerHTML={{__html: artistStmt.body}} />
             </div>
           </div>
           <img src={artistStatement} alt="Artist Statement" />
