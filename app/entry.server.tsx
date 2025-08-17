@@ -1,14 +1,15 @@
-import type {EntryContext, AppLoadContext} from '@shopify/remix-oxygen';
-import {RemixServer} from '@remix-run/react';
-import isbot from 'isbot';
+import type {AppLoadContext} from '@shopify/remix-oxygen';
+import {ServerRouter} from 'react-router';
+import {isbot} from 'isbot';
 import {renderToReadableStream} from 'react-dom/server';
 import {createContentSecurityPolicy} from '@shopify/hydrogen';
+import type {EntryContext} from 'react-router';
 
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
   context: AppLoadContext,
 ) {
   const {nonce, header, NonceProvider} = createContentSecurityPolicy({
@@ -28,11 +29,12 @@ export default async function handleRequest(
     scriptSrc: [
       'https://klaviyo.com',
       'https://*.klaviyo.com',
-      'https://cdn.shopify.com'
+      'https://cdn.shopify.com',
     ],
     connectSrc: [
       'https://klaviyo.com',
-      'https://*.klaviyo.com'
+      'https://*.klaviyo.com',
+      'https://api-js.datadome.co/'
     ],
     fontSrc: [
       'https://klaviyo.com',
@@ -53,13 +55,16 @@ export default async function handleRequest(
 
   const body = await renderToReadableStream(
     <NonceProvider>
-      <RemixServer context={remixContext} url={request.url} />
+      <ServerRouter
+        context={reactRouterContext}
+        url={request.url}
+        nonce={nonce}
+      />
     </NonceProvider>,
     {
       nonce,
       signal: request.signal,
       onError(error) {
-        // eslint-disable-next-line no-console
         console.error(error);
         responseStatusCode = 500;
       },

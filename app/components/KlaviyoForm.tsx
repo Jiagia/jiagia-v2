@@ -1,9 +1,15 @@
-export function KlaviyoForm({newsletterLink}) {
+interface KlaviyoFormProps {
+  newsletterLink: string;
+}
+
+export function KlaviyoForm({newsletterLink}: KlaviyoFormProps) {
   return (
-    <div className="flex flex-col items-center text-center gap-2 px-8">
-      <p>Join our email list for exclusive info and offers!</p>
+    <div className="w-full flex flex-col md:flex-row md:justify-evenly items-center text-center gap-y-4 md:gap-y-0 md:gap-x-20 px-4 md:px-8">
+      <p className="w-full md:w-1/2">
+        Join our email list for exclusive products and offers!
+      </p>
       <a
-        className="w-full bg-black hover:bg-white text-white hover:text-black hover:no-underline border border-white p-2"
+        className="w-full md:w-1/2 hover:bg-black hover:text-white hover:no-underline border border-black p-2"
         rel="noopener noreferrer"
         href={newsletterLink}
         target="_blank"

@@ -1,4 +1,4 @@
-import {Await, Link} from '@remix-run/react';
+import {Await, Link, useLocation} from 'react-router';
 import {Suspense, useId} from 'react';
 import type {
   CartApiQueryFragment,
@@ -32,28 +32,31 @@ export function PageLayout({
   isLoggedIn,
   publicStoreDomain,
 }: PageLayoutProps) {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+  const newsletterLink =
+    'https://manage.kmail-lists.com/subscriptions/subscribe?a=QRiSq4&g=SD5TkF';
 
-  const newsletterLink =  "https://manage.kmail-lists.com/subscriptions/subscribe?a=QRiSq4&g=SD5TkF";
   return (
     <Aside.Provider>
       <CartAside cart={cart} />
       <SearchAside />
-      <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
-      {header && (
+      {/* <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} /> */}
+      {/* {header && !isHome && ( */}
         <Header
           header={header}
           cart={cart}
           isLoggedIn={isLoggedIn}
           publicStoreDomain={publicStoreDomain}
         />
-      )}
-      <main className='dark:text-white'>{children}</main>
-      <Footer
+      {/* )} */}
+      <main>{children}</main>
+      {/* <Footer
         footer={footer}
         header={header}
         publicStoreDomain={publicStoreDomain}
         newsletterLink={newsletterLink}
-      />
+      /> */}
     </Aside.Provider>
   );
 }

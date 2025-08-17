@@ -1,17 +1,13 @@
-import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {Await, useLoaderData, Link, type MetaFunction,} from '@remix-run/react';
-import {Suspense, useState, useEffect, useCallback, useMemo} from 'react';
-import {Image, Money} from '@shopify/hydrogen';
+import {Image} from '@shopify/hydrogen';
+import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {Link, useLoaderData, type MetaFunction} from 'react-router';
+import {useState} from 'react';
+import {HEADER_QUERY} from '~/lib/fragments';
 import type {
-  FeaturedCollectionFragment,
-  RecommendedProductsQuery,
-  TowerQuery,
-  CloudsQuery,
-  PlanetsQuery,
+  FeaturedArtQuery,
+  FeaturedExhibitionsQuery,
 } from 'storefrontapi.generated';
-
-
-import  lumaperl from  "~/assets/LumaPerl.png"
+import comingSoon from '~/assets/coming-soon.png'
 
 export const meta: MetaFunction = () => {
   return [{title: 'Jiagia Studios'}];
@@ -24,7 +20,7 @@ export async function loader(args: LoaderFunctionArgs) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  return defer({...deferredData, ...criticalData});
+  return {...deferredData, ...criticalData};
 }
 
 /**
@@ -32,23 +28,88 @@ export async function loader(args: LoaderFunctionArgs) {
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
 async function loadCriticalData({context}: LoaderFunctionArgs) {
+  let handle = 'home-page';
+  let type = 'featured_art';
 
-  const [{collections}] = await Promise.all([
-    context.storefront.query(FEATURED_COLLECTION_QUERY),
+  const featuredArt = await context.storefront.query(FEATURED_ART, {
+    cache: context.storefront.CacheLong(),
+    variables: {handle, type},
+  });
+
+  if (!featuredArt) {
+    console.error(featuredArt);
+    throw new Response('Featured Art not found', {
+      status: 404,
+    });
+  }
+
+  handle = 'featured-exhibitions';
+  type = 'exhibition_collection';
+
+  const featuredExhibitions = await context.storefront.query(
+    FEATURED_EXHIBITIONS,
+    {
+      cache: context.storefront.CacheLong(),
+      variables: {handle, type},
+    },
+  );
+
+  if (!featuredExhibitions) {
+    console.error(featuredExhibitions);
+    throw new Response('Featured Exhibitions not found', {
+      status: 404,
+    });
+  }
+
+  handle = 'season-4';
+  const first = 3;
+
+  const gear = await context.storefront.query(GEAR, {
+    cache: context.storefront.CacheLong(),
+    variables: {handle, first},
+  });
+
+  if (!gear) {
+    console.error(gear);
+    throw new Response('Gear not found', {
+      status: 404,
+    });
+  }
+
+  handle = 'season-3';
+
+  const artifacts = await context.storefront.query(ARTIFACTS, {
+    cache: context.storefront.CacheLong(),
+    variables: {handle, first},
+  });
+
+  if (!artifacts) {
+    console.error(artifacts);
+    throw new Response('Artifacts not found', {
+      status: 404,
+    });
+  }
+
+  const [header] = await Promise.all([
+    context.storefront.query(HEADER_QUERY, {
+      cache: context.storefront.CacheLong(),
+      variables: {
+        headerMenuHandle: 'main-menu', // Adjust to your header menu handle
+      },
+    }),
     // Add other queries here, so that they are loaded in parallel
   ]);
 
-  // const handle = "home-page";
-  // const type = "tower";
-  // const [{tower = await Promise.all([
-  //   context.storefront
-  //   .query(TOWER_QUERY, {
-  //     variables: {handle, type},
-  //   }),
-  // ]);
+  console.log(JSON.stringify(header));
 
+  console.log(JSON.stringify(featuredArt));
+  console.log(JSON.stringify(featuredExhibitions));
   return {
-    featuredCollection: collections.nodes[0],
+    ...featuredArt,
+    ...featuredExhibitions,
+    ...gear,
+    ...artifacts,
+    header,
   };
 }
 
@@ -58,577 +119,365 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
 function loadDeferredData({context}: LoaderFunctionArgs) {
-  const recommendedProducts = context.storefront
-    .query(RECOMMENDED_PRODUCTS_QUERY)
-    .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
-      console.error(error);
-      return null;
-    });
-  
-  const handle = "home-page";
-  const type = "tower";
-  const tower = context.storefront
-    .query(TOWER_QUERY, {
-      variables: {handle, type},
-    })
-    .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
-      console.error(error);
-      return null;
-    });
-
-    const clouds = context.storefront
-    .query(CLOUD_QUERY)
-    .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
-      console.error(error);
-      return null;
-    });
-
-    const planets = context.storefront
-    .query(PLANETS)
-    .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
-      console.error(error);
-      return null;
-    });
-
-  return {
-    recommendedProducts,
-    tower,
-    clouds,
-    planets,
-  };
+  return {};
 }
 
 export default function Homepage() {
-  const data = useLoaderData<typeof loader>();
-  
-  return (
-    <div className="home dark">
-      {/* <div className="klaviyo-form-UtiWXz"></div> */}
-      <div className="dark:bg-black dark:text-white overflow-x-hidden">
-       <Planets planets={data.planets}></Planets>
-      
-      <div className="relative overflow-hidden ">
-       <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={data.tower}>
-          {(response) => (
-            <div className="relative md:min-h-[120wh]">
-            {response ? (
-              <>
-                <Tower tower={response} />
-              </>) : null
-            }
-            </div>
-          )}
-        </Await>
-        </Suspense>
+  const {
+    featuredArt,
+    featuredExhibitions,
+    gear,
+    artifacts,
+    header,
+  } = useLoaderData<typeof loader>();
+  console.log(gear);
+  console.log(artifacts);
 
-        <Clouds clouds={data.clouds} />
-        </div>
-       {/* <Tower tower={data.tower}></Tower> */}
+  return (
+    <div className="h-screen overflow-hidden lg:h-auto lg:w-auto ">
+      <img 
+        id="coming-soon"
+        src={comingSoon} 
+        alt="Coming Soon Image" 
+        className="w-full h-full object-cover md:h-auto md:object-fill"
+      />
+      {/* <HomePageNav />
+      <FeaturedArt featuredArt={featuredArt} />
+      <AboutUs />
+      <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
+      <FeaturedGear gear={gear} />
+      <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div>
+      <FeaturedArtifacts artifacts={artifacts} /> */}
+    </div>
+  );
+}
+
+function HomePageNav() {
+  return (
+    <div className="flex flex-col items-center text-center p-6 md:p-10 lg:p-20">
+      <h1 className="text-3xl md:text-6xl lg:text-8xl font-bold mb-4 md:mb-6">
+        &gt; JIAGIA STUDIOS &lt;
+      </h1>
+      <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
+        <Link to="/shop" className="hover:no-underline">
+          SHOP
+        </Link>
+        <Link to="/lab" className="hover:no-underline">
+          LAB
+        </Link>
+        <Link to="/exhibitions" className="hover:no-underline">
+          EXHIBITIONS
+        </Link>
       </div>
     </div>
   );
 }
 
-
-
-function Planets({planets} : {planets: Promise<PlanetsQuery | null>}) {
-
-  // const getRandomObject = (array) => {
-  //   const randomObject = array[Math.floor(Math.random() * array.length)];
-  //   return randomObject;
-  // };
+function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
+  const [active, setActive] = useState(0);
+  console.log(active);
+  const entries = featuredArt?.entries?.references?.nodes;
+  console.log(entries);
   
-  // const MyComponent = () => {
-  //   const [randomData, setRandomData] = useState(() => getRandomObject(DATA));
-  // // generate stars
-  let starsX: number[] = new Array(100);
-  for (let i=0; i<starsX.length; i++) starsX[i] = Math.random()*200;
+  if (!entries || entries.length === 0) {
+    return null;
+  }
 
-  let starsY: number[] = new Array(100);
-  for (let i=0; i<starsY.length; i++) starsY[i] = Math.random()*100;
-
-  let smallStarsX: number[] = new Array(50);
-  for (let i=0; i<smallStarsX.length; i++) smallStarsX[i] = Math.random()*200;
-
-  let smallStarsY: number[] = new Array(50);
-  for (let i=0; i<smallStarsY.length; i++) smallStarsY[i] = Math.random()*100;
-  
   return (
-    <div className="pt-40 h-full overflow-x-hidden">
-      
-      {starsX.map((star, i) => (
-        <div key={i} 
-        style={{position: "absolute", 
-                top: star+"%", 
-                left: starsY[i]+"%", 
-                fontSize: "10px"
-              }}
-          >
-          &#10022;
-        </div>
-      ))
-      }
-
-      {smallStarsX.map((star, i) => (
-        <div key={i} 
-        style={{position: "absolute", 
-                top: star+"%", 
-                left: smallStarsY[i]+"%", 
-                fontSize: "6px"
-              }}
-          >
-          &#10038;
-        </div>
-      ))}
-
-      <Suspense >
-        <Await resolve={planets}>
-          {(response) => (
-            <>
-            {response ? (
-              
-              response.planets.nodes.map((planet) => {
-                const pos_d : String[] = JSON.parse(planet.pos_d?.value || '["0", "0"]');
-                const size : String[] = JSON.parse(planet.size.value);
-
-                return (
-                <div key={planet.id} className="" style={{zIndex:1}}>
-
-                  {planet.image ? 
-                  <Image className="" data={planet.image.reference.image} sizes={size[0]+"%"}
-                  style={{position: "absolute", left:pos_d[0]+"%", top: pos_d[1]+"%", width: size[0]+"%"}}
-                  /> 
-                  : null}
-                </div>
-              )})
-            )
-            : null
-            }
-            </>
-          )}
-        </Await>
-      </Suspense>
-      
-      <div className="min-h-32"></div>
-      <div className="p-8 max-w-[400px] mx-auto text-center ">
-        <p className="dark:bg-black relative z-0">WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE <i><strong>“DAYDREAM UNIVERSE”</strong></i> </p>
-        
-        <p className="dark:bg-black relative z-0 mt-[2rem]">FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY OUR FINDINGS </p>
-
-        <div className="flex justify-center items-center">
-          <img className="mt-40 z-2" src={lumaperl} style={{zIndex:1}}/>
-        </div>
-        <div className="font-bold">
-          <div className="bg-black relative z-0">
-            <h5 className="bg-black my-4 text-[60px] md:text-[64px] text-[#896997] relative z-0">LUMAPERL</h5>
+    <div className="px-4 md:px-8 lg:px-16">
+      <div className="flex flex-col items-center gap-2 max-w-md mx-auto text-center mb-6 md:mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold">FEATURED ART</h2>
+        <p className="text-sm md:text-base">
+          Displayed in the Daydream Universe Artifact Gallery
+        </p>
+      </div>
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-6 md:mb-8">
+          <div className="w-full max-w-3xl mx-auto mb-4">
+            <Image
+              data={entries[active].image.reference.image}
+              className="w-full h-auto"
+            />
           </div>
-
-          <h4 className="bg-black hover:bg-white border-2 border-white hover:text-black text-[16px] p-4 relative z-0">
-            <Link to="/dreamscapes/lumaperl" className="hover:no-underline">
-              &gt; VIEW LATEST EXPEDITION &lt;
-            </Link>
-          </h4>
-
-          <div className="min-h-32"></div>
-        
-        </div>
-        
-      </div>
-      
-      
-    </div>
-  )
-}
-
-
-function Tower({
-  tower,
-}: {
-  tower: TowerQuery;
-}) {
-  if (!tower.home) return null;
-
-  // buggy/ - need to refresh every hour
-  const colors : any = JSON.parse(tower.home.color?.value || "[\"#000000\",\"#8deaff\"]");
-  const time : any = JSON.parse(tower.home.time?.value || "[8, 24]");
-
-  const [date, setDate] = useState(new Date());
-  useEffect(() => {
-      const timerID = setInterval(() => tick(), 1000*60);
-      return () => clearInterval(timerID);
-  }, []);
-
-  const tick = useCallback(() => {
-      setDate(new Date());
-  }, []);
-
-  const hr = useMemo(() => date.getHours(), [date]);
-  let i = 0
-  for (i = 0; i < time.length; i++) {
-    if (hr < time[i]) break;
-  }
-  const sky_color = colors[i].toString();
- console.log(sky_color)
-
-  return (
-    <>
-      <div className={" h-[360px] w-full font-bold"} style={{backgroundImage: "linear-gradient(to bottom, black, "+sky_color}}>
-
-        <nav className="flex flex-col justify-start items-center h-5/6 space-y-5 text-[18px] sm:invisible ">
-          <Link className="border-2 p-2 border-white rounded-xl" to="/about">&gt; ABOUT US &lt;</Link>
-          {/* <Link className="pointer-events-none" to="/shop">&gt; SHOP &lt;</Link>
-          <Link className="pointer-events-none" to="/lab">&gt; LABORATORY &lt;</Link> */}
-        </nav>
-      </div>
-        
-      <div className="font-bold" style={{backgroundColor: sky_color}}>
-        {tower.home?.floors?.references.nodes.map((floor) => (
-          <div className="bg-transparent relative" style={{zIndex: 2}} key={floor.id} >
-
-            <Image data={floor.image.reference.image} sizes="100%" />
-            {floor.show_name && floor.show_name.value === "true" ? 
-              (
-                <Link className="absolute inset-x-0 bottom-0 text-center invisible sm:visible hover:no-underline lg:mb-1 lg:text-[16px]" 
-                to={floor.link?.value || ""} 
-                style={{pointerEvents: floor.active && floor.active.value ==="true" ? "auto" : "none"}}
-                >
-                    <h2 className="mx-auto md:p-1 xl:p-2 w-fit border border-white rounded-xl">{floor.name?.value}</h2>
-                  </Link>
-              )
-              : null
-            }
+          <div className="flex flex-wrap justify-center gap-2 md:gap-4 text-sm md:text-base">
+            {JSON.parse(entries[active].caption.value)?.map((caption: string, index: number) => (
+              <p className="px-2" key={index}>
+                {caption}
+              </p>
+            ))}
           </div>
-        ))}
-      </div>
-    </> 
-  
-  )
-}
-
-function Clouds({
-  clouds
-} : {
-  clouds: Promise<CloudsQuery | null>;
-}) {
-  return (
-    <Suspense >
-    <Await resolve={clouds}>
-      {(response) => (
-        <>
-        {response ? (
-          response.cloud.nodes.map((cloud) => {
-            const pos = JSON.parse(cloud.position.value);
-            const dur = 30;
-            return (
-            <div key={cloud.id} className="absolute top-[320px]">
-
-              {cloud.image ? 
-              <Image data={cloud.image.reference.image} sizes="50vw"
-              style={{position: "relative", 
-                animationName: "cloud", 
-                animationDuration: dur+"s", 
-                animationIterationCount: "infinite", 
-                animationTimingFunction: "linear",
-                animationDelay: cloud.delay.value/10*dur+"s",
-                top: pos[1]+"vw",
-                width: cloud.image.reference?.image.width/2+"px"}}
-              /> 
-              : null}
-            </div>
-          )})
-        )
-        : null
-        }
-        </>
-      )}
-    </Await>
-    </Suspense>
-  )
-}
-
-
-
-// function Tower( {
-//   tower,
-// } : {tower: Promise<TowerQuery | null>;} ) {
-//   return (
-//     <Suspense>
-//       <Await resolve={tower}>
-//         {(response) => (
-//           <>
-//           
-//           <div>
-//             {response 
-//               ? (<div></div>)
-//               : null
-//             }
-//           </div>
-//           </>
-//         )}
-//         <div></div>
-//       </Await>
-//     </Suspense>
-//   )
-// }
-
-
-
-function FeaturedCollection({
-  collection,
-}: {
-  collection: FeaturedCollectionFragment;
-}) {
-  if (!collection) return null;
-  const image = collection?.image;
-  return (
-    <Link
-      className="featured-collection"
-      to={`/collections/${collection.handle}`}
-    >
-      {image && (
-        <div className="featured-collection-image">
-          <Image data={image} sizes="100vw" />
         </div>
-      )}
-      <h1>{collection.title}</h1>
-    </Link>
-  );
-}
-
-function RecommendedProducts({
-  products,
-}: {
-  products: Promise<RecommendedProductsQuery | null>;
-}) {
-  return (
-    <div className="recommended-products">
-      <h2>Recommended Products</h2>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={products}>
-          {(response) => (
-            <div className="recommended-products-grid">
-              {response
-                ? response.products.nodes.map((product) => (
-                    <Link
-                      key={product.id}
-                      className="recommended-product"
-                      to={`/products/${product.handle}`}
-                    >
-                      <Image
-                        data={product.images.nodes[0]}
-                        aspectRatio="1/1"
-                        sizes="(min-width: 45em) 20vw, 50vw"
-                      />
-                      <h4>{product.title}</h4>
-                      <small>
-                        <Money data={product.priceRange.minVariantPrice} />
-                      </small>
-                    </Link>
-                  ))
-                : null}
-            </div>
-          )}
-        </Await>
-      </Suspense>
-      <br />
+        <div className="flex flex-wrap justify-center gap-2 md:gap-4">
+          {entries.map((entry: any, index: number) => (
+            <button
+              key={entry.id}
+              onClick={() => setActive(index)}
+              className={`hover:cursor-pointer transition-all ${
+                active === index ? 'border-2 border-black' : ''
+              }`}
+              aria-label={`View featured art ${index + 1}`}
+            >
+              <Image data={entry.image.reference.image} width={100} className="md:w-32 lg:w-36" />
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-const PLANETS = `#graphql
-query Planets {
-  planets: metaobjects(type: "planet", first: 20) {
-    nodes {
-      id
-      handle
-      type
-      image: field(key: "image") {
-        reference {
-          ... on MediaImage {
-            alt
-            image {
-              altText
-              height
-              id
-              url
-              width
-            }
-          }
+function AboutUs() {
+  return (
+    <div className="flex flex-col items-center gap-4 max-w-lg py-12 md:py-20 mx-auto text-center px-4 md:px-8">
+      <p className="text-sm md:text-base leading-relaxed">
+        WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE
+        <span className="italic"> &quot;DAYDREAM UNIVERSE&quot;</span>
+      </p>
+      <p className="text-sm md:text-base leading-relaxed">
+        FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY
+        FINDINGS
+      </p>
+      <Link 
+        to="/about" 
+        className="mt-4 text-sm md:text-base hover:underline"
+      >
+        Learn More About Us
+      </Link>
+    </div>
+  );
+}
+
+function FeaturedExhibitions({
+  featuredExhibitions,
+}: {
+  featuredExhibitions: FeaturedExhibitionsQuery;
+}) {
+  const exhibitions = featuredExhibitions?.exhibitions?.references?.nodes;
+
+  if (!exhibitions || exhibitions.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="bg-black text-white py-12 md:py-20 lg:py-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 md:mb-20 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold">EXHIBITIONS</h2>
+          <p className="text-sm md:text-base leading-relaxed">
+            Our exhibitions are collection of works displayed within a dreamscape. 
+            Each one are based on our explorations and findings.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto">
+          {exhibitions.map((exhibition: any) => (
+            <div
+              key={exhibition.id}
+              className="flex flex-col gap-4 text-center"
+            >
+              <div className="w-full">
+                <Image
+                  data={exhibition?.poster?.reference?.image}
+                  className="w-full h-auto"
+                />
+              </div>
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold">
+                {exhibition.title.value}
+              </h3>
+              <p className="text-sm md:text-base leading-relaxed">
+                {exhibition.description.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FeaturedGear({gear}: {gear: any}) {
+  return (
+    <div className="py-12 md:py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
+          GEAR
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {/* <div className="grid lg:grid-cols-3 xl:grid-cols-4 grid-cols-1 sm:grid-cols-2"> */}
+          {gear?.products?.nodes?.map((product: any) => (
+            <div
+              key={product.id}
+              className="flex flex-col items-center gap-4 text-center"
+            >
+              <div className="w-full">
+                <Image 
+                  data={product.featuredImage} 
+                  className="w-full h-auto"
+                />
+              </div>
+              <p className="text-sm md:text-base font-medium">
+                {product.title}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FeaturedArtifacts({artifacts}: {artifacts: any}) {
+  return (
+    <div className="py-12 md:py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
+          ARTIFACTS
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {artifacts?.products?.nodes?.map((product: any) => (
+            <div
+              key={product.id}
+              className="flex flex-col items-center gap-4 text-center"
+            >
+              <div className="w-full">
+                <Image 
+                  data={product.featuredImage} 
+                  className="w-full h-auto"
+                />
+              </div>
+              <p className="text-sm md:text-base font-medium">
+                {product.title}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const FEATURED_ART = `#graphql
+fragment Entry on Metaobject {
+  id
+  handle
+  image: field(key: "image") {
+    reference {
+      ... on MediaImage {
+        alt
+        image {
+          altText
+          height
+          width
+          url
         }
       }
-      size: field(key: "size") {
-        value
-        type
-      }
-      pos_m: field(key: "pos_m") {
-        value
-        type
-      }
-      pos_d: field(key: "pos_d") {
-        value
-        type
-      }
-      index: field(key: "index") {
-        value
-        type
+    }
+  }
+  caption: field(key: "caption") {
+    value
+  }
+}
+query FeaturedArt($handle: String!, $type: String!) {
+  featuredArt: metaobject(handle: {handle: $handle, type: $type}) {
+    id
+    handle
+    entries: field(key: "entries") {
+      references(first: 10) {
+        nodes {
+          ... on Metaobject {
+            ...Entry
+          }
+        }
       }
     }
   }
 }
-` as const
-
-const TOWER_QUERY = `#graphql
-  fragment Floor on Metaobject {
-    id,
-    image: field(key: "image") {
-      reference {
-        ... on MediaImage {
-          alt
-          image {
-            altText
-            height
-            id
-            url
-            width
-          }
-        }
-      }
-    }
-    name: field(key: "name") {
-      value
-    }
-    link: field(key: "link") {
-      value,
-    }
-    active: field(key: "link_active") {
-      value
-    }
-    show_name: field(key: "show_name") {
-      value
-    }
-  }
-
-  query Tower($handle: String!, $type: String!) {
-    home: metaobject(handle: {handle: $handle, type: $type}) {
-      id
-      handle
-      type
-      floors: field(key: "floors") {
-        references(first: 10) {
-          nodes {
-            ...Floor
-          }
-        }
-      }
-      color: field(key: "sky_colors") {
-        value
-        type
-      }
-      time: field(key: "time") {
-        value
-        type
-      }
-    }
-  }
 ` as const;
 
-const CLOUD_QUERY = `#graphql
-query Clouds {
-  cloud: metaobjects(type: "cloud", first: 20) {
-    nodes {
-      id
-      handle
-      type
-      image: field(key: "image") {
-        reference {
-          ... on MediaImage {
-            alt
-            image {
-              altText
-              height
-              id
-              url
-              width
-            }
-          }
+const FEATURED_EXHIBITIONS = `#graphql
+fragment Exhibition on Metaobject {
+  id
+  handle
+  title: field(key: "title") {
+    value
+  }
+  description: field(key: "description") {
+    value
+  }
+  poster: field(key: "poster") {
+    reference {
+      ... on MediaImage {
+        alt
+        image {
+          altText
+          height
+          width
+          url
         }
-      }
-      size: field(key: "size") {
-        value
-        type
-      }
-      speed: field(key: "speed") {
-        value
-        type
-      }
-      delay: field(key: "delay") {
-        value
-        type
-      }
-      position: field(key: "position") {
-        value
-        type
       }
     }
   }
 }
-` as const;
-
-const FEATURED_COLLECTION_QUERY = `#graphql
-  fragment FeaturedCollection on Collection {
+query FeaturedExhibitions($handle: String!, $type: String!) {
+  featuredExhibitions: metaobject(handle: {handle: $handle, type: $type}) {
     id
-    title
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
     handle
-  }
-  query FeaturedCollection($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...FeaturedCollection
+    title: field(key: "title") {
+      value
+    }
+    exhibitions: field(key: "exhibitions") {
+      references(first: 10) {
+        nodes {
+          ... on Metaobject {
+            ...Exhibition
+          }
+        }
       }
     }
   }
-` as const;
+}` as const;
 
-const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-  fragment RecommendedProduct on Product {
+const GEAR = `#graphql
+query Gear($handle: String!, $first: Int!) {
+  gear: collection(handle: $handle) {
     id
-    title
     handle
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
-    }
-    images(first: 1) {
+    products(first: $first) {
       nodes {
         id
-        url
-        altText
-        width
-        height
+        handle
+        title
+        featuredImage {
+          id
+          altText
+          url
+          width
+          height
+        }
       }
     }
   }
-  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
+}
+` as const;
+
+const ARTIFACTS = `#graphql
+query Artifacts($handle: String!, $first: Int!) {
+  artifacts: collection(handle: $handle) {
+    id
+    handle
+    products(first: $first) {
       nodes {
-        ...RecommendedProduct
+        id
+        handle
+        title
+        featuredImage {
+          id
+          altText
+          url
+          width
+          height
+        }
       }
     }
   }
+}
 ` as const;

@@ -1,5 +1,5 @@
 import {Suspense} from 'react';
-import {Await, NavLink} from '@remix-run/react';
+import {Await, NavLink} from 'react-router';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
 import { KlaviyoForm } from './KlaviyoForm';
 
@@ -17,14 +17,17 @@ export function Footer({
   newsletterLink,
 }: FooterProps) {
   const FBLink = 'https://www.facebook.com/profile.php?id=100083105601746';
-  const IGLink = 'https://www.instagram.com/jiagia_studios/';
+  const IGLink = 'https://www.instagram.com/jiagia.x/';
   const XLink = 'https://twitter.com/jiagia_studios';
   return (
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="footer border-t border-black grid md:grid-cols-3 gap-y-4 justify-items-center items-center pt-2 dark:text-white overflow-hidden mb-[32px]">
-            <KlaviyoForm newsletterLink={newsletterLink} />
+          <footer className="footer flex flex-col items-center gap-y-4 border-t border-black pt-2 overflow-hidden pt-[32px] mb-[32px]">
+            <div className="flex justify-center">
+              {/* <KlaviyoForm newsletterLink={newsletterLink} /> */}
+              <div className="klaviyo-form-SYV6SN"></div>
+            </div>
             <div className="justify-self-center py-4 md:pt-0">
               <SocialIcon
                 FacebookLink={FBLink}
@@ -56,7 +59,10 @@ function FooterMenu({
   publicStoreDomain: string;
 }) {
   return (
-    <nav className="text-center md:text-right justify-items-center flex flex-col" role="navigation">
+    <nav
+      className="flex flex-col md:flex-row flex-wrap items-center justify-evenly text-center gap-y-2 gap-x-8 md:gap-x-20"
+      role="navigation"
+    >
       {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
         if (!item.url) return null;
         // if the url is internal, we strip the domain
@@ -95,7 +101,7 @@ function SocialIcon(
     XLink: string,
   }) {
   return (
-    <div className="social-icons">
+    <div className="social-icons flex flex-row items-center gap-4">
       <a
         target="_blank"
         href={FacebookLink}
@@ -221,6 +227,6 @@ function activeLinkStyle({
 }) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'white',
+    color: isPending ? 'grey' : 'black',
   };
 }

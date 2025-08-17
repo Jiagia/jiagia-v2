@@ -6,14 +6,7 @@
     .fill {
       fill: #000;
     }
-    @media (prefers-color-scheme: dark) {
-      .stroke {
-        stroke: #fff;
-      }
-      .fill {
-        fill: #fff;
-      }
-    }
+
   </style>
   <path
     class="stroke"

@@ -1,5 +1,5 @@
-import {Suspense} from 'react';
-import {Await, NavLink, useAsyncValue} from '@remix-run/react';
+import {Suspense, useState, useEffect} from 'react';
+import {Await, NavLink, useAsyncValue} from 'react-router';
 import {
   type CartViewPayload,
   useAnalytics,
@@ -24,10 +24,51 @@ export function Header({
   publicStoreDomain,
 }: HeaderProps) {
   const {shop, menu} = header;
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+
+    const controlHeader = () => {
+      const currentScrollY = window.scrollY;
+
+      // Show header when at top of page
+      if (currentScrollY <= 0) {
+        setIsVisible(true);
+      }
+      // Hide header when scrolling down, show when scrolling up
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', controlHeader);
+
+    return () => {
+      window.removeEventListener('scroll', controlHeader);
+    };
+  }, [lastScrollY]);
+
   return (
     <header
-      className="header dark:bg-transparent dark:text-white"
-      style={{zIndex: 5}}
+      className="header flex justify-between md:justify-start mx-4"
+      style={{
+        zIndex: 5,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
+        transition: 'transform 0.3s ease-in-out',
+        // backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: 'transparent',
+        color: '#94a3b8',
+        // backdropFilter: 'blur(10px)',
+      }}
     >
       <NavLink
         prefetch="intent"
@@ -44,7 +85,7 @@ export function Header({
         primaryDomainUrl={header.shop.primaryDomain.url}
         publicStoreDomain={publicStoreDomain}
       />
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+      {/* <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
     </header>
   );
 }
@@ -64,7 +105,7 @@ export function HeaderMenu({
   const {close} = useAside();
 
   return (
-    <nav className={className} role="navigation">
+    <nav className={className + ' mx-4'} role="navigation">
       {viewport === 'mobile' && (
         <NavLink
           end

@@ -1,10 +1,17 @@
-import {Await, type MetaFunction, useRouteLoaderData} from '@remix-run/react';
+import {Await, type MetaFunction, useRouteLoaderData} from 'react-router';
 import {Suspense} from 'react';
 import type {CartQueryDataReturn} from '@shopify/hydrogen';
 import {CartForm} from '@shopify/hydrogen';
-import {json, type ActionFunctionArgs} from '@shopify/remix-oxygen';
+import {
+  data, 
+  type LoaderFunctionArgs,
+  type ActionFunctionArgs,
+  type HeadersFunction
+} from '@shopify/remix-oxygen';
 import {CartMain} from '~/components/CartMain';
 import type {RootLoader} from '~/root';
+
+export const headers: HeadersFunction = ({actionHeaders}) => actionHeaders;
 
 export const meta: MetaFunction = () => {
   return [{title: `Hydrogen | Cart`}];
@@ -82,7 +89,7 @@ export async function action({request, context}: ActionFunctionArgs) {
     headers.set('Location', redirectTo);
   }
 
-  return json(
+  return data(
     {
       cart: cartResult,
       errors,
@@ -93,6 +100,12 @@ export async function action({request, context}: ActionFunctionArgs) {
     },
     {status, headers},
   );
+}
+
+export async function loader({context}: LoaderFunctionArgs) {
+      const {cart} = context;
+    // return data(await cart.get());
+    return await cart.get();
 }
 
 export default function Cart() {
