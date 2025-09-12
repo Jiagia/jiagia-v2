@@ -42,14 +42,14 @@ export function PageLayout({
       <CartAside cart={cart} />
       <SearchAside />
       {/* <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} /> */}
-      {/* {header && !isHome && ( */}
+      {header && !isHome && (
         <Header
           header={header}
           cart={cart}
           isLoggedIn={isLoggedIn}
           publicStoreDomain={publicStoreDomain}
         />
-      {/* )} */}
+      )}
       <main>{children}</main>
       {/* <Footer
         footer={footer}
