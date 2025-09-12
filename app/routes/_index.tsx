@@ -8,7 +8,7 @@ import type {
   FeaturedExhibitionsQuery,
 } from 'storefrontapi.generated';
 import comingSoon from '~/assets/coming-soon.png'
-import { Tower, TOWER_QUERY, CLOUD_QUERY} from './about/Tower';
+import { Tower, TOWER_QUERY, CLOUD_QUERY} from '../components/Tower';
 import artistStatement from '~/assets/ArtistStatement.png'
 
 export const meta: MetaFunction = () => {
