@@ -377,8 +377,9 @@ function FeaturedGear({gear}: {gear: any}) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {/* <div className="grid lg:grid-cols-3 xl:grid-cols-4 grid-cols-1 sm:grid-cols-2"> */}
           {gear?.products?.nodes?.map((product: any) => (
-            <div
+            <Link
               key={product.id}
+              to={`/products/${product.handle}`}
               className="flex flex-col items-center gap-4 text-center"
             >
               <div className="w-full">
@@ -390,7 +391,7 @@ function FeaturedGear({gear}: {gear: any}) {
               <p className="text-sm md:text-base font-medium">
                 {product.title}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
