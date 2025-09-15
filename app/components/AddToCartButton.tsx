@@ -27,6 +27,7 @@ export function AddToCartButton({
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
+            className="bg-black text-white border-none px-8 py-4 text-base font-semibold uppercase tracking-wide cursor-pointer transition-all w-full mt-4 hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {children}
           </button>
