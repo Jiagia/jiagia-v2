@@ -3,6 +3,110 @@
 /* eslint-disable */
 import type * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 
+export type FloorFragment = Pick<StorefrontAPI.Metaobject, 'id'> & {
+  image?: StorefrontAPI.Maybe<{
+    reference?: StorefrontAPI.Maybe<
+      Pick<StorefrontAPI.MediaImage, 'alt'> & {
+        image?: StorefrontAPI.Maybe<
+          Pick<
+            StorefrontAPI.Image,
+            'altText' | 'height' | 'id' | 'url' | 'width'
+          >
+        >;
+      }
+    >;
+  }>;
+  name?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
+  link?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
+  active?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
+  show_name?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
+};
+
+export type TowerQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String']['input'];
+  type: StorefrontAPI.Scalars['String']['input'];
+}>;
+
+export type TowerQuery = {
+  home?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Metaobject, 'id' | 'handle' | 'type'> & {
+      floors?: StorefrontAPI.Maybe<{
+        references?: StorefrontAPI.Maybe<{
+          nodes: Array<
+            Pick<StorefrontAPI.Metaobject, 'id'> & {
+              image?: StorefrontAPI.Maybe<{
+                reference?: StorefrontAPI.Maybe<
+                  Pick<StorefrontAPI.MediaImage, 'alt'> & {
+                    image?: StorefrontAPI.Maybe<
+                      Pick<
+                        StorefrontAPI.Image,
+                        'altText' | 'height' | 'id' | 'url' | 'width'
+                      >
+                    >;
+                  }
+                >;
+              }>;
+              name?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+              link?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+              active?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+              show_name?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+            }
+          >;
+        }>;
+      }>;
+      color?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+      >;
+      time?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+      >;
+    }
+  >;
+};
+
+export type CloudsQueryVariables = StorefrontAPI.Exact<{[key: string]: never}>;
+
+export type CloudsQuery = {
+  cloud: {
+    nodes: Array<
+      Pick<StorefrontAPI.Metaobject, 'id' | 'handle' | 'type'> & {
+        image?: StorefrontAPI.Maybe<{
+          reference?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.MediaImage, 'alt'> & {
+              image?: StorefrontAPI.Maybe<
+                Pick<
+                  StorefrontAPI.Image,
+                  'altText' | 'height' | 'id' | 'url' | 'width'
+                >
+              >;
+            }
+          >;
+        }>;
+        size?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+        speed?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+        delay?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+        position?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
+        >;
+      }
+    >;
+  };
+};
+
 export type MoneyFragment = Pick<
   StorefrontAPI.MoneyV2,
   'currencyCode' | 'amount'
@@ -294,278 +398,6 @@ export type StoreRobotsQueryVariables = StorefrontAPI.Exact<{
 }>;
 
 export type StoreRobotsQuery = {shop: Pick<StorefrontAPI.Shop, 'id'>};
-
-export type EntryFragment = Pick<StorefrontAPI.Metaobject, 'id' | 'handle'> & {
-  image?: StorefrontAPI.Maybe<{
-    reference?: StorefrontAPI.Maybe<
-      Pick<StorefrontAPI.MediaImage, 'alt'> & {
-        image?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.Image, 'altText' | 'height' | 'width' | 'url'>
-        >;
-      }
-    >;
-  }>;
-  caption?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
-};
-
-export type FeaturedArtQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String']['input'];
-  type: StorefrontAPI.Scalars['String']['input'];
-}>;
-
-export type FeaturedArtQuery = {
-  featuredArt?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Metaobject, 'id' | 'handle'> & {
-      entries?: StorefrontAPI.Maybe<{
-        references?: StorefrontAPI.Maybe<{
-          nodes: Array<
-            Pick<StorefrontAPI.Metaobject, 'id' | 'handle'> & {
-              image?: StorefrontAPI.Maybe<{
-                reference?: StorefrontAPI.Maybe<
-                  Pick<StorefrontAPI.MediaImage, 'alt'> & {
-                    image?: StorefrontAPI.Maybe<
-                      Pick<
-                        StorefrontAPI.Image,
-                        'altText' | 'height' | 'width' | 'url'
-                      >
-                    >;
-                  }
-                >;
-              }>;
-              caption?: StorefrontAPI.Maybe<
-                Pick<StorefrontAPI.MetaobjectField, 'value'>
-              >;
-            }
-          >;
-        }>;
-      }>;
-    }
-  >;
-};
-
-export type ExhibitionFragment = Pick<
-  StorefrontAPI.Metaobject,
-  'id' | 'handle'
-> & {
-  title?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
-  description?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.MetaobjectField, 'value'>
-  >;
-  poster?: StorefrontAPI.Maybe<{
-    reference?: StorefrontAPI.Maybe<
-      Pick<StorefrontAPI.MediaImage, 'alt'> & {
-        image?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.Image, 'altText' | 'height' | 'width' | 'url'>
-        >;
-      }
-    >;
-  }>;
-};
-
-export type FeaturedExhibitionsQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String']['input'];
-  type: StorefrontAPI.Scalars['String']['input'];
-}>;
-
-export type FeaturedExhibitionsQuery = {
-  featuredExhibitions?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Metaobject, 'id' | 'handle'> & {
-      title?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
-      exhibitions?: StorefrontAPI.Maybe<{
-        references?: StorefrontAPI.Maybe<{
-          nodes: Array<
-            Pick<StorefrontAPI.Metaobject, 'id' | 'handle'> & {
-              title?: StorefrontAPI.Maybe<
-                Pick<StorefrontAPI.MetaobjectField, 'value'>
-              >;
-              description?: StorefrontAPI.Maybe<
-                Pick<StorefrontAPI.MetaobjectField, 'value'>
-              >;
-              poster?: StorefrontAPI.Maybe<{
-                reference?: StorefrontAPI.Maybe<
-                  Pick<StorefrontAPI.MediaImage, 'alt'> & {
-                    image?: StorefrontAPI.Maybe<
-                      Pick<
-                        StorefrontAPI.Image,
-                        'altText' | 'height' | 'width' | 'url'
-                      >
-                    >;
-                  }
-                >;
-              }>;
-            }
-          >;
-        }>;
-      }>;
-    }
-  >;
-};
-
-export type GearQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String']['input'];
-  first: StorefrontAPI.Scalars['Int']['input'];
-}>;
-
-export type GearQuery = {
-  gear?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Collection, 'id' | 'handle'> & {
-      products: {
-        nodes: Array<
-          Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
-            featuredImage?: StorefrontAPI.Maybe<
-              Pick<
-                StorefrontAPI.Image,
-                'id' | 'altText' | 'url' | 'width' | 'height'
-              >
-            >;
-          }
-        >;
-      };
-    }
-  >;
-};
-
-export type ArtifactsQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String']['input'];
-  first: StorefrontAPI.Scalars['Int']['input'];
-}>;
-
-export type ArtifactsQuery = {
-  artifacts?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Collection, 'id' | 'handle'> & {
-      products: {
-        nodes: Array<
-          Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
-            featuredImage?: StorefrontAPI.Maybe<
-              Pick<
-                StorefrontAPI.Image,
-                'id' | 'altText' | 'url' | 'width' | 'height'
-              >
-            >;
-          }
-        >;
-      };
-    }
-  >;
-};
-
-export type FloorFragment = Pick<StorefrontAPI.Metaobject, 'id'> & {
-  image?: StorefrontAPI.Maybe<{
-    reference?: StorefrontAPI.Maybe<
-      Pick<StorefrontAPI.MediaImage, 'alt'> & {
-        image?: StorefrontAPI.Maybe<
-          Pick<
-            StorefrontAPI.Image,
-            'altText' | 'height' | 'id' | 'url' | 'width'
-          >
-        >;
-      }
-    >;
-  }>;
-  name?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
-  link?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
-  active?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
-  show_name?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
-};
-
-export type TowerQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String']['input'];
-  type: StorefrontAPI.Scalars['String']['input'];
-}>;
-
-export type TowerQuery = {
-  home?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Metaobject, 'id' | 'handle' | 'type'> & {
-      floors?: StorefrontAPI.Maybe<{
-        references?: StorefrontAPI.Maybe<{
-          nodes: Array<
-            Pick<StorefrontAPI.Metaobject, 'id'> & {
-              image?: StorefrontAPI.Maybe<{
-                reference?: StorefrontAPI.Maybe<
-                  Pick<StorefrontAPI.MediaImage, 'alt'> & {
-                    image?: StorefrontAPI.Maybe<
-                      Pick<
-                        StorefrontAPI.Image,
-                        'altText' | 'height' | 'id' | 'url' | 'width'
-                      >
-                    >;
-                  }
-                >;
-              }>;
-              name?: StorefrontAPI.Maybe<
-                Pick<StorefrontAPI.MetaobjectField, 'value'>
-              >;
-              link?: StorefrontAPI.Maybe<
-                Pick<StorefrontAPI.MetaobjectField, 'value'>
-              >;
-              active?: StorefrontAPI.Maybe<
-                Pick<StorefrontAPI.MetaobjectField, 'value'>
-              >;
-              show_name?: StorefrontAPI.Maybe<
-                Pick<StorefrontAPI.MetaobjectField, 'value'>
-              >;
-            }
-          >;
-        }>;
-      }>;
-      color?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-      >;
-      time?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-      >;
-    }
-  >;
-};
-
-export type CloudsQueryVariables = StorefrontAPI.Exact<{[key: string]: never}>;
-
-export type CloudsQuery = {
-  cloud: {
-    nodes: Array<
-      Pick<StorefrontAPI.Metaobject, 'id' | 'handle' | 'type'> & {
-        image?: StorefrontAPI.Maybe<{
-          reference?: StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.MediaImage, 'alt'> & {
-              image?: StorefrontAPI.Maybe<
-                Pick<
-                  StorefrontAPI.Image,
-                  'altText' | 'height' | 'id' | 'url' | 'width'
-                >
-              >;
-            }
-          >;
-        }>;
-        size?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-        >;
-        speed?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-        >;
-        delay?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-        >;
-        position?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.MetaobjectField, 'value' | 'type'>
-        >;
-      }
-    >;
-  };
-};
-
-export type AboutQueryVariables = StorefrontAPI.Exact<{
-  handle: StorefrontAPI.Scalars['String']['input'];
-}>;
-
-export type AboutQuery = {
-  page?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Page, 'handle' | 'body'> & {
-      seo?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.Seo, 'title' | 'description'>
-      >;
-    }
-  >;
-};
 
 export type ArticleQueryVariables = StorefrontAPI.Exact<{
   articleHandle: StorefrontAPI.Scalars['String']['input'];
@@ -1543,6 +1375,14 @@ export type PredictiveSearchQuery = {
 };
 
 interface GeneratedQueryTypes {
+  '#graphql\n  fragment Floor on Metaobject {\n    id,\n    image: field(key: "image") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            id\n            url\n            width\n          }\n        }\n      }\n    }\n    name: field(key: "name") {\n      value\n    }\n    link: field(key: "link") {\n      value,\n    }\n    active: field(key: "link_active") {\n      value\n    }\n    show_name: field(key: "show_name") {\n      value\n    }\n  }\n\n  query Tower($handle: String!, $type: String!) {\n    home: metaobject(handle: {handle: $handle, type: $type}) {\n      id\n      handle\n      type\n      floors: field(key: "floors") {\n        references(first: 10) {\n          nodes {\n            ...Floor\n          }\n        }\n      }\n      color: field(key: "sky_colors") {\n        value\n        type\n      }\n      time: field(key: "time") {\n        value\n        type\n      }\n    }\n  }\n': {
+    return: TowerQuery;
+    variables: TowerQueryVariables;
+  };
+  '#graphql\nquery Clouds {\n  cloud: metaobjects(type: "cloud", first: 20) {\n    nodes {\n      id\n      handle\n      type\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              id\n              url\n              width\n            }\n          }\n        }\n      }\n      size: field(key: "size") {\n        value\n        type\n      }\n      speed: field(key: "speed") {\n        value\n        type\n      }\n      delay: field(key: "delay") {\n        value\n        type\n      }\n      position: field(key: "position") {\n        value\n        type\n      }\n    }\n  }\n}\n': {
+    return: CloudsQuery;
+    variables: CloudsQueryVariables;
+  };
   '#graphql\n  fragment Shop on Shop {\n    id\n    name\n    description\n    primaryDomain {\n      url\n    }\n    brand {\n      logo {\n        image {\n          url\n        }\n      }\n    }\n  }\n  query Header(\n    $country: CountryCode\n    $headerMenuHandle: String!\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n    shop {\n      ...Shop\n    }\n    menu(handle: $headerMenuHandle) {\n      ...Menu\n    }\n  }\n  #graphql\n  fragment MenuItem on MenuItem {\n    id\n    resourceId\n    tags\n    title\n    type\n    url\n  }\n  fragment ChildMenuItem on MenuItem {\n    ...MenuItem\n  }\n  fragment ParentMenuItem on MenuItem {\n    ...MenuItem\n    items {\n      ...ChildMenuItem\n    }\n  }\n  fragment Menu on Menu {\n    id\n    items {\n      ...ParentMenuItem\n    }\n  }\n\n': {
     return: HeaderQuery;
     variables: HeaderQueryVariables;
@@ -1554,34 +1394,6 @@ interface GeneratedQueryTypes {
   '#graphql\n  query StoreRobots($country: CountryCode, $language: LanguageCode)\n   @inContext(country: $country, language: $language) {\n    shop {\n      id\n    }\n  }\n': {
     return: StoreRobotsQuery;
     variables: StoreRobotsQueryVariables;
-  };
-  '#graphql\nfragment Entry on Metaobject {\n  id\n  handle\n  image: field(key: "image") {\n    reference {\n      ... on MediaImage {\n        alt\n        image {\n          altText\n          height\n          width\n          url\n        }\n      }\n    }\n  }\n  caption: field(key: "caption") {\n    value\n  }\n}\nquery FeaturedArt($handle: String!, $type: String!) {\n  featuredArt: metaobject(handle: {handle: $handle, type: $type}) {\n    id\n    handle\n    entries: field(key: "entries") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            ...Entry\n          }\n        }\n      }\n    }\n  }\n}\n': {
-    return: FeaturedArtQuery;
-    variables: FeaturedArtQueryVariables;
-  };
-  '#graphql\nfragment Exhibition on Metaobject {\n  id\n  handle\n  title: field(key: "title") {\n    value\n  }\n  description: field(key: "description") {\n    value\n  }\n  poster: field(key: "poster") {\n    reference {\n      ... on MediaImage {\n        alt\n        image {\n          altText\n          height\n          width\n          url\n        }\n      }\n    }\n  }\n}\nquery FeaturedExhibitions($handle: String!, $type: String!) {\n  featuredExhibitions: metaobject(handle: {handle: $handle, type: $type}) {\n    id\n    handle\n    title: field(key: "title") {\n      value\n    }\n    exhibitions: field(key: "exhibitions") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            ...Exhibition\n          }\n        }\n      }\n    }\n  }\n}': {
-    return: FeaturedExhibitionsQuery;
-    variables: FeaturedExhibitionsQueryVariables;
-  };
-  '#graphql\nquery Gear($handle: String!, $first: Int!) {\n  gear: collection(handle: $handle) {\n    id\n    handle\n    products(first: $first) {\n      nodes {\n        id\n        handle\n        title\n        featuredImage {\n          id\n          altText\n          url\n          width\n          height\n        }\n      }\n    }\n  }\n}\n': {
-    return: GearQuery;
-    variables: GearQueryVariables;
-  };
-  '#graphql\nquery Artifacts($handle: String!, $first: Int!) {\n  artifacts: collection(handle: $handle) {\n    id\n    handle\n    products(first: $first) {\n      nodes {\n        id\n        handle\n        title\n        featuredImage {\n          id\n          altText\n          url\n          width\n          height\n        }\n      }\n    }\n  }\n}\n': {
-    return: ArtifactsQuery;
-    variables: ArtifactsQueryVariables;
-  };
-  '#graphql\n  fragment Floor on Metaobject {\n    id,\n    image: field(key: "image") {\n      reference {\n        ... on MediaImage {\n          alt\n          image {\n            altText\n            height\n            id\n            url\n            width\n          }\n        }\n      }\n    }\n    name: field(key: "name") {\n      value\n    }\n    link: field(key: "link") {\n      value,\n    }\n    active: field(key: "link_active") {\n      value\n    }\n    show_name: field(key: "show_name") {\n      value\n    }\n  }\n\n  query Tower($handle: String!, $type: String!) {\n    home: metaobject(handle: {handle: $handle, type: $type}) {\n      id\n      handle\n      type\n      floors: field(key: "floors") {\n        references(first: 10) {\n          nodes {\n            ...Floor\n          }\n        }\n      }\n      color: field(key: "sky_colors") {\n        value\n        type\n      }\n      time: field(key: "time") {\n        value\n        type\n      }\n    }\n  }\n': {
-    return: TowerQuery;
-    variables: TowerQueryVariables;
-  };
-  '#graphql\nquery Clouds {\n  cloud: metaobjects(type: "cloud", first: 20) {\n    nodes {\n      id\n      handle\n      type\n      image: field(key: "image") {\n        reference {\n          ... on MediaImage {\n            alt\n            image {\n              altText\n              height\n              id\n              url\n              width\n            }\n          }\n        }\n      }\n      size: field(key: "size") {\n        value\n        type\n      }\n      speed: field(key: "speed") {\n        value\n        type\n      }\n      delay: field(key: "delay") {\n        value\n        type\n      }\n      position: field(key: "position") {\n        value\n        type\n      }\n    }\n  }\n}\n': {
-    return: CloudsQuery;
-    variables: CloudsQueryVariables;
-  };
-  '#graphql\n  query About($handle: String!) {\n    page(handle: $handle) {\n      handle\n      body\n      seo {\n        title\n        description\n      }\n    }\n  }\n': {
-    return: AboutQuery;
-    variables: AboutQueryVariables;
   };
   '#graphql\n  query Article(\n    $articleHandle: String!\n    $blogHandle: String!\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n    blog(handle: $blogHandle) {\n      articleByHandle(handle: $articleHandle) {\n        title\n        contentHtml\n        publishedAt\n        author: authorV2 {\n          name\n        }\n        image {\n          id\n          altText\n          url\n          width\n          height\n        }\n        seo {\n          description\n          title\n        }\n      }\n    }\n  }\n': {
     return: ArticleQuery;

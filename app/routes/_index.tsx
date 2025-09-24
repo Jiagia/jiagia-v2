@@ -187,7 +187,7 @@ export default function Homepage() {
 
   return (
     <>
-      <div className="min-h-screen lg:h-auto w-full">
+      <div className="w-full">
         {/* <img 
           id="coming-soon"
           src={comingSoon} 
@@ -199,9 +199,9 @@ export default function Homepage() {
         {/* <FeaturedArtwork artwork={artwork} /> */}
         {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
         {/* <FeaturedArtifacts artifacts={artifacts} /> */}
+        {/* <FeaturedGear gear={gear} /> */}
           <HomePageNav />
-          <FeaturedGear gear={gear} />
-          <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div>
+          {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
           <AboutUs />
         </div>
         <div className="w-full bg-black text-white overflow-x-hidden clear-both">
@@ -232,11 +232,11 @@ export default function Homepage() {
 
 function HomePageNav() {
   return (
-    <div className="flex flex-col items-center text-center p-6 md:p-10 lg:p-20">
+    <div className="flex flex-col items-center text-center pt-15 md:pt-20 lg:pt-30">
       <h1 className="text-3xl md:text-6xl lg:text-8xl font-bold mb-4 md:mb-6">
         &gt; JIAGIA STUDIOS &lt;
       </h1>
-      <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
+      {/* <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
         <Link to="/shop" className="hover:no-underline">
           SHOP
         </Link>
@@ -246,7 +246,7 @@ function HomePageNav() {
         <Link to="/exhibitions" className="hover:no-underline">
           EXHIBITIONS
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -310,12 +310,6 @@ function AboutUs() {
       <p className="text-sm md:text-base leading-relaxed">
         Jiagia is a creative collective built on the idea that perception is an art form. We explore the world within (our thoughts, feelings,  ideas) and express it through fine art, collectible apparel, and visual storytelling. We invite you to step into these worlds, as you may also come to reimagine the one you already live in.
       </p>
-      {/* <Link 
-        to="/about" 
-        className="mt-4 text-sm md:text-base hover:underline"
-      >
-        Learn More About Us
-      </Link> */}
     </div>
   );
 }
@@ -375,7 +369,6 @@ function FeaturedGear({gear}: {gear: any}) {
           GEAR
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        {/* <div className="grid lg:grid-cols-3 xl:grid-cols-4 grid-cols-1 sm:grid-cols-2"> */}
           {gear?.products?.nodes?.map((product: any) => (
             <Link
               key={product.id}
