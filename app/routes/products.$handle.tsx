@@ -105,33 +105,76 @@ export default function Product() {
 
   useEffect(() => {
     trackViewedProduct(selectedVariant);
-  },[]);
+  },[selectedVariant]);
 
-  console.log(selectedVariant)
 
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <ProductForm
-          productOptions={productOptions}
-          selectedVariant={selectedVariant}
-        />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <br />
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {/* Product Images Section */}
+        <div className="relative">
+          <div className="sticky top-8">
+            <ProductImage image={selectedVariant?.image} />
+          </div>
+        </div>
+
+        {/* Product Details Section */}
+        <div className="flex flex-col space-y-6">
+          <div className="pb-4">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 uppercase tracking-wide">{title}</h1>
+            <div className="text-xl font-semibold">
+              <div className="text-sm text-gray-600 mb-1 uppercase tracking-wide">Sale price</div>
+              <ProductPrice
+                price={selectedVariant?.price}
+                compareAtPrice={selectedVariant?.compareAtPrice}
+              />
+            </div>
+          </div>
+
+          {/* Product Note */}
+          <div className="text-sm text-gray-600 italic leading-relaxed">
+            <p><em>Due to the made-to-order nature of this product, please allow us up to 3 business weeks for production and fulfillment.</em></p>
+          </div>
+
+          <div className="h-px bg-gray-200 w-full"></div>
+
+          {/* Product Form */}
+          <div className="py-2">
+            <ProductForm
+              productOptions={productOptions}
+              selectedVariant={selectedVariant}
+            />
+          </div>
+
+          <div className="h-px bg-gray-200 w-full"></div>
+
+          {/* Shipping & Returns */}
+          <div className="flex flex-col space-y-8">
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold uppercase tracking-wide text-gray-800">SHIPPING & RETURNS</h3>
+              <div className="space-y-2">
+                <p className="text-sm leading-relaxed text-gray-600">Free Shipping In The USA On All Orders $100+.</p>
+                <p className="text-sm leading-relaxed text-gray-600">International Customers: For the cheapest, fastest, & most secure international shipping, please select your country&apos;s flag in the bottom left corner of the website.</p>
+                <p className="text-sm leading-relaxed text-gray-600">See full shipping policy here.<br />See Return Policy here.</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold uppercase tracking-wide text-gray-800">QUESTIONS?</h3>
+              <p className="text-sm leading-relaxed text-gray-600">Email Help@JiagiaStudios.com If You Need Help!</p>
+            </div>
+          </div>
+
+          {/* Product Description */}
+          {descriptionHtml && (
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold uppercase tracking-wide text-gray-800">DESCRIPTION</h3>
+              <div className="text-sm leading-relaxed text-gray-600" dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+            </div>
+          )}
+        </div>
       </div>
+
       <Analytics.ProductView
         data={{
           products: [

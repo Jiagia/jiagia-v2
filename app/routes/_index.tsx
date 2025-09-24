@@ -8,6 +8,8 @@ import type {
   FeaturedExhibitionsQuery,
 } from 'storefrontapi.generated';
 import comingSoon from '~/assets/coming-soon.png'
+import { Tower, TOWER_QUERY, CLOUD_QUERY} from '../components/Tower';
+import artistStatement from '~/assets/ArtistStatement.png'
 
 export const meta: MetaFunction = () => {
   return [{title: 'Jiagia Studios'}];
@@ -90,6 +92,27 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
     });
   }
 
+  // Query artwork collection
+  const artworkHandle = 'artwork';
+  const artwork = await context.storefront.query(ARTWORK, {
+    cache: context.storefront.CacheLong(),
+    variables: {handle: artworkHandle, first},
+  });
+
+  if (!artwork) {
+    console.error(artwork);
+    throw new Response('Artwork not found', {
+      status: 404,
+    });
+  }
+
+  // Query artist statement
+  const artistStmtHandle = 'artist-statement';
+  const artistStmt = await context.storefront.query(PAGE_QUERY, {
+    cache: context.storefront.CacheLong(),
+    variables: {handle: artistStmtHandle},
+  });
+
   const [header] = await Promise.all([
     context.storefront.query(HEADER_QUERY, {
       cache: context.storefront.CacheLong(),
@@ -109,6 +132,8 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
     ...featuredExhibitions,
     ...gear,
     ...artifacts,
+    ...artwork,
+    artistStmt,
     header,
   };
 }
@@ -119,7 +144,30 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
 function loadDeferredData({context}: LoaderFunctionArgs) {
-  return {};
+  const handle = "home-page";
+  const type = "tower";
+  const tower = context.storefront
+    .query(TOWER_QUERY, {
+      variables: {handle, type},
+    })
+    .catch((error: any) => {
+      // Log query errors, but don't throw them so the page can still render
+      console.error(error);
+      return null;
+    });
+
+  const clouds = context.storefront
+    .query(CLOUD_QUERY)
+    .catch((error: any) => {
+      // Log query errors, but don't throw them so the page can still render
+      console.error(error);
+      return null;
+    });
+
+  return {
+    tower,
+    clouds,
+  };
 }
 
 export default function Homepage() {
@@ -128,37 +176,67 @@ export default function Homepage() {
     featuredExhibitions,
     gear,
     artifacts,
+    artwork,
+    artistStmt,
+    tower,
+    clouds,
     header,
   } = useLoaderData<typeof loader>();
   console.log(gear);
   console.log(artifacts);
 
   return (
-    <div className="h-screen overflow-hidden lg:h-auto lg:w-auto ">
-      <img 
-        id="coming-soon"
-        src={comingSoon} 
-        alt="Coming Soon Image" 
-        className="w-full h-full object-cover md:h-auto md:object-fill"
-      />
-      {/* <HomePageNav />
-      <FeaturedArt featuredArt={featuredArt} />
-      <AboutUs />
-      <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
-      <FeaturedGear gear={gear} />
-      <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div>
-      <FeaturedArtifacts artifacts={artifacts} /> */}
-    </div>
+    <>
+      <div className="w-full">
+        {/* <img 
+          id="coming-soon"
+          src={comingSoon} 
+          alt="Coming Soon Image" 
+          className="w-full h-full object-cover md:h-auto md:object-fill"
+        /> */}
+        {/* <FeaturedArt featuredArt={featuredArt} /> */}
+        {/* <FeaturedExhibitions featuredExhibitions={featuredExhibitions} /> */}
+        {/* <FeaturedArtwork artwork={artwork} /> */}
+        {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
+        {/* <FeaturedArtifacts artifacts={artifacts} /> */}
+        {/* <FeaturedGear gear={gear} /> */}
+          <HomePageNav />
+          {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
+          <AboutUs />
+        </div>
+        <div className="w-full bg-black text-white overflow-x-hidden clear-both">
+          <Tower tower={tower} clouds={clouds} />
+          <section
+            className="relative"
+            style={{
+              backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0753/7868/8295/files/stars.png?v=1735004828)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="w-full pt-12 md:pt-20 pb-8 md:pb-12">
+              <div className="text-center sm:w-1/2 lg:w-1/3 mx-auto px-4 md:px-8">
+                <h2 className="bg-black bg-opacity-80 rounded-lg px-4 py-2 text-2xl md:text-[36px] mb-6 md:mb-8 inline-block">Artist Statement</h2>
+                <div className="bg-black bg-opacity-80 rounded-lg p-4 md:p-6" dangerouslySetInnerHTML={{__html: artistStmt?.page?.body}} />
+              </div>
+            </div>
+            <div className="w-full">
+              <img src={artistStatement} alt="Artist Statement" className="w-full h-auto object-cover" />
+            </div>
+          </section>
+        </div>
+    </>
   );
 }
 
 function HomePageNav() {
   return (
-    <div className="flex flex-col items-center text-center p-6 md:p-10 lg:p-20">
+    <div className="flex flex-col items-center text-center pt-15 md:pt-20 lg:pt-30">
       <h1 className="text-3xl md:text-6xl lg:text-8xl font-bold mb-4 md:mb-6">
         &gt; JIAGIA STUDIOS &lt;
       </h1>
-      <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
+      {/* <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
         <Link to="/shop" className="hover:no-underline">
           SHOP
         </Link>
@@ -168,7 +246,7 @@ function HomePageNav() {
         <Link to="/exhibitions" className="hover:no-underline">
           EXHIBITIONS
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -228,21 +306,10 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
 
 function AboutUs() {
   return (
-    <div className="flex flex-col items-center gap-4 max-w-lg py-12 md:py-20 mx-auto text-center px-4 md:px-8">
+    <div className="flex flex-col items-center gap-4 max-w-lg py-12 md:py-20 mx-auto text-center px-4 md:px-8 mb-8 md:mb-12">
       <p className="text-sm md:text-base leading-relaxed">
-        WE ARE A CREATIVE LABORATORY EXPLORING WORLDS WITHIN THE
-        <span className="italic"> &quot;DAYDREAM UNIVERSE&quot;</span>
+        Jiagia is a creative collective built on the idea that perception is an art form. We explore the world within (our thoughts, feelings,  ideas) and express it through fine art, collectible apparel, and visual storytelling. We invite you to step into these worlds, as you may also come to reimagine the one you already live in.
       </p>
-      <p className="text-sm md:text-base leading-relaxed">
-        FROM THESE JOURNEYS, WE GATHER ARTIFACTS AND CREATE ART INSPIRED BY
-        FINDINGS
-      </p>
-      <Link 
-        to="/about" 
-        className="mt-4 text-sm md:text-base hover:underline"
-      >
-        Learn More About Us
-      </Link>
     </div>
   );
 }
@@ -302,8 +369,38 @@ function FeaturedGear({gear}: {gear: any}) {
           GEAR
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        {/* <div className="grid lg:grid-cols-3 xl:grid-cols-4 grid-cols-1 sm:grid-cols-2"> */}
           {gear?.products?.nodes?.map((product: any) => (
+            <Link
+              key={product.id}
+              to={`/products/${product.handle}`}
+              className="flex flex-col items-center gap-4 text-center"
+            >
+              <div className="w-full">
+                <Image 
+                  data={product.featuredImage} 
+                  className="w-full h-auto"
+                />
+              </div>
+              <p className="text-sm md:text-base font-medium">
+                {product.title}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FeaturedArtwork({artwork}: {artwork: any}) {
+  return (
+    <div className="py-12 md:py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
+          ARTWORK
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {artwork?.products?.nodes?.map((product: any) => (
             <div
               key={product.id}
               className="flex flex-col items-center gap-4 text-center"
@@ -459,6 +556,29 @@ query Gear($handle: String!, $first: Int!) {
 }
 ` as const;
 
+const ARTWORK = `#graphql
+query Artwork($handle: String!, $first: Int!) {
+  artwork: collection(handle: $handle) {
+    id
+    handle
+    products(first: $first) {
+      nodes {
+        id
+        handle
+        title
+        featuredImage {
+          id
+          altText
+          url
+          width
+          height
+        }
+      }
+    }
+  }
+}
+` as const;
+
 const ARTIFACTS = `#graphql
 query Artifacts($handle: String!, $first: Int!) {
   artifacts: collection(handle: $handle) {
@@ -480,4 +600,17 @@ query Artifacts($handle: String!, $first: Int!) {
     }
   }
 }
+` as const;
+
+const PAGE_QUERY = `#graphql
+  query Page($handle: String!) {
+    page(handle: $handle) {
+      handle
+      body
+      seo {
+        title
+        description
+      }
+    }
+  }
 ` as const;
