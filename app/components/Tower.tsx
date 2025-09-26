@@ -20,7 +20,7 @@ export function Tower({
           {(response) => (
             <div className="relative md:min-h-[120wh]">
             {
-              response ? <TowerBuidling tower={response} /> : null
+              response ? <TowerBuidling tower={response} clouds={clouds} /> : null
             }
             </div>
           )}
@@ -45,8 +45,10 @@ export function Tower({
 
 function TowerBuidling({
   tower,
+  clouds,
 }: {
   tower: TowerQuery;
+  clouds: Promise<CloudsQuery | null>;
 }) {
   if (!tower.home) return null;
 
@@ -73,9 +75,21 @@ function TowerBuidling({
 
   return (
     <>
-      <div className={" h-[360px] w-full font-bold"} style={{backgroundImage: "linear-gradient(to bottom, white, " + sky_color}}>
-
-        <nav className="flex flex-col justify-start items-center p-16 h-5/6 space-y-5 text-[18px] sm:invisible ">
+      <div className="relative h-[360px] w-full font-bold overflow-hidden" style={{backgroundImage: "linear-gradient(to bottom, white, " + sky_color}}>
+        {/* Clouds within gradient area */}
+        <Suspense>
+          <Await resolve={clouds}>
+            {(response) => (
+              <>
+              {
+                response ? <GradientClouds clouds={response} /> : null
+              }
+              </>
+            )}
+          </Await>
+        </Suspense>
+        
+        <nav className="flex flex-col justify-start items-center p-16 h-5/6 space-y-5 text-[18px] sm:invisible relative z-10">
           {/* <Link className="border-2 p-2 border-white rounded-xl" to="/about">&gt; ABOUT US &lt;</Link> */}
           {/* <Link className="pointer-events-none" to="/shop">&gt; SHOP &lt;</Link>
           <Link className="pointer-events-none" to="/lab">&gt; LABORATORY &lt;</Link> */}
@@ -114,7 +128,7 @@ function Clouds({
   return (
     <>
     {clouds.cloud.nodes.map((cloud) => {
-      const pos = JSON.parse(cloud.position?.value || "[0,0]");
+      const pos = JSON.parse(cloud.position?.value || "[0,0]") as number[];
       const dur = 30;
       const delay = parseInt(cloud.delay?.value || "0");
       return (
@@ -129,7 +143,42 @@ function Clouds({
           animationTimingFunction: "linear",
           animationDelay: delay/10*dur+"s",
           top: pos[1]+"vw",
-          width: cloud.image?.reference?.image?.width/2+"px"}}
+          width: (cloud.image?.reference?.image?.width || 100)/2+"px"}}
+        /> 
+        : null}
+      </div>
+    )})}
+    </>
+  )
+}
+
+function GradientClouds({
+  clouds
+} : {
+  clouds: CloudsQuery;
+}) {
+  return (
+    <>
+    {clouds.cloud.nodes.map((cloud) => {
+      const pos = JSON.parse(cloud.position?.value || "[0,0]") as number[];
+      const dur = 30; // Same speed as original clouds
+      const delay = parseInt(cloud.delay?.value || "0");
+      // Position clouds within the gradient area (0-360px)
+      const topPosition = Math.max(0, Math.min(pos[1] * 3.6, 300)); // Convert vw to px within gradient
+      return (
+      <div key={`gradient-${cloud.id}`} className="absolute pointer-events-none" style={{top: topPosition + "px", height: "360px", width: "100%"}}>
+
+        {cloud.image ? 
+        <Image data={cloud.image.reference?.image} sizes="50vw"
+        style={{position: "absolute", 
+          animationName: "cloud", 
+          animationDuration: dur+"s", 
+          animationIterationCount: "infinite", 
+          animationTimingFunction: "linear",
+          animationDelay: delay/10*dur+"s",
+          top: "0px",
+          opacity: 0.6,
+          width: (cloud.image?.reference?.image?.width || 100)/2+"px"}}
         /> 
         : null}
       </div>

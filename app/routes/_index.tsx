@@ -194,13 +194,13 @@ export default function Homepage() {
           alt="Coming Soon Image" 
           className="w-full h-full object-cover md:h-auto md:object-fill"
         /> */}
-        {/* <FeaturedArt featuredArt={featuredArt} /> */}
         {/* <FeaturedExhibitions featuredExhibitions={featuredExhibitions} /> */}
         {/* <FeaturedArtwork artwork={artwork} /> */}
         {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
         {/* <FeaturedArtifacts artifacts={artifacts} /> */}
         {/* <FeaturedGear gear={gear} /> */}
           <HomePageNav />
+          {/* <FeaturedArt featuredArt={featuredArt} /> */}
           {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
           <AboutUs />
         </div>
@@ -216,10 +216,7 @@ export default function Homepage() {
             }}
           >
             <div className="w-full pt-12 md:pt-20 pb-8 md:pb-12">
-              <div className="text-center sm:w-1/2 lg:w-1/3 mx-auto px-4 md:px-8">
-                <h2 className="bg-black bg-opacity-80 rounded-lg px-4 py-2 text-2xl md:text-[36px] mb-6 md:mb-8 inline-block">Artist Statement</h2>
-                <div className="bg-black bg-opacity-80 rounded-lg p-4 md:p-6" dangerouslySetInnerHTML={{__html: artistStmt?.page?.body}} />
-              </div>
+            <ArtistStatementText />
             </div>
             <div className="w-full">
               <img src={artistStatement} alt="Artist Statement" className="w-full h-auto object-cover" />
@@ -306,10 +303,37 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
 
 function AboutUs() {
   return (
-    <div className="flex flex-col items-center gap-4 max-w-lg py-12 md:py-20 mx-auto text-center px-4 md:px-8 mb-8 md:mb-12">
+    <div className="flex flex-col items-center gap-4 max-w-2xl py-12 md:py-20 mx-auto text-center px-4 md:px-8 mb-8 md:mb-12">
       <p className="text-sm md:text-base leading-relaxed">
-        Jiagia is a creative collective built on the idea that perception is an art form. We explore the world within (our thoughts, feelings,  ideas) and express it through fine art, collectible apparel, and visual storytelling. We invite you to step into these worlds, as you may also come to reimagine the one you already live in.
+      Jiagia Studios is a creative collective and perceptual research unit. Our primary mission is to explore and document the Daydream Universe—a layered dimension that exists at the confluence of ancient mythology, collective memory, and our immersive digital present.
       </p>
+      <p className="text-sm md:text-base leading-relaxed">
+        In an age of accelerating information and fleeting attention, our work is an act of deep engagement. We believe that by observing, documenting, and reinterpreting these layered realities, we can build a new visual language—one that makes the unseen visible and gives form to the complex forces that shape our consciousness.
+      </p>
+      <p className="text-sm md:text-base leading-relaxed">
+      The artifacts we create, from fine art paintings to digital "Sightings," are the published findings of our exploration. They are worlds to be entered and understood. We invite you to join our research, to engage with our findings, and to remember that what we choose to preserve, question, and imagine becomes the foundation for every future we build.
+      </p>
+    </div>
+  );
+}
+
+function ArtistStatementText() {
+  return (
+    <div className="w-full pt-12 md:pt-20 pb-8 md:pb-12">
+      <div className="text-center sm:w-1/2 lg:w-2/5 mx-auto px-4 md:px-8">
+        <h2 className="bg-black bg-opacity-80 rounded-lg px-4 py-2 text-2xl md:text-[36px] mb-6 md:mb-8 inline-block">Artist Statement</h2>
+        <div className="bg-black bg-opacity-80 rounded-lg p-4 md:p-6 text-center space-y-4">
+          <p>
+            Parth&apos;s work <b>examines the parallels between organized </b>religion and digital immersion, exploring how contemporary culture seeks meaning, comfort, and a sense of self through virtual experiences in the same way past generations sought divinity.
+          </p>
+          <p>
+            Employing a vibrant, cartoon-inspired aesthetic rooted in internet iconography, Parth constructs dense, layered visual narratives. These layered compositions reflect the nonlinear way younger audiences engage with culture: not as a fixed history, but as a living dialogue of reverence, remix, and reinterpretation.
+          </p>
+          <p>
+            The worlds he builds are not meant as simple escapes. Each piece is an invitation to the viewer: to enter these imagined realms, to reflect on their messages, and ultimately, to reconsider the realities we all inhabit.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
