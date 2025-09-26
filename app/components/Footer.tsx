@@ -1,6 +1,7 @@
 import {Suspense} from 'react';
 import {Await, NavLink} from 'react-router';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
+import {useLocation} from 'react-router';
 import { KlaviyoForm } from './KlaviyoForm';
 
 interface FooterProps {
@@ -19,14 +20,17 @@ export function Footer({
   const FBLink = 'https://www.facebook.com/profile.php?id=100083105601746';
   const IGLink = 'https://www.instagram.com/jiagia.x/';
   const XLink = 'https://twitter.com/jiagia_studios';
+  const { pathname } = useLocation();
+
   return (
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
           <footer className="footer flex flex-col items-center gap-y-4 border-t border-black pt-2 overflow-hidden pt-[32px] mb-[32px]">
             <div className="flex justify-center">
-              {/* <KlaviyoForm newsletterLink={newsletterLink} /> */}
-              <div className="klaviyo-form-SYV6SN"></div>
+              {pathname !== '/subscribe' && (
+                <div className="klaviyo-form-SYV6SN"></div>
+              )}
             </div>
             <div className="justify-self-center py-4 md:pt-0">
               <SocialIcon
