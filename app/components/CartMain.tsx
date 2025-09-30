@@ -26,21 +26,28 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
     cart &&
     Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length);
   const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
-  const cartHasItems = cart?.totalQuantity! > 0;
+  const cartHasItems = (cart?.totalQuantity ?? 0) > 0;
 
   return (
-    <div className={className}>
+    <div className={`w-full ${className}`}>
       <CartEmpty hidden={linesCount} layout={layout} />
-      <div className="cart-details">
-        <div aria-labelledby="cart-lines">
-          <ul>
-            {(cart?.lines?.nodes ?? []).map((line) => (
-              <CartLineItem key={line.id} line={line} layout={layout} />
-            ))}
-          </ul>
+      {linesCount && (
+        <div className="w-full">
+          <div className="hidden md:grid grid-cols-3 gap-8 pb-4 mb-4 text-xs font-medium uppercase tracking-wide text-black">
+            <span className="justify-self-start">PRODUCT</span>
+            <span className="justify-self-center">QUANTITY</span>
+            <span className="justify-self-end">TOTAL</span>
+          </div>
+          <div aria-labelledby="cart-lines">
+            <ul className="list-none p-0 m-0">
+              {(cart?.lines?.nodes ?? []).map((line) => (
+                <CartLineItem key={line.id} line={line} layout={layout} />
+              ))}
+            </ul>
+          </div>
+          {cartHasItems && <CartSummary cart={cart} layout={layout} />}
         </div>
-        {cartHasItems && <CartSummary cart={cart} layout={layout} />}
-      </div>
+      )}
     </div>
   );
 }
