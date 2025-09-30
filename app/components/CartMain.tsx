@@ -33,11 +33,14 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
       <CartEmpty hidden={linesCount} layout={layout} />
       {linesCount && (
         <div className="w-full">
-          <div className="hidden md:grid grid-cols-3 gap-8 pb-4 mb-4 text-xs font-medium uppercase tracking-wide text-black">
-            <span className="justify-self-start">PRODUCT</span>
-            <span className="justify-self-center">QUANTITY</span>
-            <span className="justify-self-end">TOTAL</span>
-          </div>
+          {/* Only show column headers for page layout, not aside */}
+          {layout === 'page' && (
+            <div className="hidden md:grid grid-cols-3 gap-8 pb-4 mb-4 text-xs font-medium uppercase tracking-wide text-black">
+              <span className="justify-self-start">PRODUCT</span>
+              <span className="justify-self-center">QUANTITY</span>
+              <span className="justify-self-end">TOTAL</span>
+            </div>
+          )}
           <div aria-labelledby="cart-lines">
             <ul className="list-none p-0 m-0">
               {(cart?.lines?.nodes ?? []).map((line) => (

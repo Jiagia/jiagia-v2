@@ -26,9 +26,13 @@ export function CartLineItem({
   const {close} = useAside();
 
   return (
-    <li key={id} className="md:grid md:grid-cols-3 md:gap-8 py-6 border-b border-gray-200 md:items-center last:border-b-0 space-y-3 md:space-y-0">
+    <li key={id} className={`py-6 border-b border-gray-200 last:border-b-0 ${
+      layout === 'page' 
+        ? 'md:grid md:grid-cols-3 md:gap-8 md:items-start space-y-3 md:space-y-0' 
+        : 'space-y-3'
+    }`}>
       {/* Product section - spans full width on mobile, first column on desktop */}
-      <div className="flex gap-4 items-start md:justify-self-start">
+      <div className={`flex gap-4 items-start ${layout === 'page' ? 'md:justify-self-start' : ''}`}>
         {image && (
           <div className="flex-shrink-0">
             <Image
@@ -72,16 +76,28 @@ export function CartLineItem({
         </div>
       </div>
       
-      {/* Quantity section - centered on desktop */}
-      <div className="flex justify-between md:justify-center items-center">
-        <span className="md:hidden text-sm font-medium text-gray-700">Quantity</span>
+      {/* Quantity section - centered on desktop for page layout */}
+      <div className={`flex items-center ${
+        layout === 'page' 
+          ? 'justify-between md:justify-center' 
+          : 'justify-between'
+      }`}>
+        <span className={`text-sm font-medium text-gray-700 ${
+          layout === 'page' ? 'md:hidden' : ''
+        }`}>Quantity</span>
         <CartLineQuantity line={line} />
       </div>
       
-      {/* Total section - right aligned on desktop */}
-      <div className="flex justify-between md:justify-end items-center">
-        <span className="md:hidden text-sm font-medium text-gray-700">Total</span>
-        <div className="font-medium md:text-right">
+      {/* Total section - right aligned on desktop for page layout */}
+      <div className={`flex items-center ${
+        layout === 'page' 
+          ? 'justify-between md:justify-end' 
+          : 'justify-between'
+      }`}>
+        <span className={`text-sm font-medium text-gray-700 ${
+          layout === 'page' ? 'md:hidden' : ''
+        }`}>Total</span>
+        <div className={`font-medium ${layout === 'page' ? 'md:text-right' : ''}`}>
           <ProductPrice price={line?.cost?.totalAmount} />
         </div>
       </div>
