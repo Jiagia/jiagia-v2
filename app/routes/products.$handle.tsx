@@ -1,5 +1,5 @@
-import {Suspense, useEffect} from 'react';
-import {redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {useEffect} from 'react';
+import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import { useLoaderData, type MetaFunction } from 'react-router';
 import {
   getSelectedProductOptions,
@@ -7,10 +7,9 @@ import {
   useOptimisticVariant,
   getProductOptions,
   getAdjacentAndFirstAvailableVariants,
-  useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
 import {ProductPrice} from '~/components/ProductPrice';
-import {ProductImage} from '~/components/ProductImage';
+import {ProductImageGallery} from '~/components/ProductImageGallery';
 import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {trackViewedProduct} from '~/components/KlaviyoOnsite';
@@ -109,17 +108,20 @@ export default function Product() {
 
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* Product Images Section */}
-        <div className="relative">
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+        {/* Product Images Section - Takes up 3 columns */}
+        <div className="lg:col-span-3 relative">
           <div className="sticky top-8">
-            <ProductImage image={selectedVariant?.image} />
+            <ProductImageGallery 
+              images={product.images?.nodes || []} 
+              productTitle={product.title}
+            />
           </div>
         </div>
 
-        {/* Product Details Section */}
-        <div className="flex flex-col space-y-6">
+        {/* Product Details Section - Takes up 2 columns */}
+        <div className="lg:col-span-2 flex flex-col space-y-6">
           <div className="pb-4">
             <h1 className="text-3xl md:text-4xl font-bold mb-4 uppercase tracking-wide">{title}</h1>
             <div className="text-xl font-semibold">
@@ -241,6 +243,15 @@ const PRODUCT_FRAGMENT = `#graphql
     description
     encodedVariantExistence
     encodedVariantAvailability
+    images(first: 20) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
     options {
       name
       optionValues {
