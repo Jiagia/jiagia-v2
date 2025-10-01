@@ -19,7 +19,7 @@ export function Footer({
 }: FooterProps) {
   const FBLink = 'https://www.facebook.com/profile.php?id=100083105601746';
   const IGLink = 'https://www.instagram.com/jiagia.x/';
-  const XLink = 'https://twitter.com/jiagia_studios';
+  const SubstackLink = 'https://substack.com/@jiagia?utm_source=global-search';
   const { pathname } = useLocation();
 
   return (
@@ -36,7 +36,7 @@ export function Footer({
               <SocialIcon
                 FacebookLink={FBLink}
                 InstaLink={IGLink}
-                XLink={XLink}
+                SubstackLink={SubstackLink}
               />
             </div>
             {footer?.menu && header.shop.primaryDomain?.url && (
@@ -98,11 +98,11 @@ function FooterMenu({
 }
 
 function SocialIcon(
-  {FacebookLink, InstaLink, XLink} 
+  {FacebookLink, InstaLink, SubstackLink} 
   : {
     FacebookLink: string,
     InstaLink: string, 
-    XLink: string,
+    SubstackLink: string,
   }) {
   return (
     <div className="social-icons flex flex-row items-center gap-4">
@@ -152,27 +152,18 @@ function SocialIcon(
       </a>
       <a
         target="_blank"
-        href={XLink}
+        href={SubstackLink}
         className="social-link m-3 md:m-5 w-7 h-7"
         rel="noreferrer"
       >
         <div className="w-7 h-7" style={{display: 'inline-block'}}>
           <svg
-            className="icon icon-x"
+            className="icon icon-substack"
             xmlns="http://www.w3.org/2000/svg"
-            shapeRendering="geometricPrecision"
-            textRendering="geometricPrecision"
-            imageRendering="optimizeQuality"
-            fillRule="evenodd"
-            clipRule="evenodd"
-            viewBox="0 0 512 462.799"
-          >
-            {/* <rect fill="currentColor" width="512" height="509.64" rx="115.61" ry="115.61" /> */}
-            <path 
-            xmlns="http://www.w3.org/2000/svg" 
-            fillRule="nonzero" 
+            viewBox="0 0 24 24"
             fill="currentColor"
-            d="M403.229 0h78.506L310.219 196.04 512 462.799H354.002L230.261 301.007 88.669 462.799h-78.56l183.455-209.683L0 0h161.999l111.856 147.88L403.229 0zm-27.556 415.805h43.505L138.363 44.527h-46.68l283.99 371.278z"/>
+          >
+            <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
           </svg>
         </div>
       </a>
