@@ -18,7 +18,7 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(true);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
@@ -33,11 +33,11 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
         setSelectedImageIndex(prev => prev > 0 ? prev - 1 : images.length - 1);
-        setImageLoaded(false);
+        setImageLoaded(true);
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
         setSelectedImageIndex(prev => prev < images.length - 1 ? prev + 1 : 0);
-        setImageLoaded(false);
+        setImageLoaded(true);
       } else if (e.key === 'Escape' && isLightboxOpen) {
         setIsLightboxOpen(false);
         setIsZoomed(false);
@@ -79,16 +79,16 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
 
     if (isLeftSwipe) {
       setSelectedImageIndex(prev => prev < images.length - 1 ? prev + 1 : 0);
-      setImageLoaded(false);
+      setImageLoaded(true);
     }
     if (isRightSwipe) {
       setSelectedImageIndex(prev => prev > 0 ? prev - 1 : images.length - 1);
-      setImageLoaded(false);
+      setImageLoaded(true);
     }
   };
 
   const handleImageChange = (index: number) => {
-    setImageLoaded(false);
+    setImageLoaded(true);
     setSelectedImageIndex(index);
   };
 
@@ -295,9 +295,19 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
           aria-modal="true"
           aria-label="Image lightbox"
         >
+          {/* Backdrop overlay (click to close) */}
+          <div 
+            className="absolute inset-0 z-0"
+            onClick={() => {
+              setIsLightboxOpen(false);
+              setIsZoomed(false);
+            }}
+            aria-hidden="true"
+          />
+
           {/* Close button */}
           <button
-            className="absolute top-4 right-4 md:top-6 md:right-6 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 z-10"
+            className="absolute top-4 right-4 md:top-6 md:right-6 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 z-20"
             onClick={() => {
               setIsLightboxOpen(false);
               setIsZoomed(false);
@@ -309,18 +319,8 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
             </svg>
           </button>
 
-          {/* Backdrop overlay (click to close) */}
-          <div 
-            className="absolute inset-0"
-            onClick={() => {
-              setIsLightboxOpen(false);
-              setIsZoomed(false);
-            }}
-            aria-hidden="true"
-          />
-
           {/* Main lightbox image */}
-          <div className="relative max-w-7xl w-full h-full flex items-center justify-center pointer-events-none">
+          <div className="relative max-w-7xl w-full h-full flex items-center justify-center pointer-events-none z-10">
             <Image
               alt={selectedImage.altText || `${productTitle} - Image ${selectedImageIndex + 1}`}
               data={selectedImage}
@@ -334,7 +334,7 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
             <>
               <button
                 onClick={() => handleImageChange(selectedImageIndex > 0 ? selectedImageIndex - 1 : images.length - 1)}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 z-20"
                 aria-label="Previous image"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -344,7 +344,7 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
               
               <button
                 onClick={() => handleImageChange(selectedImageIndex < images.length - 1 ? selectedImageIndex + 1 : 0)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 z-20"
                 aria-label="Next image"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -353,7 +353,7 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
               </button>
 
               {/* Lightbox counter */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm text-white px-6 py-2 rounded-full text-sm font-medium tracking-wide">
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm text-white px-6 py-2 rounded-full text-sm font-medium tracking-wide z-20">
                 {selectedImageIndex + 1} / {images.length}
               </div>
             </>
