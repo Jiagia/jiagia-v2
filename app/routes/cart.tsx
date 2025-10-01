@@ -103,9 +103,8 @@ export async function action({request, context}: ActionFunctionArgs) {
 }
 
 export async function loader({context}: LoaderFunctionArgs) {
-      const {cart} = context;
-    // return data(await cart.get());
-    return await cart.get();
+  const {cart} = context;
+  return await cart.get();
 }
 
 export default function Cart() {
@@ -113,8 +112,13 @@ export default function Cart() {
   if (!rootData) return null;
 
   return (
-    <div className="cart">
-      <h1>Cart</h1>
+    <div className="bg-white p-4 sm:p-8 pt-20 sm:pt-20 max-w-6xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 pb-4 gap-2 sm:gap-0">
+        <h1 className="text-2xl sm:text-3xl font-bold text-black">Your cart</h1>
+        <a href="/collections" className="text-black underline text-sm hover:no-underline">
+          Continue shopping
+        </a>
+      </div>
       <Suspense fallback={<p>Loading cart ...</p>}>
         <Await
           resolve={rootData.cart}

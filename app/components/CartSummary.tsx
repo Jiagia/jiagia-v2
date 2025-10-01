@@ -10,25 +10,32 @@ type CartSummaryProps = {
 };
 
 export function CartSummary({cart, layout}: CartSummaryProps) {
-  const className =
-    layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
+  const className = layout === 'page' 
+    ? 'mt-8 sm:mt-12 flex justify-center sm:justify-end' 
+    : 'cart-summary-aside';
 
   return (
     <div aria-labelledby="cart-summary" className={className}>
-      <h4>Totals</h4>
-      <dl className="cart-subtotal">
-        <dt>Subtotal</dt>
-        <dd>
-          {cart.cost?.subtotalAmount?.amount ? (
-            <Money data={cart.cost?.subtotalAmount} />
-          ) : (
-            '-'
-          )}
-        </dd>
-      </dl>
-      <CartDiscounts discountCodes={cart.discountCodes} />
-      <CartGiftCard giftCardCodes={cart.appliedGiftCards} />
-      <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
+      <div className="w-full sm:min-w-80 sm:max-w-sm text-left sm:text-right">
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-2 text-lg">
+            <span className="font-medium">Subtotal</span>
+            <span className="font-semibold">
+              {cart.cost?.subtotalAmount?.amount ? (
+                <Money data={cart.cost?.subtotalAmount} />
+              ) : (
+                '$0.00'
+              )}
+            </span>
+          </div>
+          <p className="text-sm text-gray-600 m-0 text-left sm:text-right">
+            Taxes and shipping calculated at checkout
+          </p>
+        </div>
+        <CartDiscounts discountCodes={cart.discountCodes} />
+        <CartGiftCard giftCardCodes={cart.appliedGiftCards} />
+        <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
+      </div>
     </div>
   );
 }
@@ -36,11 +43,14 @@ function CartCheckoutActions({checkoutUrl}: {checkoutUrl?: string}) {
   if (!checkoutUrl) return null;
 
   return (
-    <div>
-      <a href={checkoutUrl} target="_self">
-        <p>Continue to Checkout &rarr;</p>
+    <div className="mt-6">
+      <a 
+        href={checkoutUrl} 
+        target="_self" 
+        className="block sm:inline-block w-full sm:w-auto text-center bg-black text-white px-8 py-3 rounded font-medium text-sm hover:bg-gray-800 transition-colors no-underline"
+      >
+        Check out
       </a>
-      <br />
     </div>
   );
 }
@@ -62,7 +72,7 @@ function CartDiscounts({
         <div>
           <dt>Discount(s)</dt>
           <UpdateDiscountForm>
-            <div className="cart-discount">
+            <div className="flex items-center mt-1">
               <code>{codes?.join(', ')}</code>
               &nbsp;
               <button>Remove</button>
@@ -131,7 +141,7 @@ function CartGiftCard({
         <div>
           <dt>Applied Gift Card(s)</dt>
           <UpdateGiftCardForm>
-            <div className="cart-discount">
+            <div className="flex items-center mt-1">
               <code>{codes?.join(', ')}</code>
               &nbsp;
               <button onSubmit={() => removeAppliedCode}>Remove</button>
@@ -172,7 +182,7 @@ function UpdateGiftCardForm({
     >
       {(fetcher: FetcherWithComponents<any>) => {
         const code = fetcher.formData?.get('giftCardCode');
-        if (code) saveAppliedCode && saveAppliedCode(code as string);
+        if (code && saveAppliedCode) saveAppliedCode(code as string);
         return children;
       }}
     </CartForm>
