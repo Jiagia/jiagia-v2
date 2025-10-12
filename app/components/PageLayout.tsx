@@ -50,7 +50,7 @@ export function PageLayout({
         publicStoreDomain={publicStoreDomain}
       />
       {/* )} */}
-      <main>{children}</main>
+      <main className="pt-8 md:pt-12 lg:pt-16">{children}</main>
       <Footer
         footer={footer}
         header={header}
