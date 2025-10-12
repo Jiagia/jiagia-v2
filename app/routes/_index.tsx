@@ -198,8 +198,8 @@ export default function Homepage() {
         {/* <FeaturedArtwork artwork={artwork} /> */}
         {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
         {/* <FeaturedArtifacts artifacts={artifacts} /> */}
-        {/* <FeaturedGear gear={gear} /> */}
           <HomePageNav />
+        <FeaturedGear gear={gear} />
           {/* <FeaturedArt featuredArt={featuredArt} /> */}
           {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
           <AboutUs />
