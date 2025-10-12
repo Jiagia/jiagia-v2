@@ -1,4 +1,4 @@
-import {data, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {data, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, Link, type MetaFunction} from 'react-router';
 import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
 import type {ProductItemFragment} from 'storefrontapi.generated';
@@ -6,11 +6,10 @@ import {useVariantUrl} from '~/lib/variants';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 
 export const meta: MetaFunction<typeof loader> = () => {
-  return [{title: `Hydrogen | Products`}];
+  return [{title: `All Products | Jiagia`}];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
-  throw redirect('/');
   // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
 
@@ -52,13 +51,12 @@ export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
 
   return (
-    <div className="collection">
-      <h1>Products</h1>
-      <PaginatedResourceSection
-        connection={products}
-        resourcesClassName="products-grid"
-      >
-        {({node: product, index}) => (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <header className="text-center mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">All Products</h1>
+      </header>
+      <PaginatedResourceSection connection={products}>
+        {({node: product, index}: {node: ProductItemFragment; index: number}) => (
           <ProductItem
             key={product.id}
             product={product}
@@ -73,32 +71,42 @@ export default function Collection() {
 function ProductItem({
   product,
   loading,
-}: {
+}: Readonly<{
   product: ProductItemFragment;
   loading?: 'eager' | 'lazy';
-}) {
+}>) {
   const variant = product.variants.nodes[0];
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   return (
     <Link
-      className="product-item"
+      className="block rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus:outline-2 focus:outline-black focus:outline-offset-2"
       key={product.id}
       prefetch="intent"
       to={variantUrl}
+      aria-label={`View ${product.title}`}
     >
-      {product.featuredImage && (
-        <Image
-          alt={product.featuredImage.altText || product.title}
-          aspectRatio="1/1"
-          data={product.featuredImage}
-          loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
-        />
+      {product.featuredImage ? (
+        <div className="relative w-full bg-gray-100 overflow-hidden">
+          <Image
+            alt={product.featuredImage.altText || product.title}
+            aspectRatio="1/1"
+            data={product.featuredImage}
+            loading={loading}
+            sizes="(min-width: 45em) 400px, 100vw"
+            className="w-full h-auto block"
+          />
+        </div>
+      ) : (
+        <div className="aspect-square flex items-center justify-center bg-gray-200" aria-label="No image available">
+          <span className="text-gray-400 text-sm">No image</span>
+        </div>
       )}
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
+      <div className="p-4">
+        <h4 className="font-semibold text-base sm:text-lg mb-2">{product.title}</h4>
+        <div className="text-sm text-gray-600">
+          <Money data={product.priceRange.minVariantPrice} />
+        </div>
+      </div>
     </Link>
   );
 }
