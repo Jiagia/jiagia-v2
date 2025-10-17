@@ -10,6 +10,7 @@ import type {
 import comingSoon from '~/assets/coming-soon.png'
 import { Tower, TOWER_QUERY, CLOUD_QUERY} from '../components/Tower';
 import artistStatement from '~/assets/ArtistStatement.png'
+import hoodieManifesting from '~/assets/Hoodie Manifesting.png'
 
 export const meta: MetaFunction = () => {
   return [{title: 'Jiagia Studios'}];
@@ -194,35 +195,35 @@ export default function Homepage() {
           alt="Coming Soon Image" 
           className="w-full h-full object-cover md:h-auto md:object-fill"
         /> */}
-        {/* <FeaturedExhibitions featuredExhibitions={featuredExhibitions} /> */}
-        {/* <FeaturedArtwork artwork={artwork} /> */}
         {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
+        {/* <FeaturedArtwork artwork={artwork} /> */}
         {/* <FeaturedArtifacts artifacts={artifacts} /> */}
-          <HomePageNav />
-        <FeaturedGear gear={gear} />
-          {/* <FeaturedArt featuredArt={featuredArt} /> */}
-          {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
-          <AboutUs />
-        </div>
-        <div className="w-full bg-black text-white overflow-x-hidden clear-both">
-          <Tower tower={tower} clouds={clouds} />
-          <section
-            className="relative"
-            style={{
-              backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0753/7868/8295/files/stars.png?v=1735004828)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
-          >
-            <div className="w-full pt-12 md:pt-20 pb-8 md:pb-12">
-            <ArtistStatementText />
+        <HomePageNav />
+        <FeaturedArt featuredArt={featuredArt} />
+        <AboutUs />
+        <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
+        <div className="py-12 md:py-20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
+              GEAR
+            </h2>
+            <div className="max-w-2xl mx-auto mb-8 md:mb-12">
+              <img
+                src={hoodieManifesting} 
+                alt="Upcoming Products - Artifact Manifestation in Progress" 
+                className="w-full h-auto object-cover"
+              />
             </div>
-            <div className="w-full">
-              <img src={artistStatement} alt="Artist Statement" className="w-full h-auto object-cover" />
-            </div>
-          </section>
+          </div>
         </div>
+        <div>
+          <Image
+            src="https://cdn.shopify.com/s/files/1/0753/7868/8295/files/laboratory.png?v=1760504043"
+          />
+        </div>
+        {/* <FeaturedGear gear={gear} /> */}
+        {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
+      </div>
     </>
   );
 }
@@ -234,7 +235,7 @@ function HomePageNav() {
         &gt; JIAGIA STUDIOS &lt;
       </h1>
       {/* <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
-        <Link to="/shop" className="hover:no-underline">
+        <Link to="/collections/all" className="hover:no-underline">
           SHOP
         </Link>
         <Link to="/lab" className="hover:no-underline">
@@ -261,7 +262,7 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
   return (
     <div className="px-4 md:px-8 lg:px-16">
       <div className="flex flex-col items-center gap-2 max-w-md mx-auto text-center mb-6 md:mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold">FEATURED ART</h2>
+        {/* <h2 className="text-2xl md:text-3xl font-bold">FEATURED ART</h2> */}
         <p className="text-sm md:text-base">
           Displayed in the Daydream Universe Artifact Gallery
         </p>
@@ -272,6 +273,7 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
             <Image
               data={entries[active].image.reference.image}
               className="w-full h-auto"
+              aspectRatio="4/3"
             />
           </div>
           <div className="flex flex-wrap justify-center gap-2 md:gap-4 text-sm md:text-base">
@@ -365,12 +367,13 @@ function FeaturedExhibitions({
               key={exhibition.id}
               className="flex flex-col gap-4 text-center"
             >
-              <div className="w-full">
+              <Link to={`/exhibitions/${exhibition.handle}`} className="w-full">
                 <Image
                   data={exhibition?.poster?.reference?.image}
-                  className="w-full h-auto"
+                  className="w-full h-auto hover:opacity-90 transition-opacity"
+                  aspectRatio="3/4"
                 />
-              </div>
+              </Link>
               <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold">
                 {exhibition.title.value}
               </h3>
@@ -433,6 +436,7 @@ function FeaturedArtwork({artwork}: {artwork: any}) {
                 <Image 
                   data={product.featuredImage} 
                   className="w-full h-auto"
+                  aspectRatio="3/4"
                 />
               </div>
               <p className="text-sm md:text-base font-medium">
