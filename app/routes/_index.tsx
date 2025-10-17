@@ -204,15 +204,20 @@ export default function Homepage() {
         <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
         <div className="py-12 md:py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
-              GEAR
-            </h2>
-            <div className="max-w-2xl mx-auto mb-8 md:mb-12">
-              <img
-                src={hoodieManifesting} 
-                alt="Upcoming Products - Artifact Manifestation in Progress" 
-                className="w-full h-auto object-cover"
-              />
+            <div className="flex flex-col items-center gap-6 md:gap-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-center">
+                GEAR
+              </h2>
+              <p className="text-center mx-auto max-w-xl">
+                As you prepare to explore the infinite possibilities of the daydream universe perceptions, we have assembled the necessary gear for you to carry forward.
+              </p>
+              <div className="max-w-2xl w-full mx-auto">
+                <img
+                  src={hoodieManifesting} 
+                  alt="Upcoming Products - Artifact Manifestation in Progress" 
+                  className="w-full h-auto object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -352,7 +357,16 @@ function FeaturedExhibitions({
   }
 
   return (
-    <div className="bg-black text-white py-12 md:py-20 lg:py-32">
+    <div
+      className="bg-black text-white py-12 md:py-20 lg:py-32"
+      style={{
+        backgroundImage:
+          'url(https://cdn.shopify.com/s/files/1/0753/7868/8295/files/stars.png?v=1735004828)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 md:mb-20 text-center">
           <h2 className="text-2xl md:text-3xl font-bold">EXHIBITIONS</h2>
@@ -361,23 +375,25 @@ function FeaturedExhibitions({
             Each one are based on our explorations and findings.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto"> */}
+        <div className="grid grid-cols-1 gap-8 md:gap-12 max-w-7xl mx-auto">
           {exhibitions.map((exhibition: any) => (
             <div
               key={exhibition.id}
-              className="flex flex-col gap-4 text-center"
+              className="flex flex-col items-center gap-4 text-center w-full max-w-md mx-auto"
             >
               <Link to={`/exhibitions/${exhibition.handle}`} className="w-full">
-                <Image
-                  data={exhibition?.poster?.reference?.image}
-                  className="w-full h-auto hover:opacity-90 transition-opacity"
-                  aspectRatio="3/4"
-                />
+                <div className="w-full aspect-[3/4] relative rounded-lg overflow-hidden bg-gray-200">
+                  <Image
+                    data={exhibition?.poster?.reference?.image}
+                    className="absolute inset-0 w-full h-full object-cover hover:opacity-90 transition-opacity"
+                  />
+                </div>
               </Link>
-              <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold">
+              <h3 className="text-lg md:text-2xl lg:text-3xl font-semibold mt-2">
                 {exhibition.title.value}
               </h3>
-              <p className="text-sm md:text-base leading-relaxed">
+              <p className="text-base md:text-lg leading-relaxed">
                 {exhibition.description.value}
               </p>
             </div>
@@ -550,7 +566,7 @@ query FeaturedExhibitions($handle: String!, $type: String!) {
       value
     }
     exhibitions: field(key: "exhibitions") {
-      references(first: 10) {
+      references(first: 1) {
         nodes {
           ... on Metaobject {
             ...Exhibition

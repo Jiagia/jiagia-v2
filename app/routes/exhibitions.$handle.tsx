@@ -39,7 +39,12 @@ export default function Exhibition() {
   const entries = exhibition?.entries?.references?.nodes;
 
   return (
-    <div className="bg-black text-white min-h-screen py-12 md:py-20 lg:py-32">
+    <div
+      className="text-white min-h-screen py-12 md:py-20 lg:py-32"
+      style={{
+        backgroundColor: `#${exhibition.backgroundColor?.value}` || '#000',
+      }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-32 xl:px-48">
         <div className="max-w-7xl mx-auto">
           {/* Exhibition Header */}
@@ -137,6 +142,9 @@ const EXHIBITION_QUERY = `#graphql
             }
           }
         }
+      }
+      backgroundColor: field(key: "background_color") {
+        value
       }
     }
   }
