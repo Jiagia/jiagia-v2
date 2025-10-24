@@ -56,40 +56,36 @@ export default function Collection() {
 
   return (
     <div>
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <header className="text-center mb-12">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2">Shop Collections</h1>
-      </header>
-      
-      {collections.map((collection, collectionIndex) => (
-        <section key={collection.id} className="mb-16">
-          <div className="mb-8 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2">{collection.title}</h2>
-            {collection.description && (
-              <p className="text-gray-600">{collection.description}</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {collections.map((collection, collectionIndex) => (
+          <section key={collection.id} className="mb-16">
+            <div className="mb-8 text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">{collection.title}</h2>
+              {collection.description && (
+                <p className="text-gray-600">{collection.description}</p>
+              )}
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mx-auto">
+              {collection.products.nodes.map((product: ProductItemFragment, index: number) => (
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  loading={index < 8 ? 'eager' : 'lazy'}
+                />
+              ))}
+            </div>
+            
+            {collectionIndex < collections.length - 1 && (
+              <hr className="mt-16 border-t border-gray-300" />
             )}
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mx-auto">
-            {collection.products.nodes.map((product: ProductItemFragment, index: number) => (
-              <ProductItem
-                key={product.id}
-                product={product}
-                loading={index < 8 ? 'eager' : 'lazy'}
-              />
-            ))}
-          </div>
-          
-          {collectionIndex < collections.length - 1 && (
-            <hr className="mt-16 border-t border-gray-300" />
-          )}
-        </section>
-      ))}
-    </div>
-    <Image
-      alt="Shop Collections Background"
-      src="https://cdn.shopify.com/s/files/1/0753/7868/8295/files/laboratory.png?v=1760504043"
-    />
+          </section>
+        ))}
+      </div>
+      <Image
+        alt="Shop Collections Background"
+        src="https://cdn.shopify.com/s/files/1/0753/7868/8295/files/laboratory.png?v=1760504043"
+      />
     </div>
   );
 }
