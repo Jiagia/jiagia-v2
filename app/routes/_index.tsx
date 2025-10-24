@@ -10,6 +10,7 @@ import type {
 import comingSoon from '~/assets/coming-soon.png'
 import { Tower, TOWER_QUERY, CLOUD_QUERY} from '../components/Tower';
 import artistStatement from '~/assets/ArtistStatement.png'
+import hoodieManifesting from '~/assets/Hoodie Manifesting.png'
 
 export const meta: MetaFunction = () => {
   return [{title: 'Jiagia Studios'}];
@@ -63,7 +64,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
     });
   }
 
-  handle = 'season-4';
+  handle = 'gear';
   const first = 3;
 
   const gear = await context.storefront.query(GEAR, {
@@ -78,7 +79,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
     });
   }
 
-  handle = 'season-3';
+  handle = 'artifacts-exhibition-1';
 
   const artifacts = await context.storefront.query(ARTIFACTS, {
     cache: context.storefront.CacheLong(),
@@ -194,56 +195,61 @@ export default function Homepage() {
           alt="Coming Soon Image" 
           className="w-full h-full object-cover md:h-auto md:object-fill"
         /> */}
-        {/* <FeaturedExhibitions featuredExhibitions={featuredExhibitions} /> */}
-        {/* <FeaturedArtwork artwork={artwork} /> */}
         {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
-        {/* <FeaturedArtifacts artifacts={artifacts} /> */}
-          <HomePageNav />
+        {/* <FeaturedArtwork artwork={artwork} /> */}
+        <HomePageNav />
+        <FeaturedArt featuredArt={featuredArt} />
+        <AboutUs />
+        <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
+        {/* <div className="py-12 md:py-20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col items-center gap-6 md:gap-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-center">
+                GEAR
+              </h2>
+              <p className="text-center mx-auto max-w-xl">
+                As you prepare to explore the infinite possibilities of the daydream universe perceptions, we have assembled the necessary gear for you to carry forward.
+              </p>
+              <div className="max-w-2xl w-full mx-auto">
+                <img
+                  src={hoodieManifesting} 
+                  alt="Upcoming Products - Artifact Manifestation in Progress" 
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div> */}
+        {/* <div>
+          <Image
+            src="https://cdn.shopify.com/s/files/1/0753/7868/8295/files/laboratory.png?v=1760504043"
+          />
+        </div> */}
         <FeaturedGear gear={gear} />
-          {/* <FeaturedArt featuredArt={featuredArt} /> */}
-          {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
-          <AboutUs />
-        </div>
-        <div className="w-full bg-black text-white overflow-x-hidden clear-both">
-          <Tower tower={tower} clouds={clouds} />
-          <section
-            className="relative"
-            style={{
-              backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0753/7868/8295/files/stars.png?v=1735004828)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
-          >
-            <div className="w-full pt-12 md:pt-20 pb-8 md:pb-12">
-            <ArtistStatementText />
-            </div>
-            <div className="w-full">
-              <img src={artistStatement} alt="Artist Statement" className="w-full h-auto object-cover" />
-            </div>
-          </section>
-        </div>
+        <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div>
+        <FeaturedArtifacts artifacts={artifacts} />
+      </div>
     </>
   );
 }
 
 function HomePageNav() {
   return (
-    <div className="flex flex-col items-center text-center pt-15 md:pt-20 lg:pt-30">
+    <div className="flex flex-col items-center text-center my-15 md:my-20 lg:my-30">
       <h1 className="text-3xl md:text-6xl lg:text-8xl font-bold mb-4 md:mb-6">
         &gt; JIAGIA STUDIOS &lt;
       </h1>
-      {/* <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
-        <Link to="/shop" className="hover:no-underline">
-          SHOP
-        </Link>
-        <Link to="/lab" className="hover:no-underline">
-          LAB
-        </Link>
-        <Link to="/exhibitions" className="hover:no-underline">
+      <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
+        <Link to="/exhibitions/lotus-world" className="hover:no-underline">
           EXHIBITIONS
         </Link>
-      </div> */}
+        <Link to="/collections/all" className="hover:no-underline">
+          SHOP
+        </Link>
+        <Link to="/about" className="hover:no-underline">
+          ABOUT US
+        </Link>
+      </div>
     </div>
   );
 }
@@ -261,40 +267,26 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
   return (
     <div className="px-4 md:px-8 lg:px-16">
       <div className="flex flex-col items-center gap-2 max-w-md mx-auto text-center mb-6 md:mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold">FEATURED ART</h2>
+        {/* <h2 className="text-2xl md:text-3xl font-bold">FEATURED ART</h2> */}
         <p className="text-sm md:text-base">
-          Displayed in the Daydream Universe Artifact Gallery
+          Displayed in the Daydream Museum
         </p>
       </div>
       <div className="max-w-6xl mx-auto">
         <div className="mb-6 md:mb-8">
           <div className="w-full max-w-3xl mx-auto mb-4">
-            <Image
-              data={entries[active].image.reference.image}
-              className="w-full h-auto"
-            />
-          </div>
-          <div className="flex flex-wrap justify-center gap-2 md:gap-4 text-sm md:text-base">
-            {JSON.parse(entries[active].caption.value)?.map((caption: string, index: number) => (
-              <p className="px-2" key={index}>
-                {caption}
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className="flex flex-wrap justify-center gap-2 md:gap-4">
-          {entries.map((entry: any, index: number) => (
-            <button
-              key={entry.id}
-              onClick={() => setActive(index)}
-              className={`hover:cursor-pointer transition-all ${
-                active === index ? 'border-2 border-black' : ''
-              }`}
-              aria-label={`View featured art ${index + 1}`}
+            <video 
+              className="w-full h-auto mb-6 md:mb-8 rounded-lg"
+              controls
+              autoPlay
+              muted
+              loop
+              playsInline
             >
-              <Image data={entry.image.reference.image} width={100} className="md:w-32 lg:w-36" />
-            </button>
-          ))}
+              <source src="https://cdn.shopify.com/videos/c/o/v/86dc7e8e24f34b95bcd876165cbe662a.mov" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
         </div>
       </div>
     </div>
@@ -305,13 +297,7 @@ function AboutUs() {
   return (
     <div className="flex flex-col items-center gap-4 max-w-2xl py-12 md:py-20 mx-auto text-center px-4 md:px-8 mb-8 md:mb-12">
       <p className="text-sm md:text-base leading-relaxed">
-      Jiagia Studios is a creative collective and perceptual research unit. Our primary mission is to explore and document the Daydream Universe—a layered dimension that exists at the confluence of ancient mythology, collective memory, and our immersive digital present.
-      </p>
-      <p className="text-sm md:text-base leading-relaxed">
-        In an age of accelerating information and fleeting attention, our work is an act of deep engagement. We believe that by observing, documenting, and reinterpreting these layered realities, we can build a new visual language—one that makes the unseen visible and gives form to the complex forces that shape our consciousness.
-      </p>
-      <p className="text-sm md:text-base leading-relaxed">
-      The artifacts we create, from fine art paintings to digital "Sightings," are the published findings of our exploration. They are worlds to be entered and understood. We invite you to join our research, to engage with our findings, and to remember that what we choose to preserve, question, and imagine becomes the foundation for every future we build.
+      Jiagia is a creative collective built on the idea that perception is an art form. We explore the world within (our thoughts, feelings,  ideas) and express it through fine art, collectible apparel, and visual storytelling. We invite you to step into these worlds, as you may also come to reimagine the one you already live in.
       </p>
     </div>
   );
@@ -350,33 +336,45 @@ function FeaturedExhibitions({
   }
 
   return (
-    <div className="bg-black text-white py-12 md:py-20 lg:py-32">
+    <div
+      className="bg-black text-white py-12 md:py-20 lg:py-32"
+      style={{
+        backgroundImage:
+          'url(https://cdn.shopify.com/s/files/1/0753/7868/8295/files/stars.png?v=1735004828)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 md:mb-20 text-center">
           <h2 className="text-2xl md:text-3xl font-bold">EXHIBITIONS</h2>
-          <p className="text-sm md:text-base leading-relaxed">
+          {/* <p className="text-sm md:text-base leading-relaxed">
             Our exhibitions are collection of works displayed within a dreamscape. 
             Each one are based on our explorations and findings.
-          </p>
+          </p> */}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto"> */}
+        <div className="grid grid-cols-1 gap-8 md:gap-12 max-w-7xl mx-auto">
           {exhibitions.map((exhibition: any) => (
             <div
               key={exhibition.id}
-              className="flex flex-col gap-4 text-center"
+              className="flex flex-col items-center gap-4 text-center w-full max-w-md mx-auto"
             >
-              <div className="w-full">
-                <Image
-                  data={exhibition?.poster?.reference?.image}
-                  className="w-full h-auto"
-                />
-              </div>
-              <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold">
+              <Link to={`/exhibitions/${exhibition.handle}`} className="w-full">
+                <div className="w-full aspect-[3/4] relative rounded-lg overflow-hidden bg-gray-200">
+                  <Image
+                    data={exhibition?.poster?.reference?.image}
+                    className="absolute inset-0 w-full h-full object-cover hover:opacity-90 transition-opacity"
+                  />
+                </div>
+              </Link>
+              <h3 className="text-lg md:text-2xl lg:text-3xl font-semibold mt-2">
                 {exhibition.title.value}
               </h3>
-              <p className="text-sm md:text-base leading-relaxed">
+              {/* <p className="text-base md:text-lg leading-relaxed">
                 {exhibition.description.value}
-              </p>
+              </p> */}
             </div>
           ))}
         </div>
@@ -399,10 +397,10 @@ function FeaturedGear({gear}: {gear: any}) {
               to={`/products/${product.handle}`}
               className="flex flex-col items-center gap-4 text-center"
             >
-              <div className="w-full">
+              <div className="w-full overflow-hidden rounded-lg">
                 <Image 
                   data={product.featuredImage} 
-                  className="w-full h-auto"
+                  className="w-full h-auto hover:opacity-90 transition-opacity"
                 />
               </div>
               <p className="text-sm md:text-base font-medium">
@@ -433,6 +431,7 @@ function FeaturedArtwork({artwork}: {artwork: any}) {
                 <Image 
                   data={product.featuredImage} 
                   className="w-full h-auto"
+                  aspectRatio="3/4"
                 />
               </div>
               <p className="text-sm md:text-base font-medium">
@@ -455,20 +454,21 @@ function FeaturedArtifacts({artifacts}: {artifacts: any}) {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {artifacts?.products?.nodes?.map((product: any) => (
-            <div
+            <Link
+              to={`/products/${product.handle}`}
               key={product.id}
               className="flex flex-col items-center gap-4 text-center"
             >
-              <div className="w-full">
+              <div className="w-full overflow-hidden rounded-lg">
                 <Image 
                   data={product.featuredImage} 
-                  className="w-full h-auto"
+                  className="w-full h-auto hover:opacity-90 transition-opacity"
                 />
               </div>
               <p className="text-sm md:text-base font-medium">
                 {product.title}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -546,7 +546,7 @@ query FeaturedExhibitions($handle: String!, $type: String!) {
       value
     }
     exhibitions: field(key: "exhibitions") {
-      references(first: 10) {
+      references(first: 1) {
         nodes {
           ... on Metaobject {
             ...Exhibition

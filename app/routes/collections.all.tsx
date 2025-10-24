@@ -1,12 +1,11 @@
 import {data, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, Link, type MetaFunction} from 'react-router';
-import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
+import {Image, Money} from '@shopify/hydrogen';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 import {useVariantUrl} from '~/lib/variants';
-import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 
 export const meta: MetaFunction<typeof loader> = () => {
-  return [{title: `All Products | Jiagia`}];
+  return [{title: `Collections | Jiagia`}];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
@@ -23,19 +22,24 @@ export async function loader(args: LoaderFunctionArgs) {
  * Load data necessary for rendering content above the fold. This is the critical data
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
-async function loadCriticalData({context, request}: LoaderFunctionArgs) {
+async function loadCriticalData({context}: LoaderFunctionArgs) {
   const {storefront} = context;
-  const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
-  });
 
-  const [{products}] = await Promise.all([
-    storefront.query(CATALOG_QUERY, {
-      variables: {...paginationVariables},
+  const [gearCollection, artifactsCollection] = await Promise.all([
+    storefront.query(COLLECTION_QUERY, {
+      variables: {handle: 'gear', first: 50},
     }),
-    // Add other queries here, so that they are loaded in parallel
+    storefront.query(COLLECTION_QUERY, {
+      variables: {handle: 'artifacts-exhibition-1', first: 50},
+    }),
   ]);
-  return {products};
+
+  return {
+    collections: [
+      gearCollection.collection,
+      artifactsCollection.collection,
+    ].filter(Boolean),
+  };
 }
 
 /**
@@ -48,22 +52,40 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 }
 
 export default function Collection() {
-  const {products} = useLoaderData<typeof loader>();
+  const {collections} = useLoaderData<typeof loader>();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <header className="text-center mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2">All Products</h1>
-      </header>
-      <PaginatedResourceSection connection={products}>
-        {({node: product, index}: {node: ProductItemFragment; index: number}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
-        )}
-      </PaginatedResourceSection>
+    <div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {collections.map((collection, collectionIndex) => (
+          <section key={collection.id} className="mb-16">
+            <div className="mb-8 text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">{collection.title}</h2>
+              {collection.description && (
+                <p className="text-gray-600">{collection.description}</p>
+              )}
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mx-auto">
+              {collection.products.nodes.map((product: ProductItemFragment, index: number) => (
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  loading={index < 8 ? 'eager' : 'lazy'}
+                />
+              ))}
+            </div>
+            
+            {collectionIndex < collections.length - 1 && (
+              <hr className="mt-16 border-t border-gray-300" />
+            )}
+          </section>
+        ))}
+      </div>
+      <Image
+        alt="Shop Collections Background"
+        src="https://cdn.shopify.com/s/files/1/0753/7868/8295/files/laboratory.png?v=1760504043"
+      />
     </div>
   );
 }
@@ -89,7 +111,6 @@ function ProductItem({
         <div className="relative w-full bg-gray-100 overflow-hidden">
           <Image
             alt={product.featuredImage.altText || product.title}
-            aspectRatio="1/1"
             data={product.featuredImage}
             loading={loading}
             sizes="(min-width: 45em) 400px, 100vw"
@@ -97,7 +118,7 @@ function ProductItem({
           />
         </div>
       ) : (
-        <div className="aspect-square flex items-center justify-center bg-gray-200" aria-label="No image available">
+        <div className="flex items-center justify-center bg-gray-200 min-h-[200px]" aria-label="No image available">
           <span className="text-gray-400 text-sm">No image</span>
         </div>
       )}
@@ -146,25 +167,22 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
   }
 ` as const;
 
-// NOTE: https://shopify.dev/docs/api/storefront/2024-01/objects/product
-const CATALOG_QUERY = `#graphql
-  query Catalog(
+const COLLECTION_QUERY = `#graphql
+  query Collection(
+    $handle: String!
     $country: CountryCode
     $language: LanguageCode
     $first: Int
-    $last: Int
-    $startCursor: String
-    $endCursor: String
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
-      nodes {
-        ...ProductItem
-      }
-      pageInfo {
-        hasPreviousPage
-        hasNextPage
-        startCursor
-        endCursor
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      description
+      products(first: $first) {
+        nodes {
+          ...ProductItem
+        }
       }
     }
   }
