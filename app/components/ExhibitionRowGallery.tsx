@@ -62,29 +62,6 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
 
   const minSwipeDistance = 50;
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (entries.length <= 1) return;
-      
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        setSelectedIndex(prev => prev > 0 ? prev - 1 : entries.length - 1);
-        setImageLoaded(true);
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        setSelectedIndex(prev => prev < entries.length - 1 ? prev + 1 : 0);
-        setImageLoaded(true);
-      } else if (e.key === 'Escape' && isLightboxOpen) {
-        setIsLightboxOpen(false);
-        setIsZoomed(false);
-      }
-    };
-
-    globalThis.addEventListener('keydown', handleKeyDown);
-    return () => globalThis.removeEventListener('keydown', handleKeyDown);
-  }, [entries.length, isLightboxOpen]);
-
   // Prevent body scroll when lightbox is open
   useEffect(() => {
     if (isLightboxOpen) {
