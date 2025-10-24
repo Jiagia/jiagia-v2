@@ -286,13 +286,7 @@ const EXHIBITION_QUERY = `#graphql
       value
     }
     sound: field(key: "sound") {
-      reference {
-        ... on MediaImage {
-          image {
-            url
-          }
-        }
-      }
+      value
     }
   }
   fragment Row on Metaobject {

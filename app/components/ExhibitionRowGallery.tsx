@@ -41,11 +41,7 @@ interface ExhibitionEntry {
     };
   };
   sound?: {
-    reference?: {
-      image?: {
-        url?: string;
-      };
-    };
+    value?: string;
   };
 }
 
@@ -170,14 +166,13 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
   const selectedTitle = selectedEntry?.title?.value;
   const selectedMaterial = selectedEntry?.material?.value;
   const exhibitionHandle = selectedEntry?.exhibitionHandle?.value;
-  const soundUrl = selectedEntry?.sound?.reference?.image?.url;
-  console.log(JSON.stringify(selectedEntry, null, 2))
-  console.log(JSON.stringify(soundUrl, null, 2))
-  console.log(JSON.stringify(selectedEntry?.sound?.reference, null, 2))
+  const soundUrl = selectedEntry?.sound?.value;
+  console.log('soundUrl:', soundUrl)
   
   // Use richDescription if category is "exhibition", otherwise use regular description
   const isExhibitionCategory = selectedEntry?.category?.value === 'exhibition';
-  const isSoundsCategory = selectedEntry?.category?.value === 'sounds';
+  const isSoundsCategory = selectedEntry?.category?.value === 'sound';
+  console.log('category:', selectedEntry?.category?.value, 'isSoundsCategory:', isSoundsCategory, 'soundUrl exists:', !!soundUrl);
   const richDescriptionNodes = selectedEntry?.richDescription?.references?.nodes || [];
   
   // Parse rich text JSON and convert to React elements with formatting
