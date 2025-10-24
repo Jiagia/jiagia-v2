@@ -40,7 +40,7 @@ export default function Exhibition() {
 
   return (
     <div
-      className="text-white min-h-screen py-12 md:py-20 lg:py-32"
+      className="min-h-screen py-12 md:py-20 lg:py-32"
       style={{
         backgroundColor: `#${exhibition.backgroundColor?.value}` || '#000',
       }}

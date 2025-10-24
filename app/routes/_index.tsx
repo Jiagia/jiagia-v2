@@ -235,21 +235,21 @@ export default function Homepage() {
 
 function HomePageNav() {
   return (
-    <div className="flex flex-col items-center text-center pt-15 md:pt-20 lg:pt-30">
+    <div className="flex flex-col items-center text-center my-15 md:my-20 lg:my-30">
       <h1 className="text-3xl md:text-6xl lg:text-8xl font-bold mb-4 md:mb-6">
         &gt; JIAGIA STUDIOS &lt;
       </h1>
-      {/* <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
+      <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
+        <Link to="/exhibitions/east-asia" className="hover:no-underline">
+          EXHIBITIONS
+        </Link>
         <Link to="/collections/all" className="hover:no-underline">
           SHOP
         </Link>
-        <Link to="/lab" className="hover:no-underline">
-          LAB
+        <Link to="/about" className="hover:no-underline">
+          ABOUT US
         </Link>
-        <Link to="/exhibitions" className="hover:no-underline">
-          EXHIBITIONS
-        </Link>
-      </div> */}
+      </div>
     </div>
   );
 }

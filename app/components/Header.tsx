@@ -117,7 +117,7 @@ export function HeaderMenu({
           Home
         </NavLink>
       )}
-      {/* {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
         // if the url is internal, we strip the domain
@@ -136,11 +136,15 @@ export function HeaderMenu({
             prefetch="intent"
             // style={activeLinkStyle}
             to={url}
+            style={({isActive}) => ({
+              pointerEvents: isActive ? 'none' : 'auto',
+              opacity: isActive ? 0.5 : 1,
+            })}
           >
             {item.title}
           </NavLink>
         );
-      })} */}
+      })}
     </nav>
   );
 }

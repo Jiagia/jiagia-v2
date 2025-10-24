@@ -67,6 +67,7 @@ export default function About() {
 function AboutUs() {
   return (
     <div className="flex flex-col items-center gap-4 max-w-2xl py-12 md:py-20 mx-auto text-center px-4 md:px-8 mb-8 md:mb-12">
+      <h2 className="text-2xl md:text-3xl font-bold">ABOUT US</h2>
       <p className="text-sm md:text-base leading-relaxed">
       Jiagia Studios is a creative collective and perceptual research unit. Our primary mission is to explore and document the Daydream Universe—a layered dimension that exists at the confluence of ancient mythology, collective memory, and our immersive digital present.
       </p>
