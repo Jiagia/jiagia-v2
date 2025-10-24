@@ -240,7 +240,7 @@ function HomePageNav() {
         &gt; JIAGIA STUDIOS &lt;
       </h1>
       <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
-        <Link to="/exhibitions/east-asia" className="hover:no-underline">
+        <Link to="/exhibitions/lotus-world" className="hover:no-underline">
           EXHIBITIONS
         </Link>
         <Link to="/collections/all" className="hover:no-underline">
