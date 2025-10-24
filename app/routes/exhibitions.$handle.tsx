@@ -208,6 +208,29 @@ export default function Exhibition() {
               })}
             </div>
           )}
+
+          {/* Special Thanks Section */}
+          <div className="mt-24 md:mt-32 lg:mt-40 py-12 md:py-16 lg:py-20 border-t border-white/20">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-8 md:mb-12">
+                Special Thanks
+              </h2>
+              
+              <div className="space-y-6 md:space-y-8 text-base md:text-lg leading-relaxed text-white/90">
+                <p>
+                  To start, we would like give a special thank our sound design partner Leon who has helped us bring the sounds from the Daydream Universe alive. You have opened our eyes to the limitless possibilities and power that audio can have on us.
+                </p>
+                
+                <p>
+                  We would also like specially thank Isaiah Trevino for helping bring our Daydream Universe concepts into a tangible environment.
+                </p>
+                
+                <p>
+                  Finally, as a team, we want to thank YOU, dear viewer. Your passion is what inspires us and continuously fuels this project. Our goal is to create a space where we can all explore the infinite universes that exist within us.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
