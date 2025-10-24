@@ -90,9 +90,28 @@ export default function Exhibition() {
 }
 
 const EXHIBITION_QUERY = `#graphql
+  fragment Description on Metaobject {
+    id
+    handle
+    text: field(key: "text") {
+      value
+    }
+  }
   fragment Entry on Metaobject {
     id
     handle
+    title: field(key: "title") {
+      value
+    }
+    category: field(key: "category") {
+      value
+    }
+    material: field(key: "material") {
+      value
+    }
+    description: field(key: "description") {
+      value
+    }
     image: field(key: "image") {
       reference {
         ... on MediaImage {
@@ -106,13 +125,22 @@ const EXHIBITION_QUERY = `#graphql
         }
       }
     }
-    description: field(key: "description") {
-      value
+    richDescription: field(key: "rich_description") {
+      references(first: 10) {
+        nodes {
+          ... on Metaobject {
+            ...Description
+          }
+        }
+      }
     }
   }
   fragment Row on Metaobject {
     id
     handle
+    title: field(key: "title") {
+      value
+    }
     entries: field(key: "entries") {
       references(first: 10) {
         nodes {

@@ -370,10 +370,10 @@ function FeaturedExhibitions({
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 md:mb-20 text-center">
           <h2 className="text-2xl md:text-3xl font-bold">EXHIBITIONS</h2>
-          <p className="text-sm md:text-base leading-relaxed">
+          {/* <p className="text-sm md:text-base leading-relaxed">
             Our exhibitions are collection of works displayed within a dreamscape. 
             Each one are based on our explorations and findings.
-          </p>
+          </p> */}
         </div>
         {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto"> */}
         <div className="grid grid-cols-1 gap-8 md:gap-12 max-w-7xl mx-auto">
@@ -393,9 +393,9 @@ function FeaturedExhibitions({
               <h3 className="text-lg md:text-2xl lg:text-3xl font-semibold mt-2">
                 {exhibition.title.value}
               </h3>
-              <p className="text-base md:text-lg leading-relaxed">
+              {/* <p className="text-base md:text-lg leading-relaxed">
                 {exhibition.description.value}
-              </p>
+              </p> */}
             </div>
           ))}
         </div>

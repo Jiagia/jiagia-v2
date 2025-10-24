@@ -14,8 +14,27 @@ interface ExhibitionEntry {
       };
     };
   };
+  title?: {
+    value?: string;
+  };
+  material?: {
+    value?: string;
+  };
   description?: {
     value?: string;
+  };
+  category?: {
+    value?: string;
+  };
+  richDescription?: {
+    references?: {
+      nodes?: Array<{
+        id?: string;
+        text?: {
+          value?: string;
+        };
+      }>;
+    };
   };
 }
 
@@ -107,6 +126,70 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
 
   const selectedEntry = entries[selectedIndex];
   const selectedImage = selectedEntry?.image?.reference?.image;
+  const selectedTitle = selectedEntry?.title?.value;
+  const selectedMaterial = selectedEntry?.material?.value;
+  
+  // Use richDescription if category is "exhibition", otherwise use regular description
+  const isExhibitionCategory = selectedEntry?.category?.value === 'exhibition';
+  const richDescriptionNodes = selectedEntry?.richDescription?.references?.nodes || [];
+  
+  // Parse rich text JSON and convert to React elements with formatting
+  const richDescriptionElements = richDescriptionNodes
+    .map((node) => {
+      const textValue = node?.text?.value;
+      const nodeId = node?.id || Math.random().toString();
+      if (!textValue) return null;
+      
+      try {
+        // Parse the JSON structure
+        const parsed = JSON.parse(textValue);
+        
+        // Convert rich text to React elements with formatting
+        const renderRichText = (obj: any, key: string = ''): any => {
+          if (typeof obj === 'string') return obj;
+          
+          if (obj?.type === 'text' && obj?.value) {
+            const text = obj.value;
+            
+            // Apply formatting based on properties
+            if (obj.bold && obj.italic) {
+              return <strong key={key}><em>{text}</em></strong>;
+            } else if (obj.bold) {
+              return <strong key={key}>{text}</strong>;
+            } else if (obj.italic) {
+              return <em key={key}>{text}</em>;
+            }
+            
+            return text;
+          }
+          
+          if (obj?.children) {
+            return obj.children.map((child: any, idx: number) => 
+              renderRichText(child, `${key}-${idx}`)
+            );
+          }
+          
+          return null;
+        };
+        
+        return {
+          id: nodeId,
+          content: (
+            <span key={nodeId}>
+              {renderRichText(parsed, `node-${nodeId}`)}
+            </span>
+          ),
+        };
+      } catch {
+        // If parsing fails, return the raw value
+        return {
+          id: nodeId,
+          content: textValue,
+        };
+      }
+    })
+    .filter(Boolean);
+  
   const selectedDescription = selectedEntry?.description?.value;
 
   return (
@@ -168,7 +251,7 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
               {selectedImage && (
                 <Image
                   alt={selectedImage.altText || `${rowTitle} - Image ${selectedIndex + 1}`}
-                  aspectRatio="1/1"
+                  aspectRatio="4/3"
                   data={selectedImage}
                   key={selectedImage.id}
                   sizes="(min-width: 1024px) 60vw, (min-width: 45em) 50vw, 100vw"
@@ -306,11 +389,34 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
         </div>
 
         {/* Description below the image */}
-        {selectedDescription && (
+        {(isExhibitionCategory ? richDescriptionElements.length > 0 : selectedDescription) && (
           <div className="mt-6 text-center">
-            <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap text-white/90">
-              {selectedDescription}
-            </p>
+            {/* Title and Material - only show for exhibition category */}
+            {isExhibitionCategory && (selectedTitle || selectedMaterial) && (
+              <div className="mb-6 space-y-2">
+                {selectedTitle && (
+                  <h3 className="text-lg md:text-xl font-semibold text-white">
+                    {selectedTitle}
+                  </h3>
+                )}
+                {selectedMaterial && (
+                  <p className="text-sm md:text-base text-white/70 italic">
+                    {selectedMaterial}
+                  </p>
+                )}
+              </div>
+            )}
+            
+            {/* Description text */}
+            <div className="text-sm md:text-base leading-relaxed text-white/90 space-y-4">
+              {isExhibitionCategory ? (
+                richDescriptionElements.map((element) => (
+                  <p key={element.id}>{element.content}</p>
+                ))
+              ) : (
+                <p className="whitespace-pre-wrap">{selectedDescription}</p>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -386,10 +492,33 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
           )}
 
           {/* Description in lightbox */}
-          {selectedDescription && (
+          {(isExhibitionCategory ? richDescriptionElements.length > 0 : selectedDescription) && (
             <div className="absolute bottom-20 left-1/2 -translate-x-1/2 max-w-2xl w-full px-4 z-20">
-              <div className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-lg text-sm md:text-base text-center">
-                {selectedDescription}
+              <div className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-lg text-sm md:text-base text-center space-y-3">
+                {/* Title and Material in lightbox - only show for exhibition category */}
+                {isExhibitionCategory && (selectedTitle || selectedMaterial) && (
+                  <div className="mb-4 space-y-2 border-b border-white/20 pb-3">
+                    {selectedTitle && (
+                      <h3 className="text-base md:text-lg font-semibold text-white">
+                        {selectedTitle}
+                      </h3>
+                    )}
+                    {selectedMaterial && (
+                      <p className="text-xs md:text-sm text-white/70 italic">
+                        {selectedMaterial}
+                      </p>
+                    )}
+                  </div>
+                )}
+                
+                {/* Description text */}
+                {isExhibitionCategory ? (
+                  richDescriptionElements.map((element) => (
+                    <p key={element.id}>{element.content}</p>
+                  ))
+                ) : (
+                  <p>{selectedDescription}</p>
+                )}
               </div>
             </div>
           )}
