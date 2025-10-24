@@ -285,6 +285,15 @@ const EXHIBITION_QUERY = `#graphql
     exhibitionHandle: field(key: "exhibition_handle") {
       value
     }
+    sound: field(key: "sound") {
+      reference {
+        ... on MediaImage {
+          image {
+            url
+          }
+        }
+      }
+    }
   }
   fragment Row on Metaobject {
     id

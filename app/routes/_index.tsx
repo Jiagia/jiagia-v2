@@ -275,33 +275,18 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
       <div className="max-w-6xl mx-auto">
         <div className="mb-6 md:mb-8">
           <div className="w-full max-w-3xl mx-auto mb-4">
-            <Image
-              data={entries[active].image.reference.image}
-              className="w-full h-auto"
-              aspectRatio="4/3"
-            />
-          </div>
-          <div className="flex flex-wrap justify-center gap-2 md:gap-4 text-sm md:text-base">
-            {JSON.parse(entries[active].caption.value)?.map((caption: string, index: number) => (
-              <p className="px-2" key={index}>
-                {caption}
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className="flex flex-wrap justify-center gap-2 md:gap-4">
-          {entries.map((entry: any, index: number) => (
-            <button
-              key={entry.id}
-              onClick={() => setActive(index)}
-              className={`hover:cursor-pointer transition-all ${
-                active === index ? 'border-2 border-black' : ''
-              }`}
-              aria-label={`View featured art ${index + 1}`}
+            <video 
+              className="w-full h-auto mb-6 md:mb-8 rounded-lg"
+              controls
+              autoPlay
+              muted
+              loop
+              playsInline
             >
-              <Image data={entry.image.reference.image} width={100} className="md:w-32 lg:w-36" />
-            </button>
-          ))}
+              <source src="https://cdn.shopify.com/videos/c/o/v/86dc7e8e24f34b95bcd876165cbe662a.mov" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
         </div>
       </div>
     </div>

@@ -40,6 +40,13 @@ interface ExhibitionEntry {
       }>;
     };
   };
+  sound?: {
+    reference?: {
+      image?: {
+        url?: string;
+      };
+    };
+  };
 }
 
 interface ExhibitionRowGalleryProps {
@@ -54,6 +61,8 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
   const [imageLoaded, setImageLoaded] = useState(true);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
+  const [audioElements, setAudioElements] = useState<{[key: string]: HTMLAudioElement}>({});
 
   const minSwipeDistance = 50;
 
@@ -124,6 +133,34 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
     setSelectedIndex(index);
   };
 
+  const handlePlay = (soundId: string, url: string) => {
+    // Stop currently playing sound if any
+    if (currentlyPlaying && audioElements[currentlyPlaying]) {
+      audioElements[currentlyPlaying].pause();
+      audioElements[currentlyPlaying].currentTime = 0;
+    }
+
+    // If clicking the same sound that's playing, just stop it
+    if (currentlyPlaying === soundId) {
+      setCurrentlyPlaying(null);
+      return;
+    }
+
+    // Create or get audio element
+    let audio = audioElements[soundId];
+    if (!audio) {
+      audio = new Audio(url);
+      audio.addEventListener('ended', () => {
+        setCurrentlyPlaying(null);
+      });
+      setAudioElements((prev) => ({...prev, [soundId]: audio}));
+    }
+
+    // Play new sound
+    audio.play();
+    setCurrentlyPlaying(soundId);
+  };
+
   if (!entries || entries.length === 0) {
     return null;
   }
@@ -133,9 +170,14 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
   const selectedTitle = selectedEntry?.title?.value;
   const selectedMaterial = selectedEntry?.material?.value;
   const exhibitionHandle = selectedEntry?.exhibitionHandle?.value;
+  const soundUrl = selectedEntry?.sound?.reference?.image?.url;
+  console.log(JSON.stringify(selectedEntry, null, 2))
+  console.log(JSON.stringify(soundUrl, null, 2))
+  console.log(JSON.stringify(selectedEntry?.sound?.reference, null, 2))
   
   // Use richDescription if category is "exhibition", otherwise use regular description
   const isExhibitionCategory = selectedEntry?.category?.value === 'exhibition';
+  const isSoundsCategory = selectedEntry?.category?.value === 'sounds';
   const richDescriptionNodes = selectedEntry?.richDescription?.references?.nodes || [];
   
   // Parse rich text JSON and convert to React elements with formatting
@@ -309,6 +351,30 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
               </button>
             )}
             
+            {/* Play button overlay for sounds category */}
+            {isSoundsCategory && soundUrl && (
+              <button
+                onClick={() => handlePlay(selectedEntry.id, soundUrl)}
+                className={`
+                  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                  border-2 rounded-full p-6 md:p-8
+                  transition-all duration-300 ease-in-out
+                  hover:scale-110 hover:shadow-lg
+                  ${
+                    currentlyPlaying === selectedEntry.id
+                      ? 'border-purple-500 bg-purple-500/30 shadow-lg shadow-purple-500/50'
+                      : 'border-white/70 bg-white/10 hover:border-purple-400 hover:bg-purple-500/20'
+                  }
+                  backdrop-blur-sm z-10
+                `}
+                aria-label={currentlyPlaying === selectedEntry.id ? 'Pause sound' : 'Play sound'}
+              >
+                <div className="text-white text-4xl md:text-5xl">
+                  {currentlyPlaying === selectedEntry.id ? '⏸️' : '▶️'}
+                </div>
+              </button>
+            )}
+
             {/* Image counter */}
             {entries.length > 1 && (
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-xs font-medium tracking-wide shadow-sm">
@@ -416,6 +482,30 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
               </button>
             )}
             
+            {/* Play button overlay for sounds category - Mobile */}
+            {isSoundsCategory && soundUrl && (
+              <button
+                onClick={() => handlePlay(selectedEntry.id, soundUrl)}
+                className={`
+                  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                  border-2 rounded-full p-6
+                  transition-all duration-300 ease-in-out
+                  active:scale-95
+                  ${
+                    currentlyPlaying === selectedEntry.id
+                      ? 'border-purple-500 bg-purple-500/30 shadow-lg shadow-purple-500/50'
+                      : 'border-white/70 bg-white/10 active:border-purple-400 active:bg-purple-500/20'
+                  }
+                  backdrop-blur-sm z-10
+                `}
+                aria-label={currentlyPlaying === selectedEntry.id ? 'Pause sound' : 'Play sound'}
+              >
+                <div className="text-white text-4xl">
+                  {currentlyPlaying === selectedEntry.id ? '⏸️' : '▶️'}
+                </div>
+              </button>
+            )}
+
             {/* Image counter */}
             {entries.length > 1 && (
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-xs font-medium tracking-wide shadow-sm">
