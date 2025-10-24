@@ -42,10 +42,10 @@ export default function Exhibition() {
     <div
       className="min-h-screen py-12 md:py-20 lg:py-32"
       style={{
-        backgroundColor: `#${exhibition.backgroundColor?.value}` || '#000',
+        backgroundColor: `${exhibition.backgroundColor?.value}` || '#000',
       }}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-32 xl:px-48">
+      <div className="container text-white mx-auto px-4 sm:px-6 lg:px-32 xl:px-48">
         <div className="max-w-7xl mx-auto">
           {/* Exhibition Header */}
           <div className="mb-12 md:mb-20 lg:mb-32 py-8 md:py-12 lg:py-16">
