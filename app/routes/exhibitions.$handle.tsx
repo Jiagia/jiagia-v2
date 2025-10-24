@@ -1,5 +1,6 @@
 import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, type MetaFunction} from 'react-router';
+import {Image} from '@shopify/hydrogen';
 import {ExhibitionRowGallery} from '~/components/ExhibitionRowGallery';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
@@ -37,6 +38,87 @@ export async function loader({params, context}: LoaderFunctionArgs) {
 export default function Exhibition() {
   const {exhibition} = useLoaderData<typeof loader>();
   const entries = exhibition?.entries?.references?.nodes;
+  const material = exhibition?.material?.value;
+  const isPainting = exhibition?.isPainting?.value === 'true';
+  const poster = exhibition?.poster?.reference?.image;
+  const quoteRaw = exhibition?.quote?.value;
+  const richDescriptionNodes = exhibition?.richDescription?.references?.nodes || [];
+
+  // Parse rich text quote
+  let quoteText = '';
+  if (quoteRaw) {
+    try {
+      const parsed = JSON.parse(quoteRaw);
+      
+      const extractText = (obj: any): string => {
+        if (typeof obj === 'string') return obj;
+        if (obj?.value) return obj.value;
+        if (obj?.children) {
+          return obj.children
+            .map((child: any) => extractText(child))
+            .join('');
+        }
+        return '';
+      };
+      
+      quoteText = extractText(parsed);
+    } catch {
+      quoteText = quoteRaw;
+    }
+  }
+
+  // Parse rich description (same logic as ExhibitionRowGallery)
+  const richDescriptionElements = richDescriptionNodes
+    .map((node: any) => {
+      const textValue = node?.text?.value;
+      const nodeId = node?.id || Math.random().toString();
+      if (!textValue) return null;
+      
+      try {
+        const parsed = JSON.parse(textValue);
+        
+        const renderRichText = (obj: any, key: string = ''): any => {
+          if (typeof obj === 'string') return obj;
+          
+          if (obj?.type === 'text' && obj?.value) {
+            const text = obj.value;
+            
+            if (obj.bold && obj.italic) {
+              return <strong key={key}><em>{text}</em></strong>;
+            } else if (obj.bold) {
+              return <strong key={key}>{text}</strong>;
+            } else if (obj.italic) {
+              return <em key={key}>{text}</em>;
+            }
+            
+            return text;
+          }
+          
+          if (obj?.children) {
+            return obj.children.map((child: any, idx: number) => 
+              renderRichText(child, `${key}-${idx}`)
+            );
+          }
+          
+          return null;
+        };
+        
+        return {
+          id: nodeId,
+          content: (
+            <span key={nodeId}>
+              {renderRichText(parsed, `node-${nodeId}`)}
+            </span>
+          ),
+        };
+      } catch {
+        return {
+          id: nodeId,
+          content: textValue,
+        };
+      }
+    })
+    .filter(Boolean);
 
   return (
     <div
@@ -54,12 +136,55 @@ export default function Exhibition() {
               {exhibition.title.value}
             </h1>
 
-            {/* Exhibition Description */}
-            <div className="max-w-3xl mx-auto text-center">
-              <p className="text-base md:text-lg leading-relaxed whitespace-pre-wrap">
-                {exhibition.description.value}
-              </p>
-            </div>
+            {/* Exhibition Material */}
+            {material && (
+              <div className="max-w-3xl mx-auto text-center mb-6 md:mb-8">
+                <p className="text-sm md:text-base text-white/70 italic">
+                  {material}
+                </p>
+              </div>
+            )}
+
+            {/* Exhibition Quote */}
+            {quoteText && (
+              <div className="max-w-3xl mx-auto text-center mb-6 md:mb-8">
+                <p className="text-sm md:text-base text-white/80">
+                  {quoteText}
+                </p>
+              </div>
+            )}
+
+            {/* Exhibition Poster - only show if isPainting is true */}
+            {isPainting && poster && (
+              <div className="max-w-4xl mx-auto mb-8 md:mb-12 lg:mb-16">
+                <Image
+                  data={poster}
+                  alt={poster.altText || exhibition.title.value}
+                  className="w-full h-auto rounded-lg"
+                  sizes="(min-width: 1024px) 896px, (min-width: 768px) 768px, 100vw"
+                />
+              </div>
+            )}
+
+            {/* Rich Description - only show if isPainting is true */}
+            {isPainting && richDescriptionElements.length > 0 && (
+              <div className="max-w-3xl mx-auto text-center mb-8 md:mb-12">
+                <div className="text-base md:text-lg leading-relaxed text-white/90 space-y-4">
+                  {richDescriptionElements.map((element: any) => (
+                    <p key={element.id}>{element.content}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Exhibition Description - only show if NOT isPainting */}
+            {!isPainting && (
+              <div className="max-w-3xl mx-auto text-center">
+                <p className="text-base md:text-lg leading-relaxed whitespace-pre-wrap">
+                  {exhibition.description.value}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Exhibition Entries - Each Row */}
@@ -134,6 +259,9 @@ const EXHIBITION_QUERY = `#graphql
         }
       }
     }
+    exhibitionHandle: field(key: "exhibition_handle") {
+      value
+    }
   }
   fragment Row on Metaobject {
     id
@@ -185,6 +313,24 @@ const EXHIBITION_QUERY = `#graphql
       }
       backgroundColor: field(key: "background_color") {
         value
+      }
+      material: field(key: "material") {
+        value
+      }
+      isPainting: field(key: "is_painting") {
+        value
+      }
+      quote: field(key: "quote") {
+        value
+      }
+      richDescription: field(key: "rich_description") {
+        references(first: 10) {
+          nodes {
+            ... on Metaobject {
+              ...Description
+            }
+          }
+        }
       }
     }
   }
