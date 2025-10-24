@@ -115,7 +115,7 @@ export default function Cart() {
     <div className="bg-white p-4 sm:p-8 pt-20 sm:pt-20 max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 pb-4 gap-2 sm:gap-0">
         <h1 className="text-2xl sm:text-3xl font-bold text-black">Your cart</h1>
-        <a href="/collections" className="text-black underline text-sm hover:no-underline">
+        <a href="/collections/all" className="text-black underline text-sm hover:no-underline">
           Continue shopping
         </a>
       </div>

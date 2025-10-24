@@ -85,7 +85,7 @@ export function Header({
         primaryDomainUrl={header.shop.primaryDomain.url}
         publicStoreDomain={publicStoreDomain}
       />
-      {/* <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
+      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
   );
 }
@@ -163,8 +163,8 @@ function HeaderCtas({
           </Await>
         </Suspense>
       </NavLink>
-      <SearchToggle />
-      <CartToggle cart={cart} /> */}
+      <SearchToggle /> */}
+      <CartToggle cart={cart} />
       <HeaderMenuMobileToggle />
     </nav>
   );
