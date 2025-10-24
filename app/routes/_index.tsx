@@ -268,9 +268,9 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
     <div className="px-4 md:px-8 lg:px-16">
       <div className="flex flex-col items-center gap-2 max-w-md mx-auto text-center mb-6 md:mb-8">
         {/* <h2 className="text-2xl md:text-3xl font-bold">FEATURED ART</h2> */}
-        <p className="text-sm md:text-base">
+        <h4 className="font-bold text-md md:text-base">
           Displayed in the Daydream Museum
-        </p>
+        </h4>
       </div>
       <div className="max-w-6xl mx-auto">
         <div className="mb-6 md:mb-8">
