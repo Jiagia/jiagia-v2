@@ -64,7 +64,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
     });
   }
 
-  handle = 'season-4';
+  handle = 'gear';
   const first = 3;
 
   const gear = await context.storefront.query(GEAR, {
@@ -79,7 +79,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
     });
   }
 
-  handle = 'season-3';
+  handle = 'artifacts-exhibition-1';
 
   const artifacts = await context.storefront.query(ARTIFACTS, {
     cache: context.storefront.CacheLong(),
@@ -475,7 +475,8 @@ function FeaturedArtifacts({artifacts}: {artifacts: any}) {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {artifacts?.products?.nodes?.map((product: any) => (
-            <div
+            <Link
+              to={`/products/${product.handle}`}
               key={product.id}
               className="flex flex-col items-center gap-4 text-center"
             >
@@ -488,7 +489,7 @@ function FeaturedArtifacts({artifacts}: {artifacts: any}) {
               <p className="text-sm md:text-base font-medium">
                 {product.title}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

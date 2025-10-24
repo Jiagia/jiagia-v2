@@ -1,6 +1,6 @@
-import {Image} from '@shopify/hydrogen';
 import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, type MetaFunction} from 'react-router';
+import {ExhibitionRowGallery} from '~/components/ExhibitionRowGallery';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   const title = data?.exhibition?.title?.value || 'Exhibition';
@@ -62,26 +62,25 @@ export default function Exhibition() {
             </div>
           </div>
 
-          {/* Exhibition Entries */}
+          {/* Exhibition Entries - Each Row */}
           {entries && entries.length > 0 && (
-            <div className="grid grid-cols-1 gap-8 md:gap-12 lg:gap-20">
-              {entries.map((entry: any) => (
-                <div
-                  key={entry.id}
-                  className="flex flex-col gap-4 md:gap-6 lg:gap-8 text-center"
-                >
-                  <div className="w-full">
-                    {/* <h3 className="text-lg md:text-3xl font-semibold mb-4 md:mb-6 lg:mb-8">
-                      {entry.title.value}
-                    </h3> */}
-                    <Image
-                      data={entry?.image?.reference?.image}
-                      className="w-full h-auto"
-                      aspectRatio="4/3"
+            <div className="grid grid-cols-1 gap-16 md:gap-20 lg:gap-32">
+              {entries.map((row: any) => {
+                // Get entries from the row
+                const rowEntries = row?.entries?.references?.nodes || [];
+                
+                // Get row title if available
+                const rowTitle = row?.title?.value || 'Exhibition Row';
+                
+                return rowEntries.length > 0 ? (
+                  <div key={row.id} className="w-full">
+                    <ExhibitionRowGallery 
+                      entries={rowEntries}
+                      rowTitle={rowTitle}
                     />
                   </div>
-                </div>
-              ))}
+                ) : null;
+              })}
             </div>
           )}
         </div>
@@ -94,9 +93,6 @@ const EXHIBITION_QUERY = `#graphql
   fragment Entry on Metaobject {
     id
     handle
-    title: field(key: "title") {
-      value
-    }
     image: field(key: "image") {
       reference {
         ... on MediaImage {
@@ -106,6 +102,22 @@ const EXHIBITION_QUERY = `#graphql
             height
             width
             url
+          }
+        }
+      }
+    }
+    description: field(key: "description") {
+      value
+    }
+  }
+  fragment Row on Metaobject {
+    id
+    handle
+    entries: field(key: "entries") {
+      references(first: 10) {
+        nodes {
+          ... on Metaobject {
+            ...Entry
           }
         }
       }
@@ -138,7 +150,7 @@ const EXHIBITION_QUERY = `#graphql
         references(first: 10) {
           nodes {
             ... on Metaobject {
-              ...Entry
+              ...Row
             }
           }
         }
