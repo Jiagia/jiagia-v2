@@ -197,12 +197,11 @@ export default function Homepage() {
         /> */}
         {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
         {/* <FeaturedArtwork artwork={artwork} /> */}
-        {/* <FeaturedArtifacts artifacts={artifacts} /> */}
         <HomePageNav />
         <FeaturedArt featuredArt={featuredArt} />
         <AboutUs />
         <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
-        <div className="py-12 md:py-20">
+        {/* <div className="py-12 md:py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center gap-6 md:gap-8">
               <h2 className="text-2xl md:text-3xl font-bold text-center">
@@ -220,14 +219,15 @@ export default function Homepage() {
               </div>
             </div>
           </div>
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <Image
             src="https://cdn.shopify.com/s/files/1/0753/7868/8295/files/laboratory.png?v=1760504043"
           />
-        </div>
-        {/* <FeaturedGear gear={gear} /> */}
-        {/* <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div> */}
+        </div> */}
+        <FeaturedGear gear={gear} />
+        <div className="border border-black mx-4 md:mx-8 lg:mx-20"></div>
+        <FeaturedArtifacts artifacts={artifacts} />
       </div>
     </>
   );
