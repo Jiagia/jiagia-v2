@@ -111,7 +111,6 @@ function ProductItem({
         <div className="relative w-full bg-gray-100 overflow-hidden">
           <Image
             alt={product.featuredImage.altText || product.title}
-            aspectRatio="1/1"
             data={product.featuredImage}
             loading={loading}
             sizes="(min-width: 45em) 400px, 100vw"
@@ -119,7 +118,7 @@ function ProductItem({
           />
         </div>
       ) : (
-        <div className="aspect-square flex items-center justify-center bg-gray-200" aria-label="No image available">
+        <div className="flex items-center justify-center bg-gray-200 min-h-[200px]" aria-label="No image available">
           <span className="text-gray-400 text-sm">No image</span>
         </div>
       )}

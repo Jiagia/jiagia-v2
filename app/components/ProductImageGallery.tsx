@@ -144,7 +144,7 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
           {/* Main Image - Right Side */}
           <div className="flex-1 relative group">
             <button 
-              className="w-full aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 cursor-zoom-in relative"
+              className="w-full overflow-hidden rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 cursor-zoom-in relative"
               onClick={() => setIsLightboxOpen(true)}
               onMouseEnter={() => setIsZoomed(true)}
               onMouseLeave={() => setIsZoomed(false)}
@@ -157,11 +157,10 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
               
               <Image
                 alt={selectedImage.altText || `${productTitle} - Image ${selectedImageIndex + 1}`}
-                aspectRatio="1/1"
                 data={selectedImage}
                 key={selectedImage.id}
                 sizes="(min-width: 1024px) 60vw, (min-width: 45em) 50vw, 100vw"
-                className={`w-full h-full object-cover transition-all duration-500 ${
+                className={`w-full h-auto transition-all duration-500 ${
                   isZoomed ? 'scale-110' : 'scale-100'
                 } ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => setImageLoaded(true)}
@@ -219,7 +218,7 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
             onTouchEnd={onTouchEnd}
           >
             <button 
-              className="w-full aspect-square overflow-hidden rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 relative"
+              className="w-full overflow-hidden rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 relative"
               onClick={() => setIsLightboxOpen(true)}
               aria-label="View full-screen image"
             >
@@ -230,11 +229,10 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
               
               <Image
                 alt={selectedImage.altText || `${productTitle} - Image ${selectedImageIndex + 1}`}
-                aspectRatio="1/1"
                 data={selectedImage}
                 key={selectedImage.id}
                 sizes="100vw"
-                className={`w-full h-full object-cover transition-opacity duration-500 ${
+                className={`w-full h-auto transition-opacity duration-500 ${
                   imageLoaded ? 'opacity-100' : 'opacity-0'
                 }`}
                 onLoad={() => setImageLoaded(true)}

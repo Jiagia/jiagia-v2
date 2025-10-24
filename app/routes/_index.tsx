@@ -418,10 +418,10 @@ function FeaturedGear({gear}: {gear: any}) {
               to={`/products/${product.handle}`}
               className="flex flex-col items-center gap-4 text-center"
             >
-              <div className="w-full">
+              <div className="w-full overflow-hidden rounded-lg">
                 <Image 
                   data={product.featuredImage} 
-                  className="w-full h-auto"
+                  className="w-full h-auto hover:opacity-90 transition-opacity"
                 />
               </div>
               <p className="text-sm md:text-base font-medium">
@@ -480,10 +480,10 @@ function FeaturedArtifacts({artifacts}: {artifacts: any}) {
               key={product.id}
               className="flex flex-col items-center gap-4 text-center"
             >
-              <div className="w-full">
+              <div className="w-full overflow-hidden rounded-lg">
                 <Image 
                   data={product.featuredImage} 
-                  className="w-full h-auto"
+                  className="w-full h-auto hover:opacity-90 transition-opacity"
                 />
               </div>
               <p className="text-sm md:text-base font-medium">
