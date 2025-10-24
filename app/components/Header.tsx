@@ -55,7 +55,7 @@ export function Header({
 
   return (
     <header
-      className="header flex justify-between md:justify-start mx-4"
+      className="header grid grid-cols-3 items-center mx-4"
       style={{
         zIndex: 5,
         position: 'fixed',
@@ -70,22 +70,30 @@ export function Header({
         // backdropFilter: 'blur(10px)',
       }}
     >
-      <NavLink
-        prefetch="intent"
-        to="/"
-        className="hover:no-underline"
-        // style={activeLinkStyle}
-        end
-      >
-        <strong> &gt; {shop.name} STUDIOS &lt; </strong>
-      </NavLink>
-      <HeaderMenu
-        menu={menu}
-        viewport="desktop"
-        primaryDomainUrl={header.shop.primaryDomain.url}
-        publicStoreDomain={publicStoreDomain}
-      />
-      {/* <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
+      <div className="flex items-center justify-start">
+        <div className="hidden md:block">
+          <HeaderMenu
+            menu={menu}
+            viewport="desktop"
+            primaryDomainUrl={header.shop.primaryDomain.url}
+            publicStoreDomain={publicStoreDomain}
+          />
+        </div>
+      </div>
+      <div className="flex items-center justify-center md:text-2xl">
+        <NavLink
+          prefetch="intent"
+          to="/"
+          className="hover:no-underline"
+          // style={activeLinkStyle}
+          end
+        >
+          <strong> &gt; {shop.name} STUDIOS &lt; </strong>
+        </NavLink>
+      </div>
+      <div className="flex items-center justify-end">
+        <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+      </div>
     </header>
   );
 }
@@ -117,7 +125,7 @@ export function HeaderMenu({
           Home
         </NavLink>
       )}
-      {/* {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
         // if the url is internal, we strip the domain
@@ -136,11 +144,15 @@ export function HeaderMenu({
             prefetch="intent"
             // style={activeLinkStyle}
             to={url}
+            style={({isActive}) => ({
+              pointerEvents: isActive ? 'none' : 'auto',
+              opacity: isActive ? 0.5 : 1,
+            })}
           >
             {item.title}
           </NavLink>
         );
-      })} */}
+      })}
     </nav>
   );
 }
@@ -159,8 +171,8 @@ function HeaderCtas({
           </Await>
         </Suspense>
       </NavLink>
-      <SearchToggle />
-      <CartToggle cart={cart} /> */}
+      <SearchToggle /> */}
+      <CartToggle cart={cart} />
       <HeaderMenuMobileToggle />
     </nav>
   );
@@ -204,8 +216,28 @@ function CartBadge({count}: {count: number | null}) {
           url: window.location.href || '',
         } as CartViewPayload);
       }}
+      className="flex items-center gap-2 relative"
     >
-      Cart {count === null ? <span>&nbsp;</span> : count}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="9" cy="21" r="1" />
+        <circle cx="20" cy="21" r="1" />
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+      </svg>
+      {count !== null && count > 0 && (
+        <span className="text-xs font-bold bg-slate-800 text-white rounded-full min-w-[1.25rem] h-5 flex items-center justify-center px-1">
+          {count}
+        </span>
+      )}
     </a>
   );
 }

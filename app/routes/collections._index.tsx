@@ -1,11 +1,10 @@
 import {useLoaderData, Link} from 'react-router';
-import {data, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {data, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {getPaginationVariables, Image} from '@shopify/hydrogen';
 import type {CollectionFragment} from 'storefrontapi.generated';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 
 export async function loader(args: LoaderFunctionArgs) {
-  throw redirect('/');
   // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
 
@@ -21,7 +20,7 @@ export async function loader(args: LoaderFunctionArgs) {
  */
 async function loadCriticalData({context, request}: LoaderFunctionArgs) {
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 4,
+    pageBy: 8,
   });
 
   const [{collections}] = await Promise.all([
@@ -47,13 +46,13 @@ export default function Collections() {
   const {collections} = useLoaderData<typeof loader>();
 
   return (
-    <div className="collections">
-      <h1>Collections</h1>
-      <PaginatedResourceSection
-        connection={collections}
-        resourcesClassName="collections-grid"
-      >
-        {({node: collection, index}) => (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <header className="text-center mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">Collections</h1>
+        <p className="text-gray-600">Browse our curated collections</p>
+      </header>
+      <PaginatedResourceSection connection={collections}>
+        {({node: collection, index}: {node: CollectionFragment; index: number}) => (
           <CollectionItem
             key={collection.id}
             collection={collection}
@@ -68,26 +67,36 @@ export default function Collections() {
 function CollectionItem({
   collection,
   index,
-}: {
+}: Readonly<{
   collection: CollectionFragment;
   index: number;
-}) {
+}>) {
   return (
     <Link
-      className="collection-item"
+      className="block rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus:outline-2 focus:outline-black focus:outline-offset-2"
       key={collection.id}
       to={`/collections/${collection.handle}`}
       prefetch="intent"
+      aria-label={`View ${collection.title} collection`}
     >
-      {collection?.image && (
-        <Image
-          alt={collection.image.altText || collection.title}
-          aspectRatio="1/1"
-          data={collection.image}
-          loading={index < 3 ? 'eager' : undefined}
-        />
+      {collection?.image ? (
+        <div className="relative w-full bg-gray-100 overflow-hidden">
+          <Image
+            alt={collection.image.altText || collection.title}
+            aspectRatio="1/1"
+            data={collection.image}
+            loading={index < 8 ? 'eager' : undefined}
+            className="w-full h-auto block"
+          />
+        </div>
+      ) : (
+        <div className="aspect-square flex items-center justify-center bg-gray-200" aria-label="No image available">
+          <span className="text-gray-400 text-sm">No image</span>
+        </div>
       )}
-      <h5>{collection.title}</h5>
+      <div className="p-4">
+        <h5 className="font-semibold text-lg">{collection.title}</h5>
+      </div>
     </Link>
   );
 }

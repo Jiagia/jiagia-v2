@@ -41,7 +41,7 @@ export function PageLayout({
     <Aside.Provider>
       <CartAside cart={cart} />
       <SearchAside />
-      {/* <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} /> */}
+      <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
       {/* {header && !isHome && ( */}
       <Header
         header={header}
@@ -50,7 +50,7 @@ export function PageLayout({
         publicStoreDomain={publicStoreDomain}
       />
       {/* )} */}
-      <main>{children}</main>
+      <main className="pt-8 md:pt-12 lg:pt-16">{children}</main>
       <Footer
         footer={footer}
         header={header}

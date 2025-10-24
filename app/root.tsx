@@ -104,7 +104,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
 
   const [header] = await Promise.all([
     storefront.query(HEADER_QUERY, {
-      cache: storefront.CacheLong(),
+      // cache: storefront.CacheLong(),
       variables: {
         headerMenuHandle: 'main-menu', // Adjust to your header menu handle
       },
@@ -211,22 +211,22 @@ export function ErrorBoundary() {
     >
       <div className="mx-auto flex flex-col items-center gap-4 text-center">
         <h1 className="text-4xl">Uh oh...</h1>
-        <div>
+        <div className="flex flex-col gap-4">
           <p>It seesms like portal leads nowhere!</p>
           <p>Let&apos;s help you get back to Jiagia</p>
         </div>
         <Link
           to="/"
-          className="w-fit p-4 border border-white hover:no-underline hover:border-2"
+          className="w-fit p-4 bg-black text-white border border-white hover:font-black"
         >
           &gt; BACK TO HOME &lt;
         </Link>
-        <h2>{errorStatus}</h2>
+        {/* <h2>{errorStatus}</h2>
         {errorMessage && (
           <fieldset>
             <pre>{errorMessage}</pre>
           </fieldset>
-        )}
+        )} */}
       </div>
     </div>
   );
