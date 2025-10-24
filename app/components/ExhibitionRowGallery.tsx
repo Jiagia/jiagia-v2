@@ -329,7 +329,7 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
                 onClick={() => handlePlay(selectedEntry.id, soundUrl)}
                 className={`
                   absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                  border-2 rounded-full p-6 md:p-8
+                  border-2 rounded-full px-8 py-4 md:px-10 md:py-5
                   transition-all duration-300 ease-in-out
                   hover:scale-110 hover:shadow-lg
                   ${
@@ -341,8 +341,8 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
                 `}
                 aria-label={currentlyPlaying === selectedEntry.id ? 'Pause sound' : 'Play sound'}
               >
-                <div className="text-white text-4xl md:text-5xl">
-                  {currentlyPlaying === selectedEntry.id ? '⏸️' : '▶️'}
+                <div className="text-white text-sm md:text-base font-medium tracking-wide">
+                  {currentlyPlaying === selectedEntry.id ? 'Pause' : 'Play'} immersive audio
                 </div>
               </button>
             )}
@@ -460,7 +460,7 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
                 onClick={() => handlePlay(selectedEntry.id, soundUrl)}
                 className={`
                   absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                  border-2 rounded-full p-6
+                  border-2 rounded-full px-6 py-3
                   transition-all duration-300 ease-in-out
                   active:scale-95
                   ${
@@ -472,8 +472,8 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
                 `}
                 aria-label={currentlyPlaying === selectedEntry.id ? 'Pause sound' : 'Play sound'}
               >
-                <div className="text-white text-4xl">
-                  {currentlyPlaying === selectedEntry.id ? '⏸️' : '▶️'}
+                <div className="text-white text-xs font-medium tracking-wide whitespace-nowrap">
+                  {currentlyPlaying === selectedEntry.id ? 'Pause' : 'Play'} immersive audio
                 </div>
               </button>
             )}
