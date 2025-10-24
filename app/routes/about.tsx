@@ -69,14 +69,14 @@ function AboutUs() {
     <div className="flex flex-col items-center gap-4 max-w-2xl py-12 md:py-20 mx-auto text-center px-4 md:px-8 mb-8 md:mb-12">
       <h2 className="text-2xl md:text-3xl font-bold">ABOUT US</h2>
       <p className="text-sm md:text-base leading-relaxed">
-      Jiagia Studios is a creative collective and perceptual research unit. Our primary mission is to explore and document the Daydream Universe—a layered dimension that exists at the confluence of ancient mythology, collective memory, and our immersive digital present.
-      </p>
-      {/* <p className="text-sm md:text-base leading-relaxed">
-        In an age of accelerating information and fleeting attention, our work is an act of deep engagement. We believe that by observing, documenting, and reinterpreting these layered realities, we can build a new visual language—one that makes the unseen visible and gives form to the complex forces that shape our consciousness.
+      Jiagia Studios is a creative collective and perceptual research unit. Our primary mission is to explore and document the Daydream Universe. A layered dimension that exists at the convergence of ancient mythology, collective memory, and our immersive digital present.
       </p>
       <p className="text-sm md:text-base leading-relaxed">
-      The artifacts we create, from fine art paintings to digital &ldquo;Sightings,&rdquo; are the published findings of our exploration. They are worlds to be entered and understood. We invite you to join our research, to engage with our findings, and to remember that what we choose to preserve, question, and imagine becomes the foundation for every future we build.
-      </p> */}
+      In an age of accelerating information and fleeting attention, our work is an act of engagement. We believe that by observing, documenting, and reinterpreting these  realities, we can build a new visual language... one that makes the unseen visible and gives form to the forces that shape our consciousness.
+      </p>
+      <p className="text-sm md:text-base leading-relaxed">
+      The artifacts we create, from fine art paintings to digital sightings, are the published findings of our exploration. They are worlds to be entered and understood. We invite you to join our research, to engage with our findings, and to remember that what we choose to preserve, question, and imagine becomes the foundation for every future we build.
+      </p>
     </div>
   );
 }

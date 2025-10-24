@@ -297,13 +297,7 @@ function AboutUs() {
   return (
     <div className="flex flex-col items-center gap-4 max-w-2xl py-12 md:py-20 mx-auto text-center px-4 md:px-8 mb-8 md:mb-12">
       <p className="text-sm md:text-base leading-relaxed">
-      Jiagia Studios is a creative collective and perceptual research unit. Our primary mission is to explore and document the Daydream Universe—a layered dimension that exists at the confluence of ancient mythology, collective memory, and our immersive digital present.
-      </p>
-      <p className="text-sm md:text-base leading-relaxed">
-        In an age of accelerating information and fleeting attention, our work is an act of deep engagement. We believe that by observing, documenting, and reinterpreting these layered realities, we can build a new visual language—one that makes the unseen visible and gives form to the complex forces that shape our consciousness.
-      </p>
-      <p className="text-sm md:text-base leading-relaxed">
-      The artifacts we create, from fine art paintings to digital "Sightings," are the published findings of our exploration. They are worlds to be entered and understood. We invite you to join our research, to engage with our findings, and to remember that what we choose to preserve, question, and imagine becomes the foundation for every future we build.
+      Jiagia is a creative collective built on the idea that perception is an art form. We explore the world within (our thoughts, feelings,  ideas) and express it through fine art, collectible apparel, and visual storytelling. We invite you to step into these worlds, as you may also come to reimagine the one you already live in.
       </p>
     </div>
   );
