@@ -55,7 +55,7 @@ export function Header({
 
   return (
     <header
-      className="header flex justify-between mx-4"
+      className="header grid grid-cols-3 items-center mx-4"
       style={{
         zIndex: 5,
         position: 'fixed',
@@ -70,7 +70,17 @@ export function Header({
         // backdropFilter: 'blur(10px)',
       }}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-start">
+        <div className="hidden md:block">
+          <HeaderMenu
+            menu={menu}
+            viewport="desktop"
+            primaryDomainUrl={header.shop.primaryDomain.url}
+            publicStoreDomain={publicStoreDomain}
+          />
+        </div>
+      </div>
+      <div className="flex items-center justify-center md:text-2xl">
         <NavLink
           prefetch="intent"
           to="/"
@@ -80,14 +90,10 @@ export function Header({
         >
           <strong> &gt; {shop.name} STUDIOS &lt; </strong>
         </NavLink>
-        <HeaderMenu
-          menu={menu}
-          viewport="desktop"
-          primaryDomainUrl={header.shop.primaryDomain.url}
-          publicStoreDomain={publicStoreDomain}
-        />
       </div>
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+      <div className="flex items-center justify-end">
+        <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+      </div>
     </header>
   );
 }
