@@ -20,7 +20,7 @@ export async function loader({params, context}: LoaderFunctionArgs) {
   }
 
   const exhibition = await context.storefront.query(EXHIBITION_QUERY, {
-    cache: context.storefront.CacheLong(),
+    // cache: context.storefront.CacheLong(),
     variables: {
       handle,
       type: 'exhibition',
