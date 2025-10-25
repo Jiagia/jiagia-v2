@@ -133,6 +133,16 @@ export default function Product() {
             </div>
           </div>
 
+          <div className="h-px bg-gray-200 w-full"></div>
+
+          {/* Product Description */}
+          {descriptionHtml && (
+            <div className="space-y-4">
+              <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">DESCRIPTION</h3>
+              <div className="text-sm leading-relaxed text-gray-600" dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+            </div>
+          )}
+
           {/* Product Note */}
           <div className="text-sm text-gray-600 italic leading-relaxed">
             <p><em>Due to the made-to-order nature of this product, please allow us up to 3 business weeks for production and fulfillment.</em></p>
@@ -148,30 +158,6 @@ export default function Product() {
             />
           </div>
 
-          <div className="h-px bg-gray-200 w-full"></div>
-
-          {/* Shipping & Returns */}
-          <div className="flex flex-col space-y-8">
-            <div className="space-y-3">
-              <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">SHIPPING & RETURNS</h3>
-              <div className="text-sm leading-relaxed text-gray-600">
-                <p className="">We ships to all 50 US States.</p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">QUESTIONS?</h3>
-              <div className="text-sm leading-relaxed text-gray-600"><p>Email contact.jiagiastudios@gmail.com If You Need Help!</p></div>
-            </div>
-          </div>
-
-          {/* Product Description */}
-          {descriptionHtml && (
-            <div className="space-y-4">
-              <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">DESCRIPTION</h3>
-              <div className="text-sm leading-relaxed text-gray-600" dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-            </div>
-          )}
         </div>
       </div>
 
