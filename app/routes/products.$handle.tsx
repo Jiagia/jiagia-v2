@@ -16,7 +16,7 @@ import {trackViewedProduct} from '~/components/KlaviyoOnsite';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [
-    {title: `Hydrogen | ${data?.product.title ?? ''}`},
+    {title: `${data?.product.title ?? ''} | Jiagia Studios`},
     {
       rel: 'canonical',
       href: `/products/${data?.product.handle}`,
@@ -133,9 +133,32 @@ export default function Product() {
             </div>
           </div>
 
+          <div className="h-px bg-gray-200 w-full"></div>
+
+          {/* Product Description */}
+          {descriptionHtml && (
+            <div className="space-y-4">
+              <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">DESCRIPTION</h3>
+              <div className="text-sm leading-relaxed text-gray-600" dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+            </div>
+          )}
+
+          <div className="h-px bg-gray-200 w-full mb-4"></div>
+
           {/* Product Note */}
-          <div className="text-sm text-gray-600 italic leading-relaxed">
-            <p><em>Due to the made-to-order nature of this product, please allow us up to 3 business weeks for production and fulfillment.</em></p>
+          <div className="space-y-4">
+            <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">PRODUCT NOTE</h3>
+            <p className="text-sm text-gray-600 italic leading-relaxed">Due to the made-to-order nature of this product, please allow us up to 3 business weeks for production and fulfillment.xw</p>
+          </div>
+
+          <div className="h-px bg-gray-200 w-full"></div>
+
+          {/* Return Policy */}
+          <div className="space-y-4">
+            <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">RETURN POLICY</h3>
+            <div className="text-sm leading-relaxed text-gray-600">
+              <p>We accept returns within 30 days of purchase. Items must be unworn, unwashed, and in their original condition with all tags attached.</p>
+            </div>
           </div>
 
           <div className="h-px bg-gray-200 w-full"></div>
@@ -148,32 +171,6 @@ export default function Product() {
             />
           </div>
 
-          <div className="h-px bg-gray-200 w-full"></div>
-
-          {/* Shipping & Returns */}
-          <div className="flex flex-col space-y-8">
-            <div className="space-y-3">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-gray-800">SHIPPING & RETURNS</h3>
-              <div className="space-y-2">
-                <p className="text-sm leading-relaxed text-gray-600">Free Shipping In The USA On All Orders $100+.</p>
-                <p className="text-sm leading-relaxed text-gray-600">International Customers: For the cheapest, fastest, & most secure international shipping, please select your country&apos;s flag in the bottom left corner of the website.</p>
-                <p className="text-sm leading-relaxed text-gray-600">See full shipping policy here.<br />See Return Policy here.</p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-gray-800">QUESTIONS?</h3>
-              <p className="text-sm leading-relaxed text-gray-600">Email Help@JiagiaStudios.com If You Need Help!</p>
-            </div>
-          </div>
-
-          {/* Product Description */}
-          {descriptionHtml && (
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-gray-800">DESCRIPTION</h3>
-              <div className="text-sm leading-relaxed text-gray-600" dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-            </div>
-          )}
         </div>
       </div>
 

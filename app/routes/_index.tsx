@@ -283,7 +283,7 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
               loop
               playsInline
             >
-              <source src="https://cdn.shopify.com/videos/c/o/v/86dc7e8e24f34b95bcd876165cbe662a.mov" type="video/mp4" />
+              <source src="https://cdn.shopify.com/videos/c/o/v/613112cab945473fbb40bd1701300288.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
