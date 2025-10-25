@@ -148,7 +148,7 @@ export default function Product() {
           {/* Product Note */}
           <div className="space-y-4">
             <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">PRODUCT NOTE</h3>
-            <p className="text-sm text-gray-600 italic leading-relaxed">Due to the made-to-order nature of this product, please allow us up to 3 business weeks for production and fulfillment.xw</p>
+            <p className="text-sm text-gray-600 italic leading-relaxed">Due to the made-to-order nature of this product, please allow us up to 3 business weeks for production and fulfillment.</p>
           </div>
 
           <div className="h-px bg-gray-200 w-full"></div>
