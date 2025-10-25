@@ -143,9 +143,22 @@ export default function Product() {
             </div>
           )}
 
+          <div className="h-px bg-gray-200 w-full mb-4"></div>
+
           {/* Product Note */}
-          <div className="text-sm text-gray-600 italic leading-relaxed">
-            <p><em>Due to the made-to-order nature of this product, please allow us up to 3 business weeks for production and fulfillment.</em></p>
+          <div className="space-y-4">
+            <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">PRODUCT NOTE</h3>
+            <p className="text-sm text-gray-600 italic leading-relaxed">Due to the made-to-order nature of this product, please allow us up to 3 business weeks for production and fulfillment.xw</p>
+          </div>
+
+          <div className="h-px bg-gray-200 w-full"></div>
+
+          {/* Return Policy */}
+          <div className="space-y-4">
+            <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">RETURN POLICY</h3>
+            <div className="text-sm leading-relaxed text-gray-600">
+              <p>We accept returns within 30 days of purchase. Items must be unworn, unwashed, and in their original condition with all tags attached.</p>
+            </div>
           </div>
 
           <div className="h-px bg-gray-200 w-full"></div>
