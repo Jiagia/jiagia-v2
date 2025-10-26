@@ -41,7 +41,7 @@ export default function About() {
   return (
     <>
       <AboutUs />
-      <div className="w-full bg-black text-white overflow-x-hidden clear-both">
+      <div className="w-full bg-black text-white overflow-x-hidden clear-both -mt-8 md:-mt-12 lg:-mt-16">
         <Tower tower={tower} clouds={clouds} />
       <section
         className="relative"

@@ -206,7 +206,7 @@ export function ErrorBoundary() {
 
   return (
     <div
-      className="route-error h-[900px] w-screen flex justify-center items-center overflow-hidden"
+      className="route-error h-[900px] w-screen flex justify-center items-center overflow-hidden -mt-8 md:-mt-12 lg:-mt-16"
       style={{backgroundImage: `url(${backgroundImgUrl})`, backgroundSize: "100% 100%"}}
     >
       <div className="mx-auto flex flex-col items-center gap-4 text-center">
