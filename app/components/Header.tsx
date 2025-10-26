@@ -88,7 +88,7 @@ export function Header({
           // style={activeLinkStyle}
           end
         >
-          <strong> &gt; {shop.name} STUDIOS &lt; </strong>
+          <strong>{shop.name} STUDIOS</strong>
         </NavLink>
       </div>
       <div className="flex items-center justify-end">
