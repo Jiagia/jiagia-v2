@@ -337,7 +337,7 @@ function FeaturedExhibitions({
 
   return (
     <div
-      className="bg-black text-white py-12 md:py-20 lg:py-32"
+      className="bg-black text-white py-12 md:py-20 lg:py-32 -mt-8 md:-mt-12 lg:-mt-16"
       style={{
         backgroundImage:
           'url(https://cdn.shopify.com/s/files/1/0753/7868/8295/files/stars.png?v=1735004828)',

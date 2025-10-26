@@ -122,7 +122,7 @@ export default function Exhibition() {
 
   return (
     <div
-      className="min-h-screen py-12 md:py-20 lg:py-32"
+      className="min-h-screen py-12 md:py-20 lg:py-32 -mt-8 md:-mt-12 lg:-mt-16"
       style={{
         backgroundColor: `${exhibition.backgroundColor?.value}` || '#000',
       }}

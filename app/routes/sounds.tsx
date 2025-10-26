@@ -104,7 +104,7 @@ export default function Sounds() {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen py-12 md:py-20">
+    <div className="bg-black text-white min-h-screen py-12 md:py-20 -mt-8 md:-mt-12 lg:-mt-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-32 xl:px-48">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
