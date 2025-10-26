@@ -274,7 +274,7 @@ const EXHIBITION_QUERY = `#graphql
       }
     }
     richDescription: field(key: "rich_description") {
-      references(first: 10) {
+      references(first: 20) {
         nodes {
           ... on Metaobject {
             ...Description
@@ -296,7 +296,7 @@ const EXHIBITION_QUERY = `#graphql
       value
     }
     entries: field(key: "entries") {
-      references(first: 10) {
+      references(first: 20) {
         nodes {
           ... on Metaobject {
             ...Entry
@@ -329,7 +329,7 @@ const EXHIBITION_QUERY = `#graphql
         }
       }
       entries: field(key: "entries") {
-        references(first: 10) {
+        references(first: 20) {
           nodes {
             ... on Metaobject {
               ...Row
@@ -350,7 +350,7 @@ const EXHIBITION_QUERY = `#graphql
         value
       }
       richDescription: field(key: "rich_description") {
-        references(first: 10) {
+        references(first: 20) {
           nodes {
             ... on Metaobject {
               ...Description
