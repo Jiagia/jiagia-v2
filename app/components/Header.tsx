@@ -80,7 +80,7 @@ export function Header({
           />
         </div>
       </div>
-      <div className="flex items-center justify-center md:text-2xl">
+      <div className="flex items-center justify-start md:justify-center md:text-2xl">
         <NavLink
           prefetch="intent"
           to="/"
