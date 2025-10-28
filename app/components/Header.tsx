@@ -55,7 +55,7 @@ export function Header({
 
   return (
     <header
-      className="header grid grid-cols-3 items-center mx-4"
+      className="header flex md:grid md:grid-cols-3 items-center mx-4"
       style={{
         zIndex: 5,
         position: 'fixed',
@@ -70,17 +70,15 @@ export function Header({
         // backdropFilter: 'blur(10px)',
       }}
     >
-      <div className="flex items-center justify-start">
-        <div className="hidden md:block">
-          <HeaderMenu
-            menu={menu}
-            viewport="desktop"
-            primaryDomainUrl={header.shop.primaryDomain.url}
-            publicStoreDomain={publicStoreDomain}
-          />
-        </div>
+      <div className="hidden md:flex items-center justify-start">
+        <HeaderMenu
+          menu={menu}
+          viewport="desktop"
+          primaryDomainUrl={header.shop.primaryDomain.url}
+          publicStoreDomain={publicStoreDomain}
+        />
       </div>
-      <div className="flex items-center justify-start md:justify-center md:text-2xl">
+      <div className="flex items-center md:justify-center md:text-2xl flex-1 md:flex-initial">
         <NavLink
           prefetch="intent"
           to="/"
