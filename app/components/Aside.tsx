@@ -59,14 +59,14 @@ export function Aside({
       role="dialog"
     >
       <button className="close-outside" onClick={close} />
-      <aside className="px-4">
+      <aside className={`px-4 ${type === 'mobile' ? 'mobile-menu-aside' : ''}`}>
         <header>
           <h3>{heading}</h3>
           <button className="close reset text-4xl md:text-2xl" onClick={close}>
             &times;
           </button>
         </header>
-        <main>{children}</main>
+        <main className={type === 'mobile' ? 'mobile-menu-content' : ''}>{children}</main>
       </aside>
     </div>
   );

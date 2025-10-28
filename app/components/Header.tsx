@@ -113,7 +113,7 @@ export function HeaderMenu({
   const {close} = useAside();
 
   return (
-    <nav className={className + ' mx-4'} role="navigation">
+    <nav className={className + (viewport === 'mobile' ? '' : ' mx-4')} role="navigation">
       {viewport === 'mobile' && (
         <NavLink
           end

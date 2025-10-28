@@ -29,6 +29,15 @@ aside {
   transition: transform 200ms ease-in-out;
 }
 
+/* Mobile menu aside - full width on mobile */
+aside.mobile-menu-aside {
+  max-width: 100vw;
+  min-width: 100vw;
+  right: -100vw;
+  display: flex;
+  flex-direction: column;
+}
+
 aside header {
   align-items: center;
   border-bottom: 1px solid var(--color-dark);
@@ -36,6 +45,7 @@ aside header {
   height: var(--header-height);
   justify-content: space-between;
   padding: 0 20px;
+  flex-shrink: 0;
 }
 
 aside header h3 {
@@ -61,6 +71,16 @@ aside header h2 {
 
 aside main {
   margin: 1rem;
+}
+
+/* Mobile menu content - center vertically and horizontally */
+aside main.mobile-menu-content {
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 aside p {
@@ -101,6 +121,12 @@ aside li {
   width: calc(100% - var(--aside-width));
 }
 
+/* No close-outside for mobile menu (full width) */
+.overlay:has(.mobile-menu-aside) .close-outside {
+  width: 0;
+  pointer-events: none;
+}
+
 .overlay .light {
   background: rgba(255, 255, 255, 0.5);
 }
@@ -120,6 +146,11 @@ aside li {
 /* reveal aside */
 .overlay.expanded aside {
   transform: translateX(calc(var(--aside-width) * -1));
+}
+
+/* reveal mobile menu aside */
+.overlay.expanded aside.mobile-menu-aside {
+  transform: translateX(-100vw);
 }
 
 button.reset {
@@ -167,7 +198,26 @@ button.reset:hover:not(:has(> *)) {
 .header-menu-mobile {
   display: flex;
   flex-direction: column;
-  grid-gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  grid-gap: 2rem;
+  text-align: center;
+  font-size: 1.5rem;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .header-menu-mobile {
+    font-size: 2rem;
+    grid-gap: 2.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-menu-mobile {
+    font-size: 2.5rem;
+    grid-gap: 3rem;
+  }
 }
 
 .header-menu-desktop {
@@ -181,6 +231,14 @@ button.reset:hover:not(:has(> *)) {
 
 .header-menu-item {
   cursor: pointer;
+}
+
+.header-menu-mobile .header-menu-item,
+.header-menu-mobile a {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  transition: opacity 0.2s ease;
 }
 
 .header-ctas {
