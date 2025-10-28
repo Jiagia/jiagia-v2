@@ -408,6 +408,9 @@ function FeaturedGear({gear}: {gear: any}) {
                     sizes="(min-width: 45em) 400px, 100vw"
                     className="w-full h-auto block"
                   />
+                  <div className="absolute top-2 left-2 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
+                    PREORDER
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center justify-center bg-gray-200 min-h-[200px]" aria-label="No image available">
@@ -486,6 +489,9 @@ function FeaturedArtifacts({artifacts}: {artifacts: any}) {
                     sizes="(min-width: 45em) 400px, 100vw"
                     className="w-full h-auto block"
                   />
+                  <div className="absolute top-2 left-2 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
+                    PREORDER
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center justify-center bg-gray-200 min-h-[200px]" aria-label="No image available">
