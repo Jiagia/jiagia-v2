@@ -1,5 +1,5 @@
 import {Suspense, useState, useEffect} from 'react';
-import {Await, NavLink, useAsyncValue} from 'react-router';
+import {Await, NavLink, useAsyncValue, useLocation} from 'react-router';
 import {
   type CartViewPayload,
   useAnalytics,
@@ -26,6 +26,8 @@ export function Header({
   const {shop, menu} = header;
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
 
@@ -55,7 +57,7 @@ export function Header({
 
   return (
     <header
-      className="header flex md:grid md:grid-cols-3 items-center mx-4"
+      className={`header flex items-center mx-4 ${isHomePage ? 'justify-end' : 'md:grid md:grid-cols-3'}`}
       style={{
         zIndex: 5,
         position: 'fixed',
@@ -70,7 +72,7 @@ export function Header({
         // backdropFilter: 'blur(10px)',
       }}
     >
-      <div className="hidden md:flex items-center justify-start">
+      <div className={`hidden md:flex items-center justify-start ${isHomePage ? 'md:hidden' : ''}`}>
         <HeaderMenu
           menu={menu}
           viewport="desktop"
@@ -78,7 +80,7 @@ export function Header({
           publicStoreDomain={publicStoreDomain}
         />
       </div>
-      <div className="flex items-center md:justify-center md:text-2xl flex-1 md:flex-initial">
+      <div className={`flex items-center md:justify-center md:text-2xl flex-1 md:flex-initial ${isHomePage ? 'hidden' : ''}`}>
         <NavLink
           prefetch="intent"
           to="/"
