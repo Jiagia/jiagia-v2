@@ -183,7 +183,7 @@ function HeaderMenuMobileToggle() {
       className="header-menu-mobile-toggle reset"
       onClick={() => open('mobile')}
     >
-      <h3>☰</h3>
+      <h3 className="text-3xl md:text-base">☰</h3>
     </button>
   );
 }
