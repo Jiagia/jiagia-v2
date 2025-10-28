@@ -180,10 +180,10 @@ function HeaderMenuMobileToggle() {
   const {open} = useAside();
   return (
     <button
-      className="header-menu-mobile-toggle reset"
+      className="header-menu-mobile-toggle reset flex items-center"
       onClick={() => open('mobile')}
     >
-      <h3 className="text-3xl md:text-base">☰</h3>
+      <span className="text-3xl md:text-base leading-none">☰</span>
     </button>
   );
 }
