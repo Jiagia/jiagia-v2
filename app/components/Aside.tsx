@@ -39,6 +39,11 @@ export function Aside({
     const abortController = new AbortController();
 
     if (expanded) {
+      // Prevent body scroll when aside is open
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+
       document.addEventListener(
         'keydown',
         function handler(event: KeyboardEvent) {
@@ -48,8 +53,17 @@ export function Aside({
         },
         {signal: abortController.signal},
       );
+    } else {
+      // Restore body scroll when aside is closed
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     }
-    return () => abortController.abort();
+    return () => {
+      abortController.abort();
+      // Clean up scroll lock on unmount
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
   }, [close, expanded]);
 
   return (
