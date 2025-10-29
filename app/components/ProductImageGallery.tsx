@@ -298,14 +298,16 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
       {/* Lightbox Modal */}
       {isLightboxOpen && (
         <div 
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300"
+          className="fixed inset-0 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300"
+          style={{ zIndex: 9999 }}
           role="dialog"
           aria-modal="true"
           aria-label="Image lightbox"
         >
           {/* Backdrop overlay (click to close) */}
           <div 
-            className="absolute inset-0 z-0"
+            className="absolute inset-0"
+            style={{ zIndex: 1 }}
             onClick={() => {
               setIsLightboxOpen(false);
               setIsZoomed(false);
@@ -315,7 +317,8 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
 
           {/* Close button */}
           <button
-            className="absolute top-4 right-4 md:top-6 md:right-6 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 z-20"
+            className="absolute top-4 right-4 md:top-6 md:right-6 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+            style={{ zIndex: 9999 }}
             onClick={() => {
               setIsLightboxOpen(false);
               setIsZoomed(false);
@@ -328,7 +331,10 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
           </button>
 
           {/* Main lightbox image */}
-          <div className="relative max-w-7xl w-full h-full flex items-center justify-center pointer-events-none z-10">
+          <div 
+            className="relative max-w-7xl w-full h-full flex items-center justify-center pointer-events-none"
+            style={{ zIndex: 2 }}
+          >
             <Image
               alt={selectedImage.altText || `${productTitle} - Image ${selectedImageIndex + 1}`}
               data={selectedImage}
@@ -346,7 +352,8 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
             <>
               <button
                 onClick={() => handleImageChange(selectedImageIndex > 0 ? selectedImageIndex - 1 : images.length - 1)}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 z-20"
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+                style={{ zIndex: 9999 }}
                 aria-label="Previous image"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -356,7 +363,8 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
               
               <button
                 onClick={() => handleImageChange(selectedImageIndex < images.length - 1 ? selectedImageIndex + 1 : 0)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 z-20"
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+                style={{ zIndex: 9999 }}
                 aria-label="Next image"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -365,7 +373,10 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
               </button>
 
               {/* Lightbox counter */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm text-white px-6 py-2 rounded-full text-sm font-medium tracking-wide z-20">
+              <div 
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm text-white px-6 py-2 rounded-full text-sm font-medium tracking-wide"
+                style={{ zIndex: 9999 }}
+              >
                 {selectedImageIndex + 1} / {images.length}
               </div>
             </>
