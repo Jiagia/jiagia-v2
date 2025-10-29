@@ -1,4 +1,4 @@
-import {Image} from '@shopify/hydrogen';
+import {Image, Money} from '@shopify/hydrogen';
 import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {Link, useLoaderData, type MetaFunction} from 'react-router';
 import {useState} from 'react';
@@ -390,22 +390,41 @@ function FeaturedGear({gear}: {gear: any}) {
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
           GEAR
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {gear?.products?.nodes?.map((product: any) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+          {gear?.products?.nodes?.map((product: any, index: number) => (
             <Link
               key={product.id}
               to={`/products/${product.handle}`}
-              className="flex flex-col items-center gap-4 text-center"
+              className="block rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus:outline-2 focus:outline-black focus:outline-offset-2"
+              prefetch="intent"
+              aria-label={`View ${product.title}`}
             >
-              <div className="w-full overflow-hidden rounded-lg">
-                <Image 
-                  data={product.featuredImage} 
-                  className="w-full h-auto hover:opacity-90 transition-opacity"
-                />
+              {product.featuredImage ? (
+                <div className="relative w-full bg-gray-100 overflow-hidden">
+                  <Image 
+                    alt={product.featuredImage.altText || product.title}
+                    data={product.featuredImage} 
+                    loading={index < 8 ? 'eager' : 'lazy'}
+                    sizes="(min-width: 45em) 400px, 100vw"
+                    className="w-full h-auto block"
+                  />
+                  <div className="absolute top-2 left-2 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
+                    PREORDER
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center bg-gray-200 min-h-[200px]" aria-label="No image available">
+                  <span className="text-gray-400 text-sm">No image</span>
+                </div>
+              )}
+              <div className="p-4">
+                <h4 className="font-semibold text-base sm:text-lg mb-2">
+                  {product.title}
+                </h4>
+                <div className="text-sm text-gray-600">
+                  <Money data={product.priceRange.minVariantPrice} />
+                </div>
               </div>
-              <p className="text-sm md:text-base font-medium">
-                {product.title}
-              </p>
             </Link>
           ))}
         </div>
@@ -452,22 +471,41 @@ function FeaturedArtifacts({artifacts}: {artifacts: any}) {
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">
           ARTIFACTS
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {artifacts?.products?.nodes?.map((product: any) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+          {artifacts?.products?.nodes?.map((product: any, index: number) => (
             <Link
-              to={`/products/${product.handle}`}
               key={product.id}
-              className="flex flex-col items-center gap-4 text-center"
+              to={`/products/${product.handle}`}
+              className="block rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus:outline-2 focus:outline-black focus:outline-offset-2"
+              prefetch="intent"
+              aria-label={`View ${product.title}`}
             >
-              <div className="w-full overflow-hidden rounded-lg">
-                <Image 
-                  data={product.featuredImage} 
-                  className="w-full h-auto hover:opacity-90 transition-opacity"
-                />
+              {product.featuredImage ? (
+                <div className="relative w-full bg-gray-100 overflow-hidden">
+                  <Image 
+                    alt={product.featuredImage.altText || product.title}
+                    data={product.featuredImage} 
+                    loading={index < 8 ? 'eager' : 'lazy'}
+                    sizes="(min-width: 45em) 400px, 100vw"
+                    className="w-full h-auto block"
+                  />
+                  <div className="absolute top-2 left-2 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
+                    PREORDER
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center bg-gray-200 min-h-[200px]" aria-label="No image available">
+                  <span className="text-gray-400 text-sm">No image</span>
+                </div>
+              )}
+              <div className="p-4">
+                <h4 className="font-semibold text-base sm:text-lg mb-2">
+                  {product.title}
+                </h4>
+                <div className="text-sm text-gray-600">
+                  <Money data={product.priceRange.minVariantPrice} />
+                </div>
               </div>
-              <p className="text-sm md:text-base font-medium">
-                {product.title}
-              </p>
             </Link>
           ))}
         </div>
@@ -574,6 +612,16 @@ query Gear($handle: String!, $first: Int!) {
           width
           height
         }
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+          maxVariantPrice {
+            amount
+            currencyCode
+          }
+        }
       }
     }
   }
@@ -619,6 +667,16 @@ query Artifacts($handle: String!, $first: Int!) {
           url
           width
           height
+        }
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+          maxVariantPrice {
+            amount
+            currencyCode
+          }
         }
       }
     }

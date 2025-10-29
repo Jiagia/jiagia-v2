@@ -166,6 +166,11 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
                 onLoad={() => setImageLoaded(true)}
               />
 
+              {/* PREORDER label */}
+              <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
+                PREORDER
+              </div>
+
               {/* Expand icon hint */}
               <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -237,6 +242,11 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
                 }`}
                 onLoad={() => setImageLoaded(true)}
               />
+
+              {/* PREORDER label */}
+              <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
+                PREORDER
+              </div>
 
               {/* Tap to expand hint */}
               <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm text-white p-2 rounded-full">
@@ -325,6 +335,10 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
               sizes="90vw"
               className="max-h-[90vh] w-auto object-contain"
             />
+            {/* PREORDER label in lightbox */}
+            <div className="absolute top-0 left-0 bg-black text-white px-4 py-2 text-sm font-bold uppercase pointer-events-auto">
+              PREORDER
+            </div>
           </div>
 
           {/* Lightbox navigation */}

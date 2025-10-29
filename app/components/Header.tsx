@@ -1,5 +1,5 @@
 import {Suspense, useState, useEffect} from 'react';
-import {Await, NavLink, useAsyncValue} from 'react-router';
+import {Await, NavLink, useAsyncValue, useLocation} from 'react-router';
 import {
   type CartViewPayload,
   useAnalytics,
@@ -26,6 +26,8 @@ export function Header({
   const {shop, menu} = header;
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
 
@@ -55,7 +57,7 @@ export function Header({
 
   return (
     <header
-      className="header grid grid-cols-3 items-center mx-4"
+      className={`header flex items-center mx-4 ${isHomePage ? 'justify-end' : 'md:grid md:grid-cols-3'}`}
       style={{
         zIndex: 5,
         position: 'fixed',
@@ -70,17 +72,15 @@ export function Header({
         // backdropFilter: 'blur(10px)',
       }}
     >
-      <div className="flex items-center justify-start">
-        <div className="hidden md:block">
-          <HeaderMenu
-            menu={menu}
-            viewport="desktop"
-            primaryDomainUrl={header.shop.primaryDomain.url}
-            publicStoreDomain={publicStoreDomain}
-          />
-        </div>
+      <div className={`hidden md:flex items-center justify-start ${isHomePage ? 'md:hidden' : ''}`}>
+        <HeaderMenu
+          menu={menu}
+          viewport="desktop"
+          primaryDomainUrl={header.shop.primaryDomain.url}
+          publicStoreDomain={publicStoreDomain}
+        />
       </div>
-      <div className="flex items-center justify-center md:text-2xl">
+      <div className={`flex items-center md:justify-center md:text-2xl flex-1 md:flex-initial ${isHomePage ? 'hidden' : ''}`}>
         <NavLink
           prefetch="intent"
           to="/"
@@ -113,7 +113,7 @@ export function HeaderMenu({
   const {close} = useAside();
 
   return (
-    <nav className={className + ' mx-4'} role="navigation">
+    <nav className={className + (viewport === 'mobile' ? '' : ' mx-4')} role="navigation">
       {viewport === 'mobile' && (
         <NavLink
           end
@@ -122,7 +122,7 @@ export function HeaderMenu({
           style={activeLinkStyle}
           to="/"
         >
-          Home
+          HOME
         </NavLink>
       )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
@@ -182,10 +182,10 @@ function HeaderMenuMobileToggle() {
   const {open} = useAside();
   return (
     <button
-      className="header-menu-mobile-toggle reset"
+      className="header-menu-mobile-toggle reset flex items-center"
       onClick={() => open('mobile')}
     >
-      <h3>☰</h3>
+      <span className="text-3xl md:text-base leading-none">☰</span>
     </button>
   );
 }
