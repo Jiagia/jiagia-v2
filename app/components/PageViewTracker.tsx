@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
-import { useAnalytics } from '@shopify/hydrogen';
+import { AnalyticsEvent, useAnalytics } from '@shopify/hydrogen';
 
 export function PageViewTracker() {
   const location = useLocation();
@@ -9,9 +9,9 @@ export function PageViewTracker() {
   useEffect(() => {
     if (canTrack()) {
       const pageType = getPageType(location.pathname);
-      const url = globalThis.window !== undefined ? globalThis.window.location.href : '';
-      
-      publish('custom_page_viewed', {
+      const url = typeof window !== 'undefined' ? window.location.href : '';
+
+      publish(AnalyticsEvent.PAGE_VIEWED, {
         pageType,
         path: location.pathname,
         search: location.search,
