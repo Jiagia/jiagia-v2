@@ -117,6 +117,10 @@ export function ProductForm({
           onClick={() => {
             open('cart');
           }}
+          analytics={{
+            products: [selectedVariant],
+            totalValue: parseFloat(selectedVariant?.price?.amount || '0'),
+          }}
           lines={
             selectedVariant
               ? [
