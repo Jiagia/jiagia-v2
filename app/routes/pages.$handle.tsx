@@ -56,9 +56,9 @@ export default function Page() {
 
   return (
     <div className="page m-8 sm:mx-auto sm:w-1/2">
-      <header>
+      {/* <header>
         <h1>{page.title}</h1>
-      </header>
+      </header> */}
       <main dangerouslySetInnerHTML={{__html: page.body}} />
     </div>
   );
