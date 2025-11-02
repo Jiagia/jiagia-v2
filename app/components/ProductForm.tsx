@@ -38,7 +38,7 @@ export function ProductForm({
             <h5 className="text-sm font-semibold uppercase tracking-wide text-gray-800 mb-3">{optionLabel}</h5>
             <div className="flex flex-wrap gap-2">
               {option.optionValues.map((value) => {
-                console.log("value", JSON.stringify(value, null, 2))
+                // console.log("value", JSON.stringify(value, null, 2))
                 const {
                   name,
                   handle,
