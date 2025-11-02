@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import { useLoaderData, type MetaFunction } from 'react-router';
+import { useLoaderData, NavLink, type MetaFunction } from 'react-router';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -149,6 +149,11 @@ export default function Product() {
           <div className="space-y-4">
             <h3 className="text-base font-bold uppercase tracking-wide text-gray-800">PRODUCT NOTE</h3>
             <p className="text-sm text-gray-600 italic leading-relaxed">Due to the made-to-order nature of this product, please allow us up to 3 business weeks for production and fulfillment.</p>
+            <div className="text-sm leading-relaxed text-gray-600">
+              <p>We ship to all U.S. states and territories (international shipping not available).</p>
+              <br />
+              <p>Have more questions? See our <u><NavLink end prefetch="intent" to="/pages/faq" target="_blank">FAQ</NavLink></u> page.</p>
+            </div>
           </div>
 
           <div className="h-px bg-gray-200 w-full"></div>
