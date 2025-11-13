@@ -289,6 +289,12 @@ const EXHIBITION_QUERY = `#graphql
     sound: field(key: "sound") {
       value
     }
+    buttonText: field(key: "button_text") {
+      value
+    }
+    buttonLink: field(key: "button_link") {
+      value
+    }
   }
   fragment Row on Metaobject {
     id

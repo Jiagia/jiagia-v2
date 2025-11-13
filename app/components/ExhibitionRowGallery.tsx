@@ -43,6 +43,12 @@ interface ExhibitionEntry {
   sound?: {
     value?: string;
   };
+  buttonText?: {
+    value?: string;
+  };
+  buttonLink?: {
+    value?: string;
+  };
 }
 
 interface ExhibitionRowGalleryProps {
@@ -144,6 +150,10 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
   const selectedMaterial = selectedEntry?.material?.value;
   const exhibitionHandle = selectedEntry?.exhibitionHandle?.value;
   const soundUrl = selectedEntry?.sound?.value;
+  const buttonText = selectedEntry?.buttonText?.value;
+  const rawButtonLink = selectedEntry?.buttonLink?.value;
+  // Ensure buttonLink starts with / for proper routing
+  const buttonLink = rawButtonLink ? (rawButtonLink.startsWith('/') ? rawButtonLink : `/${rawButtonLink}`) : undefined;
   console.log('soundUrl:', soundUrl)
   
   // Use richDescription if category is "exhibition", otherwise use regular description
@@ -550,6 +560,21 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
                 <p className="whitespace-pre-wrap">{selectedDescription}</p>
               )}
             </div>
+
+            {/* Call-to-action button */}
+            {buttonText && buttonLink && (
+              <div className="mt-6">
+                <Link
+                  to={buttonLink}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 text-white rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg backdrop-blur-sm font-medium"
+                >
+                  <span>{buttonText}</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -651,6 +676,22 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
                   ))
                 ) : (
                   <p>{selectedDescription}</p>
+                )}
+
+                {/* Call-to-action button in lightbox */}
+                {buttonText && buttonLink && (
+                  <div className="mt-4 pt-4 border-t border-white/20">
+                    <Link
+                      to={buttonLink}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 text-white rounded-full transition-all duration-300 hover:scale-105 backdrop-blur-sm font-medium text-sm"
+                      onClick={() => setIsLightboxOpen(false)}
+                    >
+                      <span>{buttonText}</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  </div>
                 )}
               </div>
             </div>
