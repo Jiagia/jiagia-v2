@@ -52,7 +52,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
   const featuredExhibitions = await context.storefront.query(
     FEATURED_EXHIBITIONS,
     {
-      cache: context.storefront.CacheLong(),
+      // cache: context.storefront.CacheLong(),
       variables: {handle, type},
     },
   );
@@ -354,29 +354,31 @@ function FeaturedExhibitions({
             Each one are based on our explorations and findings.
           </p> */}
         </div>
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto"> */}
-        <div className="grid grid-cols-1 gap-8 md:gap-12 max-w-7xl mx-auto">
-          {exhibitions.map((exhibition: any) => (
-            <div
-              key={exhibition.id}
-              className="flex flex-col items-center gap-4 text-center w-full max-w-md mx-auto"
-            >
-              <Link to={`/exhibitions/${exhibition.handle}`} className="w-full">
-                <div className="w-full aspect-[3/4] relative rounded-lg overflow-hidden bg-gray-200">
-                  <Image
-                    data={exhibition?.poster?.reference?.image}
-                    className="absolute inset-0 w-full h-full object-cover hover:opacity-90 transition-opacity"
-                  />
-                </div>
-              </Link>
-              <h3 className="text-lg md:text-2xl lg:text-3xl font-semibold mt-2">
-                {exhibition.title.value}
-              </h3>
-              {/* <p className="text-base md:text-lg leading-relaxed">
-                {exhibition.description.value}
-              </p> */}
-            </div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto">
+          {exhibitions.map((exhibition: any) => {
+            console.log(JSON.stringify(exhibition, null, 2));
+            return (
+              <div
+                key={exhibition.id}
+                className="flex flex-col items-center gap-4 text-center w-full max-w-md mx-auto"
+              >
+                <Link to={`/exhibitions/${exhibition.handle}`} className="w-full">
+                  <div className="w-full aspect-[3/4] relative rounded-lg overflow-hidden bg-gray-200">
+                    <Image
+                      data={exhibition?.poster?.reference?.image}
+                      className="absolute inset-0 w-full h-full object-cover hover:opacity-90 transition-opacity"
+                    />
+                  </div>
+                </Link>
+                <h3 className="text-lg md:text-2xl lg:text-3xl font-semibold mt-2">
+                  {exhibition.title.value}
+                </h3>
+                {/* <p className="text-base md:text-lg leading-relaxed">
+                  {exhibition.description.value}
+                </p> */}
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>
@@ -584,7 +586,7 @@ query FeaturedExhibitions($handle: String!, $type: String!) {
       value
     }
     exhibitions: field(key: "exhibitions") {
-      references(first: 1) {
+      references(first: 2) {
         nodes {
           ... on Metaobject {
             ...Exhibition

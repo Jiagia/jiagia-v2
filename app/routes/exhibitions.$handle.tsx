@@ -37,11 +37,12 @@ export async function loader({params, context}: LoaderFunctionArgs) {
 
 export default function Exhibition() {
   const {exhibition} = useLoaderData<typeof loader>();
-  const entries = exhibition?.entries?.references?.nodes;
-  const material = exhibition?.material?.value;
+  console.log(JSON.stringify(exhibition, null, 2));
+  const entries = exhibition?.entries?.references?.nodes || null;
+  const material = exhibition?.material?.value || null;
   const isPainting = exhibition?.isPainting?.value === 'true';
-  const poster = exhibition?.poster?.reference?.image;
-  const quoteRaw = exhibition?.quote?.value;
+  const poster = exhibition?.poster?.reference?.image || null;
+  const quoteRaw = exhibition?.quote?.value || null;
   const richDescriptionNodes = exhibition?.richDescription?.references?.nodes || [];
 
   // Parse rich text quote
@@ -124,7 +125,7 @@ export default function Exhibition() {
     <div
       className="min-h-screen py-12 md:py-20 lg:py-32 -mt-8 md:-mt-12 lg:-mt-16"
       style={{
-        backgroundColor: `${exhibition.backgroundColor?.value}` || '#000',
+        backgroundColor: exhibition?.backgroundColor?.value || '#000',
       }}
     >
       <div className="container text-white mx-auto px-4 sm:px-6 lg:px-32 xl:px-48">
@@ -178,7 +179,7 @@ export default function Exhibition() {
             )}
 
             {/* Exhibition Description - only show if NOT isPainting */}
-            {!isPainting && (
+            {!isPainting && exhibition?.description?.value && (
               <div className="max-w-3xl mx-auto text-center">
                 <p className="text-base md:text-lg leading-relaxed whitespace-pre-wrap">
                   {exhibition.description.value}
@@ -188,7 +189,7 @@ export default function Exhibition() {
           </div>
 
           {/* Exhibition Entries - Each Row */}
-          {entries && entries.length > 0 && (
+          {entries && Array.isArray(entries) && entries.length > 0 && (
             <div className="grid grid-cols-1 gap-16 md:gap-20 lg:gap-32">
               {entries.map((row: any) => {
                 // Get entries from the row
