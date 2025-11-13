@@ -261,9 +261,9 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
   const entries = featuredArt?.featuredArt?.entries?.references?.nodes;
   console.log(entries);
   
-  if (!entries || entries.length === 0) {
-    return null;
-  }
+  // if (!entries || entries.length === 0) {
+  //   return null;
+  // }
 
   return (
     <div className="px-4 md:px-8 lg:px-16">
@@ -284,7 +284,7 @@ function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
               loop
               playsInline
             >
-              <source src="https://cdn.shopify.com/videos/c/o/v/613112cab945473fbb40bd1701300288.mp4" type="video/mp4" />
+              <source src="https://cdn.shopify.com/videos/c/o/v/1d88b25aa71e42c098fd5361bfe6cc15.mov" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -352,7 +352,7 @@ function FeaturedDreamscapes({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 md:mb-20 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold">DREAMSCAPES</h2>
+          <h2 className="text-2xl md:text-3xl font-bold">DREAMSCAPE SHOWCASE</h2>
           {/* <p className="text-sm md:text-base leading-relaxed">
             Our dreamscapes are collection of works displayed within a dreamscape. 
             Each one are based on our explorations and findings.
