@@ -1,11 +1,11 @@
 import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, type MetaFunction} from 'react-router';
 import {Image} from '@shopify/hydrogen';
-import {ExhibitionRowGallery} from '~/components/ExhibitionRowGallery';
+import {DreamscapeRowGallery} from '~/components/DreamscapeRowGallery';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
-  const title = data?.exhibition?.title?.value || 'Exhibition';
-  const description = data?.exhibition?.description?.value || '';
+  const title = data?.dreamscape?.title?.value || 'Dreamscape';
+  const description = data?.dreamscape?.description?.value || '';
   
   return [
     {title: `${title} | Jiagia Studios`},
@@ -17,10 +17,10 @@ export async function loader({params, context}: LoaderFunctionArgs) {
   const {handle} = params;
   
   if (!handle) {
-    throw new Response('Exhibition handle is required', {status: 400});
+    throw new Response('Dreamscape handle is required', {status: 400});
   }
 
-  const exhibition = await context.storefront.query(EXHIBITION_QUERY, {
+  const dreamscape = await context.storefront.query(DREAMSCAPE_QUERY, {
     // cache: context.storefront.CacheLong(),
     variables: {
       handle,
@@ -28,22 +28,22 @@ export async function loader({params, context}: LoaderFunctionArgs) {
     },
   });
 
-  if (!exhibition?.exhibition) {
-    throw new Response('Exhibition not found', {status: 404});
+  if (!dreamscape?.dreamscape) {
+    throw new Response('Dreamscape not found', {status: 404});
   }
 
-  return {exhibition: exhibition.exhibition};
+  return {dreamscape: dreamscape.dreamscape};
 }
 
-export default function Exhibition() {
-  const {exhibition} = useLoaderData<typeof loader>();
-  console.log(JSON.stringify(exhibition, null, 2));
-  const entries = exhibition?.entries?.references?.nodes || null;
-  const material = exhibition?.material?.value || null;
-  const isPainting = exhibition?.isPainting?.value === 'true';
-  const poster = exhibition?.poster?.reference?.image || null;
-  const quoteRaw = exhibition?.quote?.value || null;
-  const richDescriptionNodes = exhibition?.richDescription?.references?.nodes || [];
+export default function Dreamscape() {
+  const {dreamscape} = useLoaderData<typeof loader>();
+  console.log(JSON.stringify(dreamscape, null, 2));
+  const entries = dreamscape?.entries?.references?.nodes || null;
+  const material = dreamscape?.material?.value || null;
+  const isPainting = dreamscape?.isPainting?.value === 'true';
+  const poster = dreamscape?.poster?.reference?.image || null;
+  const quoteRaw = dreamscape?.quote?.value || null;
+  const richDescriptionNodes = dreamscape?.richDescription?.references?.nodes || [];
 
   // Parse rich text quote
   let quoteText = '';
@@ -68,7 +68,7 @@ export default function Exhibition() {
     }
   }
 
-  // Parse rich description (same logic as ExhibitionRowGallery)
+  // Parse rich description (same logic as DreamscapeRowGallery)
   const richDescriptionElements = richDescriptionNodes
     .map((node: any) => {
       const textValue = node?.text?.value;
@@ -125,19 +125,19 @@ export default function Exhibition() {
     <div
       className="min-h-screen py-12 md:py-20 lg:py-32 -mt-8 md:-mt-12 lg:-mt-16"
       style={{
-        backgroundColor: exhibition?.backgroundColor?.value || '#000',
+        backgroundColor: dreamscape?.backgroundColor?.value || '#000',
       }}
     >
       <div className="container text-white mx-auto px-4 sm:px-6 lg:px-32 xl:px-48">
         <div className="max-w-7xl mx-auto">
-          {/* Exhibition Header */}
+          {/* Dreamscape Header */}
           <div className="mb-12 md:mb-20 lg:mb-32 py-8 md:py-12 lg:py-16">
-            {/* Exhibition Title */}
+            {/* Dreamscape Title */}
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-6 md:mb-8">
-              {exhibition.title.value}
+              {dreamscape.title.value}
             </h1>
 
-            {/* Exhibition Material */}
+            {/* Dreamscape Material */}
             {material && (
               <div className="max-w-3xl mx-auto text-center mb-6 md:mb-8">
                 <p className="text-sm md:text-base text-white/70 italic">
@@ -146,7 +146,7 @@ export default function Exhibition() {
               </div>
             )}
 
-            {/* Exhibition Quote */}
+            {/* Dreamscape Quote */}
             {quoteText && (
               <div className="max-w-3xl mx-auto text-center mb-6 md:mb-8">
                 <p className="text-sm md:text-base text-white/80">
@@ -155,12 +155,12 @@ export default function Exhibition() {
               </div>
             )}
 
-            {/* Exhibition Poster - only show if isPainting is true */}
+            {/* Dreamscape Poster - only show if isPainting is true */}
             {isPainting && poster && (
               <div className="max-w-4xl mx-auto mb-8 md:mb-12 lg:mb-16">
                 <Image
                   data={poster}
-                  alt={poster.altText || exhibition.title.value}
+                  alt={poster.altText || dreamscape.title.value}
                   className="w-full h-auto rounded-lg"
                   sizes="(min-width: 1024px) 896px, (min-width: 768px) 768px, 100vw"
                 />
@@ -178,17 +178,17 @@ export default function Exhibition() {
               </div>
             )}
 
-            {/* Exhibition Description - only show if NOT isPainting */}
-            {!isPainting && exhibition?.description?.value && (
+            {/* Dreamscape Description - only show if NOT isPainting */}
+            {!isPainting && dreamscape?.description?.value && (
               <div className="max-w-3xl mx-auto text-center">
                 <p className="text-base md:text-lg leading-relaxed whitespace-pre-wrap">
-                  {exhibition.description.value}
+                  {dreamscape.description.value}
                 </p>
               </div>
             )}
           </div>
 
-          {/* Exhibition Entries - Each Row */}
+          {/* Dreamscape Entries - Each Row */}
           {entries && Array.isArray(entries) && entries.length > 0 && (
             <div className="grid grid-cols-1 gap-16 md:gap-20 lg:gap-32">
               {entries.map((row: any) => {
@@ -196,11 +196,11 @@ export default function Exhibition() {
                 const rowEntries = row?.entries?.references?.nodes || [];
                 
                 // Get row title if available
-                const rowTitle = row?.title?.value || 'Exhibition Row';
+                const rowTitle = row?.title?.value || 'Dreamscape Row';
                 
                 return rowEntries.length > 0 ? (
                   <div key={row.id} className="w-full">
-                    <ExhibitionRowGallery 
+                    <DreamscapeRowGallery 
                       entries={rowEntries}
                       rowTitle={rowTitle}
                     />
@@ -238,15 +238,15 @@ export default function Exhibition() {
   );
 }
 
-const EXHIBITION_QUERY = `#graphql
-  fragment Description on Metaobject {
+const DREAMSCAPE_QUERY = `#graphql
+  fragment DreamscapeDescription on Metaobject {
     id
     handle
     text: field(key: "text") {
       value
     }
   }
-  fragment Entry on Metaobject {
+  fragment DreamscapeEntry on Metaobject {
     id
     handle
     title: field(key: "title") {
@@ -278,12 +278,12 @@ const EXHIBITION_QUERY = `#graphql
       references(first: 20) {
         nodes {
           ... on Metaobject {
-            ...Description
+            ...DreamscapeDescription
           }
         }
       }
     }
-    exhibitionHandle: field(key: "exhibition_handle") {
+    dreamscapeHandle: field(key: "exhibition_handle") {
       value
     }
     sound: field(key: "sound") {
@@ -296,7 +296,7 @@ const EXHIBITION_QUERY = `#graphql
       value
     }
   }
-  fragment Row on Metaobject {
+  fragment DreamscapeRow on Metaobject {
     id
     handle
     title: field(key: "title") {
@@ -306,14 +306,14 @@ const EXHIBITION_QUERY = `#graphql
       references(first: 20) {
         nodes {
           ... on Metaobject {
-            ...Entry
+            ...DreamscapeEntry
           }
         }
       }
     }
   }
-  query Exhibition($handle: String!, $type: String!) {
-    exhibition: metaobject(handle: {handle: $handle, type: $type}) {
+  query Dreamscape($handle: String!, $type: String!) {
+    dreamscape: metaobject(handle: {handle: $handle, type: $type}) {
       id
       handle
       title: field(key: "title") {
@@ -339,7 +339,7 @@ const EXHIBITION_QUERY = `#graphql
         references(first: 20) {
           nodes {
             ... on Metaobject {
-              ...Row
+              ...DreamscapeRow
             }
           }
         }
@@ -360,7 +360,7 @@ const EXHIBITION_QUERY = `#graphql
         references(first: 20) {
           nodes {
             ... on Metaobject {
-              ...Description
+              ...DreamscapeDescription
             }
           }
         }

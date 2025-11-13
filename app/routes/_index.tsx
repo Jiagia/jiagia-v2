@@ -5,7 +5,7 @@ import {useState} from 'react';
 import {HEADER_QUERY} from '~/lib/fragments';
 import type {
   FeaturedArtQuery,
-  FeaturedExhibitionsQuery,
+  FeaturedDreamscapesQuery,
 } from 'storefrontapi.generated';
 import comingSoon from '~/assets/coming-soon.png'
 import { Tower, TOWER_QUERY, CLOUD_QUERY} from '../components/Tower';
@@ -49,17 +49,17 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
   handle = 'featured-exhibitions';
   type = 'exhibition_collection';
 
-  const featuredExhibitions = await context.storefront.query(
-    FEATURED_EXHIBITIONS,
+  const featuredDreamscapes = await context.storefront.query(
+    FEATURED_DREAMSCAPES,
     {
       // cache: context.storefront.CacheLong(),
       variables: {handle, type},
     },
   );
 
-  if (!featuredExhibitions) {
-    console.error(featuredExhibitions);
-    throw new Response('Featured Exhibitions not found', {
+  if (!featuredDreamscapes) {
+    console.error(featuredDreamscapes);
+    throw new Response('Featured Dreamscapes not found', {
       status: 404,
     });
   }
@@ -109,7 +109,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
 
   // Query artist statement
   const artistStmtHandle = 'artist-statement';
-  const artistStmt = await context.storefront.query(PAGE_QUERY, {
+  const artistStmt = await context.storefront.query(HOME_PAGE_QUERY, {
     cache: context.storefront.CacheLong(),
     variables: {handle: artistStmtHandle},
   });
@@ -127,10 +127,10 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
   console.log(JSON.stringify(header));
 
   console.log(JSON.stringify(featuredArt));
-  console.log(JSON.stringify(featuredExhibitions));
+  console.log(JSON.stringify(featuredDreamscapes));
   return {
     ...featuredArt,
-    ...featuredExhibitions,
+    ...featuredDreamscapes,
     ...gear,
     ...artifacts,
     ...artwork,
@@ -174,7 +174,7 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 export default function Homepage() {
   const {
     featuredArt,
-    featuredExhibitions,
+    featuredDreamscapes,
     gear,
     artifacts,
     artwork,
@@ -185,6 +185,7 @@ export default function Homepage() {
   } = useLoaderData<typeof loader>();
   console.log(gear);
   console.log(artifacts);
+  console.log(JSON.stringify(featuredDreamscapes, null, 2));
 
   return (
     <>
@@ -200,7 +201,7 @@ export default function Homepage() {
         <HomePageNav />
         <FeaturedArt featuredArt={featuredArt} />
         <AboutUs />
-        <FeaturedExhibitions featuredExhibitions={featuredExhibitions} />
+        <FeaturedDreamscapes featuredDreamscapes={featuredDreamscapes} />
         {/* <div className="py-12 md:py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center gap-6 md:gap-8">
@@ -240,8 +241,8 @@ function HomePageNav() {
         &gt; JIAGIA STUDIOS &lt;
       </h1>
       <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
-        <Link to="/exhibitions/lotus-world" className="hover:no-underline">
-          EXHIBITIONS
+        <Link to="/dreamscapes/lotus-world" className="hover:no-underline">
+          DREAMSCAPES
         </Link>
         <Link to="/collections/all" className="hover:no-underline">
           SHOP
@@ -257,7 +258,7 @@ function HomePageNav() {
 function FeaturedArt({featuredArt}: {featuredArt: FeaturedArtQuery}) {
   const [active, setActive] = useState(0);
   console.log(active);
-  const entries = featuredArt?.entries?.references?.nodes;
+  const entries = featuredArt?.featuredArt?.entries?.references?.nodes;
   console.log(entries);
   
   if (!entries || entries.length === 0) {
@@ -324,14 +325,17 @@ function ArtistStatementText() {
   );
 }
 
-function FeaturedExhibitions({
-  featuredExhibitions,
+function FeaturedDreamscapes({
+  featuredDreamscapes,
 }: {
-  featuredExhibitions: FeaturedExhibitionsQuery;
+  featuredDreamscapes: FeaturedDreamscapesQuery;
 }) {
-  const exhibitions = featuredExhibitions?.exhibitions?.references?.nodes;
+  console.log('FeaturedDreamscapes received:', JSON.stringify(featuredDreamscapes, null, 2));
+  const dreamscapes = featuredDreamscapes?.dreamscapes?.references?.nodes;
+  console.log('dreamscapes extracted:', dreamscapes);
 
-  if (!exhibitions || exhibitions.length === 0) {
+  if (!dreamscapes || dreamscapes.length === 0) {
+    console.log('No dreamscapes found or empty array');
     return null;
   }
 
@@ -348,33 +352,33 @@ function FeaturedExhibitions({
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-12 md:mb-20 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold">EXHIBITIONS</h2>
+          <h2 className="text-2xl md:text-3xl font-bold">DREAMSCAPES</h2>
           {/* <p className="text-sm md:text-base leading-relaxed">
-            Our exhibitions are collection of works displayed within a dreamscape. 
+            Our dreamscapes are collection of works displayed within a dreamscape. 
             Each one are based on our explorations and findings.
           </p> */}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-7xl mx-auto">
-          {exhibitions.map((exhibition: any) => {
-            console.log(JSON.stringify(exhibition, null, 2));
+          {dreamscapes.map((dreamscape: any) => {
+            console.log(JSON.stringify(dreamscape, null, 2));
             return (
               <div
-                key={exhibition.id}
+                key={dreamscape.id}
                 className="flex flex-col items-center gap-4 text-center w-full max-w-md mx-auto"
               >
-                <Link to={`/exhibitions/${exhibition.handle}`} className="w-full">
+                <Link to={`/dreamscapes/${dreamscape.handle}`} className="w-full">
                   <div className="w-full aspect-[3/4] relative rounded-lg overflow-hidden bg-gray-200">
                     <Image
-                      data={exhibition?.poster?.reference?.image}
+                      data={dreamscape?.poster?.reference?.image}
                       className="absolute inset-0 w-full h-full object-cover hover:opacity-90 transition-opacity"
                     />
                   </div>
                 </Link>
                 <h3 className="text-lg md:text-2xl lg:text-3xl font-semibold mt-2">
-                  {exhibition.title.value}
+                  {dreamscape.title.value}
                 </h3>
                 {/* <p className="text-base md:text-lg leading-relaxed">
-                  {exhibition.description.value}
+                  {dreamscape.description.value}
                 </p> */}
               </div>
             )
@@ -554,8 +558,8 @@ query FeaturedArt($handle: String!, $type: String!) {
 }
 ` as const;
 
-const FEATURED_EXHIBITIONS = `#graphql
-fragment Exhibition on Metaobject {
+const FEATURED_DREAMSCAPES = `#graphql
+fragment Dreamscape on Metaobject {
   id
   handle
   title: field(key: "title") {
@@ -578,18 +582,18 @@ fragment Exhibition on Metaobject {
     }
   }
 }
-query FeaturedExhibitions($handle: String!, $type: String!) {
-  featuredExhibitions: metaobject(handle: {handle: $handle, type: $type}) {
+query FeaturedDreamscapes($handle: String!, $type: String!) {
+  featuredDreamscapes: metaobject(handle: {handle: $handle, type: $type}) {
     id
     handle
     title: field(key: "title") {
       value
     }
-    exhibitions: field(key: "exhibitions") {
+    dreamscapes: field(key: "exhibitions") {
       references(first: 2) {
         nodes {
           ... on Metaobject {
-            ...Exhibition
+            ...Dreamscape
           }
         }
       }
@@ -686,8 +690,8 @@ query Artifacts($handle: String!, $first: Int!) {
 }
 ` as const;
 
-const PAGE_QUERY = `#graphql
-  query Page($handle: String!) {
+const HOME_PAGE_QUERY = `#graphql
+  query HomePage($handle: String!) {
     page(handle: $handle) {
       handle
       body

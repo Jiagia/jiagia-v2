@@ -27,7 +27,6 @@ function getPageType(pathname: string): string {
   if (pathname === '/') return 'home';
   if (pathname.startsWith('/products/')) return 'product';
   if (pathname.startsWith('/collections/')) return 'collection';
-  if (pathname.startsWith('/exhibitions/')) return 'exhibition';
   if (pathname.startsWith('/dreamscapes/')) return 'dreamscape';
   if (pathname.startsWith('/about')) return 'about';
   if (pathname.startsWith('/sounds')) return 'sounds';
