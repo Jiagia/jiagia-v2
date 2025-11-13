@@ -168,7 +168,7 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
 ` as const;
 
 const COLLECTION_QUERY = `#graphql
-  query Collection(
+  query AllCollections(
     $handle: String!
     $country: CountryCode
     $language: LanguageCode

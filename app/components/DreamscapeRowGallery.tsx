@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import {Image} from '@shopify/hydrogen';
 import {Link} from 'react-router';
 
-interface ExhibitionEntry {
+interface DreamscapeEntry {
   id: string;
   image: {
     reference: {
@@ -27,7 +27,7 @@ interface ExhibitionEntry {
   category?: {
     value?: string;
   };
-  exhibitionHandle?: {
+  dreamscapeHandle?: {
     value?: string;
   };
   richDescription?: {
@@ -43,14 +43,20 @@ interface ExhibitionEntry {
   sound?: {
     value?: string;
   };
+  buttonText?: {
+    value?: string;
+  };
+  buttonLink?: {
+    value?: string;
+  };
 }
 
-interface ExhibitionRowGalleryProps {
-  entries: ExhibitionEntry[];
+interface DreamscapeRowGalleryProps {
+  entries: DreamscapeEntry[];
   rowTitle?: string;
 }
 
-export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryProps) {
+export function DreamscapeRowGallery({entries, rowTitle}: DreamscapeRowGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -142,12 +148,16 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
   const selectedImage = selectedEntry?.image?.reference?.image;
   const selectedTitle = selectedEntry?.title?.value;
   const selectedMaterial = selectedEntry?.material?.value;
-  const exhibitionHandle = selectedEntry?.exhibitionHandle?.value;
+  const dreamscapeHandle = selectedEntry?.dreamscapeHandle?.value;
   const soundUrl = selectedEntry?.sound?.value;
+  const buttonText = selectedEntry?.buttonText?.value;
+  const rawButtonLink = selectedEntry?.buttonLink?.value;
+  // Ensure buttonLink starts with / for proper routing
+  const buttonLink = rawButtonLink ? (rawButtonLink.startsWith('/') ? rawButtonLink : `/${rawButtonLink}`) : undefined;
   console.log('soundUrl:', soundUrl)
   
-  // Use richDescription if category is "exhibition", otherwise use regular description
-  const isExhibitionCategory = selectedEntry?.category?.value === 'exhibition';
+  // Use richDescription if category is "dreamscape" or "exhibition" (for backward compatibility), otherwise use regular description
+  const isDreamscapeCategory = selectedEntry?.category?.value === 'dreamscape' || selectedEntry?.category?.value === 'exhibition';
   const isSoundsCategory = selectedEntry?.category?.value === 'sound';
   console.log('category:', selectedEntry?.category?.value, 'isSoundsCategory:', isSoundsCategory, 'soundUrl exists:', !!soundUrl);
   const richDescriptionNodes = selectedEntry?.richDescription?.references?.nodes || [];
@@ -255,13 +265,13 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
 
           {/* Main Image - Right Side */}
           <div className="flex-1 relative group">
-            {isExhibitionCategory && exhibitionHandle ? (
+            {isDreamscapeCategory && dreamscapeHandle ? (
               <Link
-                to={`/exhibitions/${exhibitionHandle}`}
+                to={`/dreamscapes/${dreamscapeHandle}`}
                 className="block w-full overflow-hidden rounded-lg bg-gradient-to-br from-gray-900 to-black cursor-pointer relative"
                 onMouseEnter={() => setIsZoomed(true)}
                 onMouseLeave={() => setIsZoomed(false)}
-                aria-label={`View ${selectedTitle || 'exhibition'}`}
+                aria-label={`View ${selectedTitle || 'dreamscape'}`}
               >
                 {/* Loading skeleton */}
                 {!imageLoaded && (
@@ -390,11 +400,11 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            {isExhibitionCategory && exhibitionHandle ? (
+            {isDreamscapeCategory && dreamscapeHandle ? (
               <Link
-                to={`/exhibitions/${exhibitionHandle}`}
+                to={`/dreamscapes/${dreamscapeHandle}`}
                 className="block w-full overflow-hidden rounded-lg bg-gradient-to-br from-gray-900 to-black relative"
-                aria-label={`View ${selectedTitle || 'exhibition'}`}
+                aria-label={`View ${selectedTitle || 'dreamscape'}`}
               >
                 {/* Loading skeleton */}
                 {!imageLoaded && (
@@ -522,10 +532,10 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
         </div>
 
         {/* Description below the image */}
-        {(isExhibitionCategory ? richDescriptionElements.length > 0 : selectedDescription) && (
+        {(isDreamscapeCategory ? richDescriptionElements.length > 0 : selectedDescription) && (
           <div className="mt-6 text-center">
-            {/* Title and Material - only show for exhibition category */}
-            {isExhibitionCategory && (selectedTitle || selectedMaterial) && (
+            {/* Title and Material - only show for dreamscape category */}
+            {isDreamscapeCategory && (selectedTitle || selectedMaterial) && (
               <div className="mb-6 space-y-2">
                 {selectedTitle && (
                   <h3 className="text-lg md:text-xl font-semibold text-white">
@@ -542,7 +552,7 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
             
             {/* Description text */}
             <div className="text-sm md:text-base leading-relaxed text-white/90 space-y-4">
-              {isExhibitionCategory ? (
+              {isDreamscapeCategory ? (
                 richDescriptionElements.map((element) => (
                   <p key={element.id}>{element.content}</p>
                 ))
@@ -550,6 +560,21 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
                 <p className="whitespace-pre-wrap">{selectedDescription}</p>
               )}
             </div>
+
+            {/* Call-to-action button */}
+            {buttonText && buttonLink && (
+              <div className="mt-6">
+                <Link
+                  to={buttonLink}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 text-white rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg backdrop-blur-sm font-medium"
+                >
+                  <span>{buttonText}</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -625,11 +650,11 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
           )}
 
           {/* Description in lightbox */}
-          {(isExhibitionCategory ? richDescriptionElements.length > 0 : selectedDescription) && (
+          {(isDreamscapeCategory ? richDescriptionElements.length > 0 : selectedDescription) && (
             <div className="absolute bottom-20 left-1/2 -translate-x-1/2 max-w-2xl w-full px-4 z-20">
               <div className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-lg text-sm md:text-base text-center space-y-3">
-                {/* Title and Material in lightbox - only show for exhibition category */}
-                {isExhibitionCategory && (selectedTitle || selectedMaterial) && (
+                {/* Title and Material in lightbox - only show for dreamscape category */}
+                {isDreamscapeCategory && (selectedTitle || selectedMaterial) && (
                   <div className="mb-4 space-y-2 border-b border-white/20 pb-3">
                     {selectedTitle && (
                       <h3 className="text-base md:text-lg font-semibold text-white">
@@ -645,12 +670,28 @@ export function ExhibitionRowGallery({entries, rowTitle}: ExhibitionRowGalleryPr
                 )}
                 
                 {/* Description text */}
-                {isExhibitionCategory ? (
+                {isDreamscapeCategory ? (
                   richDescriptionElements.map((element) => (
                     <p key={element.id}>{element.content}</p>
                   ))
                 ) : (
                   <p>{selectedDescription}</p>
+                )}
+
+                {/* Call-to-action button in lightbox */}
+                {buttonText && buttonLink && (
+                  <div className="mt-4 pt-4 border-t border-white/20">
+                    <Link
+                      to={buttonLink}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 text-white rounded-full transition-all duration-300 hover:scale-105 backdrop-blur-sm font-medium text-sm"
+                      onClick={() => setIsLightboxOpen(false)}
+                    >
+                      <span>{buttonText}</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  </div>
                 )}
               </div>
             </div>
