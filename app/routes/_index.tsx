@@ -241,7 +241,7 @@ function HomePageNav() {
         &gt; JIAGIA STUDIOS &lt;
       </h1>
       <div className="flex flex-wrap justify-center gap-4 md:gap-6 font-bold text-red-900 text-sm md:text-base">
-        <Link to="/dreamscapes/lotus-world" className="hover:no-underline">
+        <Link to="/dreamscapes/divine-conch" className="hover:no-underline">
           DREAMSCAPES
         </Link>
         <Link to="/collections/all" className="hover:no-underline">
