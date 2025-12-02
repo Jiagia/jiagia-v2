@@ -167,9 +167,9 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
               />
 
               {/* PREORDER label */}
-              <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
+              {/* <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
                 PREORDER
-              </div>
+              </div> */}
 
               {/* Expand icon hint */}
               <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
