@@ -166,7 +166,7 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
                 onLoad={() => setImageLoaded(true)}
               />
 
-              {/* PREORDER label */}
+              {/* g label */}
               {/* <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
                 PREORDER
               </div> */}
@@ -244,9 +244,9 @@ export function ProductImageGallery({images, productTitle}: ProductImageGalleryP
               />
 
               {/* PREORDER label */}
-              <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
+              {/* <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 text-xs font-bold uppercase">
                 PREORDER
-              </div>
+              </div> */}
 
               {/* Tap to expand hint */}
               <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm text-white p-2 rounded-full">
